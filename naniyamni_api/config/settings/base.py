@@ -1,12 +1,10 @@
 from pathlib import Path
-from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 SECRET_KEY = 'django-insecure-v*j+6yj-0=re0!7m4@w!&4uj1wu6%irn#)(ebqjncq-(6li$%j'
 
-DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -48,19 +46,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
-
-
-#base de datos posgre en local (credenciales en .env)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': 'localhost',
-    }
-}
-
 
 
 # Password validation
