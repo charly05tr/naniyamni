@@ -1,4 +1,8 @@
 from pathlib import Path
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -100,3 +104,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'charlyst23dv@gmail.com'  
 EMAIL_HOST_PASSWORD = 'dqbn mmcv fkda cevr'  
+
+cloudinary.config(
+  cloud_name=config('CLOUD_NAME'),
+  api_key=config('API_KEY'),
+  api_secret=config('API_SECRET'),
+)
