@@ -1,6 +1,9 @@
 from decouple import config
 from .base import *
 
+
+SECRET_KEY = 'django-insecure-v*j+6yj-0=re0!7m4@w!&4uj1wu6%irn#)(ebqjncq-(6li$%j'
+
 #base de datos posgre en local (credenciales en .env)
 DATABASES = {
     'default': {
