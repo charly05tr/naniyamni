@@ -36,4 +36,4 @@ jobs:
           cd deploy_api
           git add .
           git commit -m "Deploy API desde repo principal: $GITHUB_SHA" || echo "Sin cambios para commitear"
-          git push https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/charly05tr/naniyamni_api_production.git main
+          git push https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/charly05tr/naniyamni_api_production.git --force
