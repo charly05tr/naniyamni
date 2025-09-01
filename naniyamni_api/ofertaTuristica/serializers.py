@@ -25,7 +25,7 @@ class ServicioImageSerializer(serializers.ModelSerializer):
         model =  ServicioImage
         fields = ["id", "title", "image_url"]
 
-
+#serializer padre
 class ServicioSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
 
