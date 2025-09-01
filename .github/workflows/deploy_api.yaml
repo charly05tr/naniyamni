@@ -25,7 +25,7 @@ jobs:
         run: |
           git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/charly05tr/naniyamni_api_production.git deploy_api
           cd deploy_api
-          git checkout main
+          ls
 
       - name: Copiar carpeta naniyamni_api al repo destino
         run: |
