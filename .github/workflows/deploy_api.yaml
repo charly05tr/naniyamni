@@ -1,0 +1,36 @@
+name: Deploy API to Separate Repo
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo principal
+        uses: actions/checkout@v4
+
+      - name: Configurar Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Clonar repo de destino (API)
+        run: |
+          git clone https://x-access-token:${{ secrets.DEPLOY_TOKEN }}@github.com/charly05tr/naniyamni_api_production.git deploy_api
+          cd deploy_api
+          git checkout main
+
+      - name: Copiar carpeta naniyamni_api al repo destino
+        run: |
+          rsync -av --delete naniyamni_api/ deploy_api/
+
+      - name: Commit y push a repo destino
+        run: |
+          cd deploy_api
+          git add .
+          git commit -m "Deploy API desde repo principal: $GITHUB_SHA" || echo "Sin cambios para commitear"
+          git push origin main
