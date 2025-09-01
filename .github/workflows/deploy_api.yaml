@@ -1,5 +1,8 @@
 name: Deploy API to Separate Repo
 
+permissions:
+  contents: write
+  
 on:
   push:
     branches:
