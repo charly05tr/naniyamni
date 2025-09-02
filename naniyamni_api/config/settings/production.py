@@ -1,15 +1,17 @@
 import os
+from decouple import config
 
 SECRET_KEY = os.environ.get('SECRET_KEY', '')
 DEBUG = False
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'naniyamni_db',
-        'USER': 'naniyamni_admin',
-        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
         'HOST': 'localhost',
-        'PORT': ''
     }
 }
+
+ALLOWED_HOSTS = ['api.naniyamni.app']
