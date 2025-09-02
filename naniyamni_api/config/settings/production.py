@@ -1,6 +1,7 @@
 import os
 from decouple import config
 from dotenv  import load_dotenv
+from .base import *
 
 load_dotenv()
 
