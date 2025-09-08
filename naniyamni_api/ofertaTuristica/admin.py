@@ -5,7 +5,6 @@ from .models import (
     Habitacion, Visita, Gastronomico, ProveedorImage, ServicioImage
 )
 
-
 # ======================
 # Inline para imágenes
 # ======================
