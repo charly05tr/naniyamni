@@ -5,15 +5,12 @@ export const Label = styled.label`
   font-weight: bold;
 `;
 
-export const Title = styled.h1`
-  font-family: 'IBM Plex', sans-serif;
-  font-size: 2rem;
-  font-weight: 600;
-  color: #111; 
-   margin: 0.5rem 0;
-`;
+export const Title = ({text, margin=true}) => {
+  return (
+    <h1 className={`text-2xl font-medium tracking-wide text-gray-700" ${(margin)?"mt-2 mb-2":""}`}>{text}</h1>
+  );
+}
 
-// Componente P minimalista
 export const Text = styled.p`
   font-family: 'Quicksand', sans-serif;
   font-size: 1rem;

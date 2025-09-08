@@ -1,6 +1,8 @@
 import { useLogin } from "./hooks/useLogin";
 import { LoginForm } from "./components/LoginForm";
+import { FormCard, Hr } from "@FormStyled";
 import { Title } from "@TextStyled";
+import { GoogleLogin } from "./components/GoogleLogin";
 
 const LoginPage = () => {
     const {login, loading, error} = useLogin();
@@ -8,10 +10,15 @@ const LoginPage = () => {
     const handleSubmit = async (username, password) => {
         await login(username, password);
     }
+
     return (
         <div className="flex items-center justify-center h-[80dvh] flex-col">
-        <Title>Login</Title>
-        <LoginForm onLogin={handleSubmit} loading={loading} error={error}/>
+            <FormCard>
+                <Title text="Bienvenido"/>
+                <LoginForm onLogin={handleSubmit} loading={loading} error={error}/>
+                <Hr/>
+                <GoogleLogin/>
+            </FormCard>
         </div>
     );
 };

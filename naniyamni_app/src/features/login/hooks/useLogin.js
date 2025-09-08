@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { obtenerToken } from "../services/auth-token";
+import { useNavigate } from 'react-router-dom';
 
 export const useLogin = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
     const login = async (usuario) => {
         setLoading(true);
@@ -11,9 +13,11 @@ export const useLogin = () => {
         try {
             const token = await obtenerToken(usuario);
             localStorage.setItem('token', token);
+            navigate("/");
         }
         catch(e) {
-            setError(e.message);
+            setError("correo o contraseña inválidos");
+            throw new error(e);
         }
         finally {
             setLoading(false);
