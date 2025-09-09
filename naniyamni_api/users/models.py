@@ -8,3 +8,4 @@ class User(AbstractUser):
         ('Proveedor', 'Proveedor'),
     )
     rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Turista')
+    telefono = models.CharField(max_length=20, default='0')

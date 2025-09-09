@@ -12,7 +12,7 @@ class ProveedorSerializer(serializers.ModelSerializer):
     imagenes = ProveedorImageSerializer(many=True, read_only=True)
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "telefono", "correo", "ciudad", "activo", "tipo", "numeroLegal", "administrador"]
+        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador"]
         read_only_fields = ["administrador"]
 
     def create(self, validated_data):

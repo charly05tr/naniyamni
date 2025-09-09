@@ -1,6 +1,8 @@
 import { useRegister } from "./hooks/useRegister";
 import { RegisterForm } from "./components/RegisterForm";
 import { Title } from "@TextStyled";
+import { RegisterGoogle } from "./components/RegisterGoogle";
+import { Hr, FormCard } from "@FormStyled";
 
 const RegisterPage = () => {
     const {register, loading, error,} = useRegister();
@@ -10,8 +12,12 @@ const RegisterPage = () => {
     }
     return (
         <div className="flex items-center justify-center h-[80dvh] flex-col">
-            <Title>Registrate</Title>
-            <RegisterForm onRegister={handleRegister} loading={loading} error={error}/>       
+            <FormCard>
+                <Title text="Regístrate"/>
+                <RegisterForm onRegister={handleRegister} loading={loading} error={error}/>    
+                <Hr/>
+                <RegisterGoogle/>   
+            </FormCard>
         </div>
     );
 };

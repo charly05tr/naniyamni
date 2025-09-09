@@ -5,6 +5,7 @@ from rest_framework import permissions, authentication, status, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import AllowAny, IsAuthenticated
 #external modules
 import cloudinary.uploader
 #local modules
@@ -14,14 +15,17 @@ from .permissions import IsProveedor, IsProveedorOwner
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = ProveedorSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class ServicioViewSet(viewsets.ModelViewSet):
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
+    permission_classes = [IsProveedor, IsProveedorOwner]
     queryset = Servicio.objects.all()
     serializer_class = ServicioSerializer
 

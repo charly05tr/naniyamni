@@ -1,5 +1,5 @@
 import { useState } from "react";
-import {Input, Form, Button, ErrorText} from "@FormStyled";
+import { Input, Form, Button, ErrorText } from "@FormStyled";
 
 export const LoginForm = ({onLogin, loading, error}) => {
     const [password, setPassword] = useState("");
@@ -13,26 +13,24 @@ export const LoginForm = ({onLogin, loading, error}) => {
     return (
         <Form onSubmit={handleSubmit} >
             <div className="flex flex-col">
-                <label>Email</label>
                 <Input
                     onChange={(e) => setEmail(e.target.value)}
                     value={email}
                     type="email"
                     required 
+                    placeholder="Email"
                 />
             </div>
             <div className="flex flex-col">
-                <label>Password</label>
                 <Input
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
                     type="password"
                     required 
+                    placeholder="Contraseña"
                 />
             </div>
-            <Button type="submit" disabled={loading}>
-                {loading ? "Cargando...": "Iniciar sesión"}
-            </Button>
+            <Button type="submit" disabled={loading} text={loading ? "Cargando...": "Iniciar sesión"}/>
             {error && <ErrorText>{error}</ErrorText>}
         </Form>
     );

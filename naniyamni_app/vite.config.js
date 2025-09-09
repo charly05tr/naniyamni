@@ -12,9 +12,11 @@ export default defineConfig({
   plugins: [react(), tailwindcss(),],
   resolve: {
     alias: {
-      '@FormStyled': path.resolve(__dirname, 'src/shared/styled-components/FormStyled'),
-      '@TextStyled': path.resolve(__dirname, 'src/shared/styled-components/TextStyled'),
-      '@config': path.resolve(__dirname, 'src/config.js')
+      '@FormStyled': path.resolve(__dirname, 'src/shared/styled-components/FormStyled.jsx'),
+      '@TextStyled': path.resolve(__dirname, 'src/shared/styled-components/TextStyled.jsx'),
+      '@config': path.resolve(__dirname, 'src/config.js'),
+      '@Card': path.resolve(__dirname, 'src/shared/styled-components/Card.jsx'),
+      '@authContext': path.resolve(__dirname, 'src/shared/contexts/authContext.jsx'),
     }
   }
 })

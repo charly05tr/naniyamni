@@ -21,9 +21,9 @@ class Proveedor(models.Model):
 
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
-    numeroLegal = models.CharField(unique=True)
-    telefono = models.CharField(max_length=20)
-    correo = models.CharField(unique=True, max_length=100)
+    # numeroLegal = models.CharField(unique=True)
+    # telefono = models.CharField(max_length=20)
+    # correo = models.CharField(unique=True, max_length=100)
     direccion = models.CharField(max_length=255)
     ciudad = models.CharField(max_length=255)
     tipo = models.CharField(max_length=3, choices=actividades)

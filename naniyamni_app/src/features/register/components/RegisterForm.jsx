@@ -11,8 +11,31 @@ export const RegisterForm = ({onRegister, loading, error}) => {
 
     return (
         <Form onSubmit={handleSubmit}>
+            <div className="flex gap-2"> 
+                <div className="flex flex-col">
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "first_name": e.target.value}
+                        })}
+                        value={usuario.first_name || ""}
+                        type="text"
+                        required
+                        placeholder="Nombre"
+                    />
+                </div>
+                <div className="flex flex-col">
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "last_name": e.target.value}
+                        })}
+                        value={usuario.last_name || ""}
+                        type="text"
+                        required
+                        placeholder="Apellido"
+                    />
+                </div>
+            </div>
             <div className="flex flex-col">
-                <label>Email</label>
                 <Input
                     onChange={(e) => setUsuario(prev => {
                         return {...prev, "email": e.target.value, "username": e.target.value}
@@ -20,10 +43,10 @@ export const RegisterForm = ({onRegister, loading, error}) => {
                     value={usuario.email || ""}
                     type="email"
                     required
+                    placeholder="Email"
                 />
             </div>
             <div className="flex flex-col">
-                <label>Contraseña</label>
                 <Input
                     onChange={(e) => setUsuario(prev => {
                         return {...prev, "password": e.target.value}
@@ -31,10 +54,10 @@ export const RegisterForm = ({onRegister, loading, error}) => {
                     value={usuario.password || ""}
                     type="password"
                     required
-                />
+                    placeholder="Contraseña"
+                />                                                                                                         
             </div>
             <div className="flex flex-col">
-                <label>Confirmar contraseña</label>
                 <Input
                     onChange={(e) => setUsuario(prev => {
                         return {...prev, "password2": e.target.value}
@@ -42,31 +65,10 @@ export const RegisterForm = ({onRegister, loading, error}) => {
                     value={usuario.password2 || ""}
                     type="password"
                     required
+                    placeholder="Confirmar contraseña"
                 />
             </div>
-            <div className="flex flex-col">
-                <label>Nombre</label>
-                <Input
-                    onChange={(e) => setUsuario(prev => {
-                        return {...prev, "first_name": e.target.value}
-                    })}
-                    value={usuario.first_name || ""}
-                    type="text"
-                    required
-                />
-            </div>
-            <div className="flex flex-col">
-                <label>Apellido</label>
-                <Input
-                    onChange={(e) => setUsuario(prev => {
-                        return {...prev, "last_name": e.target.value}
-                    })}
-                    value={usuario.last_name || ""}
-                    type="text"
-                    required
-                />
-            </div>
-            <Button>{(!loading)? "Registrarse": "Cargando..."}</Button>
+            <Button text={(!loading)? "Registrarse": "Cargando..."}/>
             {error && <ErrorText>{error}</ErrorText>}
         </Form>
     );
