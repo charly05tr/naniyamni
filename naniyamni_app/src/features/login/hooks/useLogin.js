@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { obtenerToken } from "../services/auth-token";
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from "@authContext";
 
 export const useLogin = () => {
+    const { login } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const login = async (usuario) => {
+    const handleLogin = async (usuario) => {
         setLoading(true);
         setError("");
         try {
             const token = await obtenerToken(usuario);
-            localStorage.setItem('token', token);
+            login(token);
             navigate("/");
         }
         catch(e) {
@@ -24,5 +26,5 @@ export const useLogin = () => {
         }
     };
 
-    return {login, loading, error};
+    return {handleLogin, loading, error};
 };  
