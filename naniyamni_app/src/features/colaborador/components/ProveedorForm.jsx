@@ -51,7 +51,7 @@ export const ProveedorForm = ({onCreateProveedor, loading, error}) => {
                         value={proveedor.direccion|| ""}
                         type="text"
                         required
-                        placeholder="Direccion"
+                        placeholder="Dirección"
                     />
                 </div>
                 <div className="flex flex-col">

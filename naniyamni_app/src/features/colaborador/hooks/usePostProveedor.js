@@ -10,13 +10,16 @@ export const usePostProveedor = () => {
         setError("");
 
         try {
-            await postProveedor(proveedor);       
+            const data = await postProveedor(proveedor);    
+            console.log(data.id)
+            return data.id;
         } catch(e) {
             throw new Error(e);
         }
         finally {
             setLoading(false);
         };
+
     };
 
     return {create, loading, error};

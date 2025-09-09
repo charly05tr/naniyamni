@@ -51,11 +51,17 @@ export const TextArea = ({ placeholder, value, onChange, ...props }) => {
   );
 };
 
-export const Button = ({ text }) => {
+export const Button = ({ text, disabled=false, color="blue", onClick=()=>{} }) => {
+  const colorClasses = {
+    red: "bg-red-400 hover:bg-red-500",
+    blue: "bg-blue-400 hover:bg-blue-500",
+    green: "bg-green-400 hover:bg-green-500",
+  };
+
   return (
-    <button className="w-full p-2 rounded-sm bg-blue-400 tracking-normal hover:bg-blue-500 cursor-pointer">
+    <button onClick={onClick} className={`cursor-pointer w-full p-2 rounded-sm tracking-normal  ${colorClasses[color]}`} disabled={disabled}>
       {text}
-    </button>
+    </button> 
   );
 }
 
@@ -73,7 +79,7 @@ export const GoogleButton = ({text}) => {
   )
 }
 
-export const Hr = ({ text="ó"}) => {
+export const Hr = ({ text="o"}) => {
   return (
     <div className="relative flex items-center mt-2 mb-2">
       <div className="flex-grow border-t border-gray-300"></div>

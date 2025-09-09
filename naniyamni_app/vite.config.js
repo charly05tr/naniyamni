@@ -15,7 +15,8 @@ export default defineConfig({
       '@FormStyled': path.resolve(__dirname, 'src/shared/styled-components/FormStyled.jsx'),
       '@TextStyled': path.resolve(__dirname, 'src/shared/styled-components/TextStyled.jsx'),
       '@config': path.resolve(__dirname, 'src/config.js'),
-      '@Card': path.resolve(__dirname, 'src/shared/styled-components/Card.jsx')
+      '@Card': path.resolve(__dirname, 'src/shared/styled-components/Card.jsx'),
+      '@authContext': path.resolve(__dirname, 'src/shared/contexts/authContext.jsx'),
     }
   }
 })

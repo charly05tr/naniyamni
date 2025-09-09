@@ -5,18 +5,24 @@ import RegisterPage from "./features/register/RegisterPage"
 import Navbar from "./shared/components/Navbar";
 import OfertaTuristica from './features/oferta-turistica/OfertaTuristicaPage';
 import ColaboradorPage from './features/colaborador/ColaboradorPage';
+import Perfil from './features/perfil/perfilPage';
+import { AuthProvider } from "@authContext";
+
 
 function App() {
   return (
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="/oferta-turistica" element={<OfertaTuristica/>}/>
-          <Route path="/colaborador" element={<ColaboradorPage/>}/>
-        </Routes>
-      </BrowserRouter>
+    <AuthProvider>
+        <BrowserRouter>
+          <Navbar />
+          <Routes>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/register" element={<RegisterPage/>}/>
+            <Route path="/oferta-turistica" element={<OfertaTuristica/>}/>
+            <Route path="/colaborador" element={<ColaboradorPage/>}/>
+            <Route path="/profile" element={<Perfil/>}/>
+          </Routes>
+        </BrowserRouter>
+    </AuthProvider>
   )
 }
 

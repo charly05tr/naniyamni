@@ -5,10 +5,10 @@ import { Title } from "@TextStyled";
 import { GoogleLogin } from "./components/GoogleLogin";
 
 const LoginPage = () => {
-    const {login, loading, error} = useLogin();
+    const {handleLogin, loading, error} = useLogin();
 
     const handleSubmit = async (username, password) => {
-        await login(username, password);
+        await handleLogin(username, password);
     }
 
     return (

@@ -1,6 +1,7 @@
-export const Card = () => {
+export const Card = ({ children }) => {
     return (
-        <div className="border border-gray-200 p-2 m-2 bg-white flex gap-2 items-center justify-between">
-        </div>
+      <div className="border rounded border-gray-200 p-2 m-4 bg-white flex gap-2 items-center justify-between">
+        {children}
+      </div>
     );
-}
+  };

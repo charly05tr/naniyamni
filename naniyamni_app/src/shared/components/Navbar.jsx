@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@FormStyled";
 import { Avatar } from "../styled-components/Avatar";
+import { AuthContext } from "@authContext";
 
 const NAV_LINKS = [
   { name: "Inicio", path: "/" },
@@ -10,11 +11,11 @@ const NAV_LINKS = [
   { name: "Mi Tour", path: "/tour" },
 ];
 
-export default function Navbar({ brandName = "Naniyamni", logoSrc = "logo.png" }) {
+const Navbar = ({ brandName = "Naniyamni", logoSrc = "logo.png" }) => {
+  const { token } = useContext(AuthContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef(null);
   const buttonRef = useRef(null);
-  const sesion =  localStorage.getItem('token');
 
   useEffect(() => {
     function onDocClick(e) {
@@ -69,7 +70,7 @@ export default function Navbar({ brandName = "Naniyamni", logoSrc = "logo.png" }
           </nav>
 
           <div className="flex items-center justify-end gap-3 lg:w-70">
-            {(!sesion)
+            {(!token)
               ?<div className="flex gap-2 items-center ">
                   <NavLink to="/login" className={ ({isActive}) =>
                           "px-3 py-2 rounded-md text-sm font-medium cursor-pointer" +
@@ -138,3 +139,5 @@ export default function Navbar({ brandName = "Naniyamni", logoSrc = "logo.png" }
     </header>
   );
 }
+
+export default Navbar;
