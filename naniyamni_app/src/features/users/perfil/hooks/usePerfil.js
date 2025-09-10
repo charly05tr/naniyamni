@@ -12,10 +12,10 @@ export const usePerfil = () => {
         const handlePerfil = async () => {
             setLoading(true);
             setError("");
-    
+            
             try {
-                    const data = await getPerfil();
-                    setPerfilData(data[0]);
+                const data = await getPerfil();
+                setPerfilData(data[0]);
     
             } catch(e) {
                 setError(e);

@@ -15,13 +15,17 @@ from .permissions import IsProveedor, IsProveedorOwner
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
-    serializer_class = ProveedorSerializer
     authentication_classes = [authentication.TokenAuthentication]
 
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return ProveedorListSerializer
+        return ProveedorDetailSerializer
 
 
 class ServicioViewSet(viewsets.ModelViewSet):

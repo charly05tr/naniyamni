@@ -1,24 +1,65 @@
 import React, { useState } from "react";
 import { useUploadImage } from "../hooks/useUploadImage";
-import { Button, Input, ErrorText, Form} from "@FormStyled";
+import { Button, Input, ErrorText, Form } from "@FormStyled";
+import { RemoveButton } from "@RemoveButton";
 
-export const SubirImagen = ({ proveedorId }) => {
-  const [file, setFile] = useState(null);
-  const { uploadImage, loading, error, data } = useUploadImage();
+export const SubirImagen = ({ onUploadImage }) => {
+  const [imagenes, setImagenes] = useState([]); 
+  const { loading, error } = useUploadImage();
 
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagenes((prev) => [...prev, file]);
+    }
+    e.target.value = ""; 
+  };
+
+  const handleRemove = (index) => {
+    setImagenes((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // enviar todas las imágenes al backend, una por una
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!file) return;
-
-    await uploadImage(file, proveedorId, "Mi imagen"); 
+    for (const file of imagenes) {
+      try {
+        onUploadImage(file);
+      } catch (err) {
+        console.error("Error subiendo imagen:", err);
+      }
+    }
+    setImagenes([]); 
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Input type="file" onChange={(e) => setFile(e.target.files[0])} />
-      <Button type="submit" disabled={loading} text={loading ? "Subiendo..." : "Subir imagen"} />
-      {error && <ErrorText>{error}</ErrorText>}
-      {data && <p>Imagen subida: {data.title}</p>}
-    </Form>
+    <div className="w-full">
+      <Form onSubmit={handleSubmit}>
+        <Input type="file" onChange={handleFileChange} />
+        <div className="mt-4 grid grid-cols-2 gap-4">
+          {imagenes.map((file, index) => (
+            <div key={index} className="relative">
+              <img
+                src={URL.createObjectURL(file)}
+                alt={`preview-${index}`}
+                className="h-40 w-full object-cover rounded"
+              />
+              <RemoveButton onClick={() => handleRemove(index)}/>
+            </div>
+          ))}
+        </div>
+
+        {imagenes.length > 0 && (
+          <Button
+            type="submit"
+            disabled={loading}
+            text={loading ? "Subiendo..." : "Enviar"}
+            className="mt-4"
+          />
+        )}
+
+        {error && <ErrorText>{error}</ErrorText>}
+      </Form>
+    </div>
   );
-}
+};

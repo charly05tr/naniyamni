@@ -17,6 +17,9 @@ export default defineConfig({
       '@config': path.resolve(__dirname, 'src/config.js'),
       '@Card': path.resolve(__dirname, 'src/shared/styled-components/Card.jsx'),
       '@authContext': path.resolve(__dirname, 'src/shared/contexts/authContext.jsx'),
+      '@getGeoDatos': path.resolve(__dirname, 'src/shared/services/getGeoDatos.js'),
+      '@Avatar': path.resolve(__dirname, 'src/shared/styled-components/Avatar.jsx'),
+      '@RemoveButton': path.resolve(__dirname, 'src/shared/styled-components/RemoveButton.jsx'),
     }
   }
 })

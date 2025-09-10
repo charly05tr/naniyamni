@@ -1,11 +1,10 @@
 import { usePerfil } from "../hooks/usePerfil";
 import { Title } from "@TextStyled";
 import { ErrorText } from "@FormStyled";
-import { Avatar } from "../../../shared/styled-components/Avatar";
+import { Avatar } from "@Avatar";
 
 export const PerfilCard = () => {
     const { loading, error, perfilData } = usePerfil();
-
     return (
         <div className="p-2 text-center border border-gray-200 m-2">
             {(!loading) 
@@ -20,10 +19,13 @@ export const PerfilCard = () => {
                         </div>
                         <div className="w-full flex flex-col text-gray-800 items-start bg-amber-50 mt-5 p-2 rounded border-gray-200">
                             <div>
-                                {(perfilData.telefono)?<p className="m-2">Teléfono: {perfilData.telefono}</p>:""}
+                                {(perfilData.telefono != 0)?<p className="m-2">Teléfono: {perfilData.telefono}</p>:""}
                             </div>
                             <div>
                                 <p className="m-2">Rol: {perfilData.rol}</p>
+                            </div>
+                            <div>
+                                <p className="m-2">Ciudad: {perfilData.ciudad}, {perfilData.pais}</p>
                             </div>
                         </div>
                     </>    

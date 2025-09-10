@@ -12,7 +12,7 @@ const OfertaTuristica = () => {
                 ? proveedores.map(proveedor => (
                     <ProveedorCard key={proveedor.id} proveedor={proveedor}/>)
                 )
-                : <h1 className="col-span-6 m-[40dvh] text-center">No hay servicios que mostrar.</h1>
+                : <h1 className="col-span-6 m-[40dvh] text-center">No hay ofertas que mostrar.</h1>
             :<h1 className="col-span-6 m-[40dvh] text-center">Cargando...</h1>}
         </div>                                               
     );

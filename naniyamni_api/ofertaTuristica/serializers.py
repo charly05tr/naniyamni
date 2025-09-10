@@ -8,17 +8,42 @@ class ProveedorImageSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "image_url"]
 
 
-class ProveedorSerializer(serializers.ModelSerializer):
-    imagenes = ProveedorImageSerializer(many=True, read_only=True)
+class ProveedorDetailSerializer(serializers.ModelSerializer):
+    imagenes = serializers.SerializerMethodField()
+    imagen = serializers.SerializerMethodField()
+
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador"]
+        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen"]
         read_only_fields = ["administrador"]
 
     def create(self, validated_data):
         # Asignar el usuario autenticado como administrador
         validated_data['administrador'] = self.context['request'].user
         return super().create(validated_data)
+
+    def get_imagen(self, obj):
+        primera = obj.imagenes.first()
+        if primera:
+            return ProveedorImageSerializer(primera).data
+        return None
+
+    def get_imagenes(self, obj):
+        imagenes = obj.imagenes.all()[1:]
+        return ProveedorImageSerializer(imagenes, many=True).data
+
+
+class ProveedorListSerializer(serializers.ModelSerializer):
+    imagen = serializers.SerializerMethodField()
+    class Meta:
+        model = Proveedor
+        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo"]
+
+    def get_imagen(self, obj):
+        primera = obj.imagenes.first()
+        if primera:
+            return ProveedorImageSerializer(primera).data
+        return None
 
 class ServicioImageSerializer(serializers.ModelSerializer):
     class Meta:

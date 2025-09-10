@@ -9,3 +9,7 @@ class User(AbstractUser):
     )
     rol = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Turista')
     telefono = models.CharField(max_length=20, default='0')
+    ciudad = models.CharField(max_length=50, default='Managua')
+    latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)
+    longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=2)        
+    pais = models.CharField(max_length=50, default='Nicaragua')

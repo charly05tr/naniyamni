@@ -9,7 +9,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'is_superuser', 'rol', 'first_name', 'last_name', 'telefono')
+        fields = ('id', 'email', 'password', 'is_superuser', 'rol', 'first_name', 'last_name', 'telefono', 'pais', 'ciudad', 'longitud', 'latitud')
         extra_kwargs = {'password': {'write_only': True}}
         
 
@@ -18,7 +18,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ['username', 'email', 'password', 'password2', 'first_name', 'last_name', 'ciudad', 'pais', 'latitud', 'longitud']
         extra_kwargs = {'password': {'write_only': True}}
 
     def validate(self, data):

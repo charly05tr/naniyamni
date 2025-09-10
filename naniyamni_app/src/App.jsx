@@ -1,14 +1,14 @@
 import './App.css'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginPage from "./features/login/LoginPage"
-import RegisterPage from "./features/register/RegisterPage"
+import LoginPage from "./features/users/login/LoginPage"
+import RegisterPage from "./features/users/register/RegisterPage"
 import Navbar from "./shared/components/Navbar";
 import OfertaTuristica from './features/oferta-turistica/OfertaTuristicaPage';
 import ColaboradorPage from './features/colaborador/ColaboradorPage';
-import Perfil from './features/perfil/perfilPage';
+import Perfil from './features/users/perfil/perfilPage';
+import ProveedorPage from './features/oferta-turistica/proveedor/ProveedorPage';
 import { AuthProvider } from "@authContext";
-
-
+import WizardNuevoProveedor from './features/colaborador/WizardNuevoProveedor' ;
 function App() {
   return (
     <AuthProvider>
@@ -20,6 +20,8 @@ function App() {
             <Route path="/oferta-turistica" element={<OfertaTuristica/>}/>
             <Route path="/colaborador" element={<ColaboradorPage/>}/>
             <Route path="/profile" element={<Perfil/>}/>
+            <Route path="/proveedor/:id" element={<ProveedorPage/>}/>
+            <Route path="/new-proveedor" element={<WizardNuevoProveedor/>}/>
           </Routes>
         </BrowserRouter>
     </AuthProvider>
