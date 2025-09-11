@@ -19,7 +19,6 @@ export const SubirImagen = ({ onUploadImage }) => {
     setImagenes((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // enviar todas las imágenes al backend, una por una
   const handleSubmit = async (e) => {
     e.preventDefault();
     for (const file of imagenes) {

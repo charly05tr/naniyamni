@@ -10,6 +10,7 @@ router.register(r'alquileres', AlquilerVehiculoViewSet)
 router.register(r'viajes', ViajeDirectoViewSet)
 router.register(r'visitas', VisitaViewSet)
 router.register(r'gastronomicos', GastronomicoViewSet)
+router.register(r'mis-proveedores', MisProveedoresViewSet, basename="mis-proveedores")
 
 urlpatterns = [
     path('', include(router.urls)),

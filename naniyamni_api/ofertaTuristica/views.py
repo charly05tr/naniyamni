@@ -1,21 +1,26 @@
 #django
 from django.shortcuts import get_object_or_404
 #DRF
-from rest_framework import permissions, authentication, status, viewsets
+from rest_framework import permissions, authentication, status, viewsets, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 #external modules
 import cloudinary.uploader
 #local modules
 from .serializers import *
 from .models import *
 from .permissions import IsProveedor, IsProveedorOwner
+from .filters import ProveedorFilter
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProveedorFilter
+    search_fields = ["nombre", "descripcion"] 
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -28,44 +33,78 @@ class ProveedorViewSet(viewsets.ModelViewSet):
         return ProveedorDetailSerializer
 
 
+class MisProveedoresViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = ProveedorListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.TokenAuthentication]
+    
+    def get_queryset(self):
+        return Proveedor.objects.filter(administrador=self.request.user)
+
+
 class ServicioViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsProveedor, IsProveedorOwner]
     queryset = Servicio.objects.all()
     serializer_class = ServicioSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class HabitacionViewSet(viewsets.ModelViewSet):
     queryset = Habitacion.objects.all()
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = HabitacionSerializer
+    authentication_classes = [authentication.TokenAuthentication]
 
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 class AlquilerVehiculoViewSet(viewsets.ModelViewSet):
     queryset = AlquilerVehiculo.objects.all()
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = AlquilerVehiculoSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+    
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class ViajeDirectoViewSet(viewsets.ModelViewSet):
     queryset = ViajeDirecto.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = ViajeDirectoSerializer
+    
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class VisitaViewSet(viewsets.ModelViewSet):
     queryset = Visita.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = VisitaSerializer
+    
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class GastronomicoViewSet(viewsets.ModelViewSet):
     queryset = Gastronomico.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     serializer_class = GastronomicoSerializer
+    
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
 class ProveedorImageView(APIView):

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { getProveedores } from "../services/getProveedores";
+import { getMisProveedores } from "../services/getMisProveedores";
 
-export const useProveedor = () => {
+export const useMisProveedores = () => {
     const [proveedores, setProveedores] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -11,9 +11,9 @@ export const useProveedor = () => {
         setError("");
 
         try {
-            const data = await getProveedores();
+            const data = await getMisProveedores();
             setProveedores(data);
-            
+
         } catch(e) {
             setError(e);
         }
@@ -27,5 +27,5 @@ export const useProveedor = () => {
 
     }, [handleGetServicio]);
 
-    return { error, loading, proveedores, refetch: handleGetServicio}
+    return { error, loading, proveedores, refetch: handleGetServicio }
 }

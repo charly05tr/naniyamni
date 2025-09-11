@@ -9,11 +9,9 @@ export const useProveedorDetail = (id) => {
     const handleGetProveedor = useCallback(async () => {
         setLoading(true);
         setError("");
-        console.log("test");
         try {
             const data = await getProveedorDetail(id);
             setProveedor(data);
-            console.log(data);
 
         } catch(e) {
             setError(e);

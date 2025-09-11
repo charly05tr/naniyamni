@@ -14,6 +14,13 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",  
 ]
 
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ]
+}
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

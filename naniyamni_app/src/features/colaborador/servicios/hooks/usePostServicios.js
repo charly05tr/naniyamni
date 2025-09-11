@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { postProveedor } from "../services/postProveedor";
+import { postServicios } from "../services/postServicios";
 
-export const usePostProveedor = () => {
+export const usePostServicios = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(""); 
 
-    const create = async (proveedor) => {
+    const createServicios = async (servicios, proveedorId) => {
         setLoading(true);
         setError("");
 
         try {
-            const data = await postProveedor(proveedor);    
-            console.log(data.id)
+            const data = await postServicios(servicios, proveedorId);    
             return data.id;
         } catch(e) {
             throw new Error(e);
@@ -19,8 +18,7 @@ export const usePostProveedor = () => {
         finally {
             setLoading(false);
         };
-
     };
 
-    return {create, loading, error};
+    return {createServicios, loading, error};
 };

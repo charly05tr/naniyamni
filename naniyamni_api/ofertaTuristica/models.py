@@ -34,12 +34,12 @@ class Proveedor(models.Model):
 
 
 class Servicio(models.Model):
-    nombre = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
+    disponible = models.BooleanField(default=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
-    disponible = models.BooleanField(default=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='servicios')
 
 

@@ -2,7 +2,6 @@ import { API_URL } from "@config";
 
 export const postProveedor = async (proveedor) => {
     const token = localStorage.getItem('token');
-    console.log(token);
     console.log(proveedor);
     const response = await fetch(`${API_URL}oferta-turistica/proveedores/`, {
         method: "POST",

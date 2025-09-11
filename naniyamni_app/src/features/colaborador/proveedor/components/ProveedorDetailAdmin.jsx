@@ -1,10 +1,9 @@
-import { Title } from "@TextStyled"; 
+import { Title, Text } from "@TextStyled"; 
 import { actividades } from "@config";
-import { GaleriaImagenes } from "./GaleriaImagenes";
-import { ServicioCard } from "./ServicioCard";
+import { GaleriaImagenes } from "./GaleriaImagenesAdmin";
 
 export const ProveedorDetailCard = ({ proveedor }) => {
-    console.log(proveedor.servicios)
+
     return (
         <div className="border p-2 bg-white flex flex-col m-2 gap-2 rounded border-gray-200">
             <div className="p-2">
@@ -26,10 +25,9 @@ export const ProveedorDetailCard = ({ proveedor }) => {
                         <p className="m-2"><strong>Categoría:</strong> {actividades.filter(item => item.value === proveedor.tipo)[0]?.label}</p>
                     </div>
                 </div>
+
             </div>
             <GaleriaImagenes proveedor={proveedor}/>    
-            <hr className="text-gray-200 my-2"></hr>
-            <ServicioCard servicios={proveedor.servicios}/>
         </div>
     );
 }

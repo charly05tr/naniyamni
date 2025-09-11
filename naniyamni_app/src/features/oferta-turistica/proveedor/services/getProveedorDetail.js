@@ -8,6 +8,5 @@ export const getProveedorDetail = async (id) => {
     }
 
     const data = await response.json();
-    console.log(data);
     return data;
 }

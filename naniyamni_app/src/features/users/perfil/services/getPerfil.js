@@ -12,6 +12,5 @@ export const getPerfil = async () => {
     }
 
     const data = await res.json();
-    
     return data;
 }  

@@ -1,10 +1,11 @@
-import { usePostProveedor } from "./hooks/usePostProveedor";
+import { usePostProveedor } from "../proveedor/hooks/usePostProveedor";
 import { FormCard } from "@FormStyled";
-import { ProveedorForm } from "./components/ProveedorForm";
+import { ProveedorForm } from "../proveedor/components/ProveedorForm";
 import { Title } from "@TextStyled";
-import { SubirImagen } from "./components/SubirImagen";
+import { SubirImagen } from "../proveedor/components/SubirImagen";
 import { useState } from "react";
-import { useUploadImage } from "./hooks/useUploadImage";
+import { useUploadImage } from "../proveedor/hooks/useUploadImage";
+import { ProgressBar } from "../styled-components/ProgressBar";
 
 const WizardNuevoProveedor = () => {
     const { create, loading, error } = usePostProveedor();
@@ -14,7 +15,7 @@ const WizardNuevoProveedor = () => {
 
     const handleCreate = async (proveedor) => {
             const data = await create(proveedor);
-            setProveedorId(data);
+            setProveedorId(data.id);
             setStep(1);
     }
 
@@ -23,18 +24,10 @@ const WizardNuevoProveedor = () => {
         setStep(2);
     }
 
+
     return (
         <>
-            <div className="w-full sticky top-0 z-49 flex flex-col items-center justify-center mt-5">
-                <div className="w-1/2 bg-gray-200 rounded-full h-3">
-                    <div
-                        className={`h-3 rounded-full transition-all duration-300 ${
-                            step === 0 ? "w-0": (step === 1)?"w-1/2 bg-blue-500" : "w-full bg-green-500"}
-                        }`}
-                    />
-                </div>
-                <p className="mt-2 text-center">{(step+1 === 3)?"Proveedor creado exitosamente!":`Paso ${step+1} de 2`}</p>
-             </div>
+            <ProgressBar step={step} totalSteps={2}/>
             <div className="flex items-center justify-center m-5 flex-col">
                 {step === 0 &&
                 <FormCard>

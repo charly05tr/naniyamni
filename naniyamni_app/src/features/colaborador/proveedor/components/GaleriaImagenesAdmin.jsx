@@ -19,7 +19,7 @@ export const GaleriaImagenes = ({ proveedor }) => {
             key={imagen.id}
             src={imagen.image_url}
             alt={imagen.title}
-            className="h-60 w-60 rounded cursor-pointer hover:opacity-90 object-cover"
+            className="h-60 w-60 rounded cursor-pointer hover:opacity-90"
             onClick={() => handleClick(imagen)}
           />
         ))}
@@ -33,7 +33,7 @@ export const GaleriaImagenes = ({ proveedor }) => {
           <img
             src={imagenSeleccionada.image_url}
             alt={imagenSeleccionada.title}
-            className="max-h-[90vh] max-w-[90vw] rounded shadow-lg object-cover"
+            className="max-h-[90vh] max-w-[90vw] rounded shadow-lg"
           />
           <button
             className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded"

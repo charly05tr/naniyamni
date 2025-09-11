@@ -51,7 +51,22 @@ export const TextArea = ({ placeholder, value, onChange, ...props }) => {
   );
 };
 
-export const Button = ({ text, disabled=false, color="blue", onClick=()=>{} }) => {
+export const Select = ({ type = "text", placeholder, value, onChange, ...props }) => {
+  return (
+    <div className="bg-gradient-to-r from-blue-200 to-yellow-100 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+      <select
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className="bg-white w-full border p-2 border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700"
+        {...props}
+      />
+    </div>
+  );
+};
+
+export const Button = ({ text, disabled=false, color="blue", onClick=()=>{}}) => {
   const colorClasses = {
     red: "bg-red-400 hover:bg-red-500",
     blue: "bg-blue-400 hover:bg-blue-500",
