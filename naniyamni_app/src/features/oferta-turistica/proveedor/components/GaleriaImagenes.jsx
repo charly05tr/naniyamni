@@ -27,7 +27,7 @@ export const GaleriaImagenes = ({ proveedor }) => {
       
       {imagenSeleccionada && (
         <div
-            className="fixed inset-0 bg-transparent backdrop-blur-sm bg-opacity-75 flex items-center justify-center z-50"
+            className="fixed inset-0 backdrop-blur-sm bg-opacity-75 flex items-center justify-center z-50"
           onClick={handleClose}
         >
           <img

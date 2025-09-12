@@ -16,3 +16,20 @@ export const actividades = [
     { value: "CDN", label: "Centro de Diversión Nocturna" },
     { value: "AL", label: "Albergue" },
   ];
+
+export const iconMap = {
+    HF: "home",        // Hostal-familiar
+    H: "hotel",        // Hotel
+    R: "utensils",     // Restaurante
+    B: "beer",         // Bar
+    CR: "tree",        // Centro recreativo
+    C: "coffee",       // Cafetería
+    TTT: "bus",        // Transporte turístico terrestre
+    OV: "plane",       // Operadora de viaje
+    AV: "car",         // Arrendamiento de Vehículos
+    CH: "bed",         // Casa de Huésped
+    D: "music",        // Discoteca
+    CP: "mountain",    // Canopy
+    CDN: "glass-martini-alt", // Centro de Diversión Nocturna
+    AL: "campground",  // Albergue
+  };

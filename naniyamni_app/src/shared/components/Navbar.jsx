@@ -11,7 +11,7 @@ const NAV_LINKS = [
   { name: "Mi Tour", path: "/tour" },
 ];
 
-const Navbar = ({ brandName = "Naniyamni", logoSrc = "logo.png" }) => {
+const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
   const { token } = useContext(AuthContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef(null);

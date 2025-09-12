@@ -20,6 +20,7 @@ export default defineConfig({
       '@getGeoDatos': path.resolve(__dirname, 'src/shared/services/getGeoDatos.js'),
       '@Avatar': path.resolve(__dirname, 'src/shared/styled-components/Avatar.jsx'),
       '@RemoveButton': path.resolve(__dirname, 'src/shared/styled-components/RemoveButton.jsx'),
+      '@ReadMoreText': path.resolve(__dirname, 'src/shared/components/ReadMoreText.jsx'),
     }
   }
 })

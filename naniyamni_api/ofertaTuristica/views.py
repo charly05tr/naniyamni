@@ -85,10 +85,10 @@ class ViajeDirectoViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
-class VisitaViewSet(viewsets.ModelViewSet):
-    queryset = Visita.objects.all()
+class AtraccionesViewSet(viewsets.ModelViewSet):
+    queryset = Atracciones.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
-    serializer_class = VisitaSerializer
+    serializer_class = AtraccionesSerializer
     
     def get_permissions(self):
         if self.request.method == "GET":

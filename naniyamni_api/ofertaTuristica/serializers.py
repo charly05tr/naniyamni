@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from .models import ProveedorImage, Proveedor, ServicioImage, AlquilerVehiculo, ViajeDirecto, Gastronomico, Visita, Habitacion, Destino, Servicio
+from .models import ProveedorImage, Proveedor, ServicioImage, AlquilerVehiculo, ViajeDirecto, Gastronomico, Atracciones, Habitacion, Destino, Servicio
 
 
 class ProveedorImageSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios"]
+        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios", "longitud", "latitud"]
         read_only_fields = ["administrador"]
 
     def create(self, validated_data):
@@ -48,7 +48,7 @@ class ProveedorListSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField()
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo"]
+        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo", "latitud", "longitud"]
 
     def get_imagen(self, obj):
         primera = obj.imagenes.first()
@@ -143,12 +143,12 @@ class ViajeDirectoSerializer(serializers.ModelSerializer):
         fields = ServicioSerializer.Meta.fields + ["origen", "fecha_salida", "asientos_disponibles", "destinos"]
 
 
-class VisitaSerializer(serializers.ModelSerializer):
+class AtraccionesSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
-        model = Visita
-        fields = ServicioSerializer.Meta.fields + ["fecha", "duracion_minutos", "guia_incluido", "cupo_maximo"]
+        model = Atracciones
+        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo"]
 
 
 class GastronomicoSerializer(serializers.ModelSerializer):
