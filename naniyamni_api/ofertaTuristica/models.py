@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import User
+from django.contrib.postgres.fields import ArrayField
+
 class Proveedor(models.Model):
 
     actividades = (
@@ -33,6 +35,34 @@ class Proveedor(models.Model):
     latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)
     longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)      
     administrador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='proveedor')
+    reglas = ArrayField(
+        models.CharField(max_length=255),
+        blank=True,
+        default=list
+    )
+
+    AMENIDADES = [
+        ("piscina", "Piscina al aire libre"),
+        ("traslado", "Traslado aeropuerto"),
+        ("movilidad", "Adaptado personas movilidad reducida"),
+        ("restaurante", "Restaurante"),
+        ("gimnasio", "Gimnasio"),
+        ("no_fumadores", "Habitaciones sin humo"),
+        ("wifi", "WiFi gratis"),
+        ("parking", "Parking gratis"),
+        ("bar", "Bar"),
+        ("desayuno", "Muy buen desayuno"),
+    ]
+
+    amenidades = ArrayField(
+        models.CharField(max_length=50, choices=AMENIDADES),
+        blank=True,
+        default=list
+    )
+
+
+class Caracteristica(models.Model):
+    nombre = models.CharField(max_length=255)
 
 
 class Servicio(models.Model):
@@ -43,20 +73,21 @@ class Servicio(models.Model):
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='servicios')
+    caracteristicas = models.ManyToManyField(Caracteristica, related_name="servicios", blank=True)
 
 
 class AlquilerVehiculo(Servicio):
+    TIPO_TRANSMISION = (('A', 'Automatico'), ('M', 'Mecanico'), ('E', 'Electrico'))
     modelo = models.CharField(max_length=255)
     marca = models.CharField(max_length=255)
-
+    transmision = models.CharField(choices=TIPO_TRANSMISION, default='A')
+    cant_asientos = models.IntegerField(default=5)
 
 class ReservaVehiculo(AlquilerVehiculo):
-       fecha_reserva =  models.DateTimeField(auto_now=True)
-       fecha_recogida = models.DateTimeField()
-       fecha_devolucion = models.DateTimeField()
+       fecha_recogida = models.DateField()
+       fecha_devolucion = models.DateField()
        hora_recogida = models.DateTimeField()
        hora_entrega  = models.DateTimeField()
-       turista = models.ForeignKey(User,on_delete=models.PROTECT,related_name="vehiculo_alquilado")
        lugar_recogida = models.CharField(max_length=255)
        lugar_devolucion = models.CharField(blank=True)
 
@@ -80,6 +111,7 @@ class Habitacion(Servicio):
     tipos = (('S', 'single'), ('D', 'double'), ('SU', 'suite'))
     tipo = models.CharField(choices=tipos, max_length=2)
     capacidad = models.IntegerField()
+
 
 class ReservaHabitacion(Habitacion):
        turista = models.ForeignKey(User,on_delete=models.PROTECT)

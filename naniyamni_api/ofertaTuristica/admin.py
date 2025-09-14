@@ -2,7 +2,8 @@ from django.contrib import admin
 
 from .models import (
     Proveedor, Servicio, AlquilerVehiculo, ViajeDirecto, Destino,
-    Habitacion, Atracciones, Gastronomico, ProveedorImage, ServicioImage
+    Habitacion, Atracciones, Gastronomico, ProveedorImage, ServicioImage,
+    Caracteristica
 )
 
 # ======================
@@ -23,7 +24,7 @@ class ServicioImageInline(admin.TabularInline):
 # ======================
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "tipo", "ciudad", "activo", "creado_en", "latitud", "longitud", "direccion")
+    list_display = ("nombre", "tipo", "ciudad", "activo", "creado_en", "latitud", "longitud", "direccion", "amenidades", "reglas")
     list_filter = ("tipo", "activo", "ciudad")
     search_fields = ("nombre", "ciudad")
     inlines = [ProveedorImageInline]
@@ -38,6 +39,10 @@ class ServicioAdmin(admin.ModelAdmin):
     list_filter = ("disponible", "creado_en", "actualizado_en")
     search_fields = ("nombre", "descripcion", "proveedor__nombre")
     inlines = [ServicioImageInline]
+
+@admin.register(Caracteristica)
+class CaracteristicaAdmin(admin.ModelAdmin):
+    list_display = ("nombre", "id")
 
 
 # ======================

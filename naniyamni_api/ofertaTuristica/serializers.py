@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from .models import ProveedorImage, Proveedor, ServicioImage, AlquilerVehiculo, ViajeDirecto, Gastronomico, Atracciones, Habitacion, Destino, Servicio
+from .models import ProveedorImage, Proveedor, ServicioImage, AlquilerVehiculo, ViajeDirecto, Gastronomico, Atracciones, Habitacion, Destino, Servicio, Caracteristica
 
 
 class ProveedorImageSerializer(serializers.ModelSerializer):
@@ -48,7 +48,7 @@ class ProveedorListSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField()
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo", "latitud", "longitud"]
+        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas"]
 
     def get_imagen(self, obj):
         primera = obj.imagenes.first()
@@ -111,21 +111,30 @@ class ServicioImageSerializer(serializers.ModelSerializer):
         model =  ServicioImage
         fields = ["id", "title", "image_url"]
 
+
+class CaracteristicaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Caracteristica
+        fields = ["id","nombre"]
+
+
 #serializer padre
 class ServicioSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
-    
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+
     class Meta:
         model = Servicio
-        fields = ["id", "nombre", "descripcion", "precio", "disponible", "proveedor", "imagenes"]
+        fields = ["id", "nombre", "descripcion", "precio", "disponible", "proveedor", "imagenes", "caracteristicas"]
 
 
 class AlquilerVehiculoSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = AlquilerVehiculo
-        fields = ServicioSerializer.Meta.fields + ["modelo", "marca"]
+        fields = ServicioSerializer.Meta.fields + ["modelo", "marca", "transmision", "cant_asientos"]
 
 
 class DestinoSerialiazer(serializers.ModelSerializer):
@@ -137,6 +146,7 @@ class DestinoSerialiazer(serializers.ModelSerializer):
 class ViajeDirectoSerializer(serializers.ModelSerializer):
     destinos = DestinoSerialiazer(many=True, read_only=True)
     imagenes = ServicioImageSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = ViajeDirecto
@@ -145,6 +155,7 @@ class ViajeDirectoSerializer(serializers.ModelSerializer):
 
 class AtraccionesSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = Atracciones
@@ -153,6 +164,7 @@ class AtraccionesSerializer(serializers.ModelSerializer):
 
 class GastronomicoSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = Gastronomico
@@ -161,6 +173,7 @@ class GastronomicoSerializer(serializers.ModelSerializer):
 
 class HabitacionSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = Habitacion

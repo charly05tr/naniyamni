@@ -5,7 +5,7 @@ const OfertaTuristica = () => {
     const { proveedores, loading } = useProveedor();
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 m-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:m-4 m-2 gap-2">
             {(!loading)
             ?
                 (proveedores[0])

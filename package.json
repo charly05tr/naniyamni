@@ -2,7 +2,10 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-switch": "^1.2.6",
+    "date-fns": "^4.1.0",
     "leaflet": "^1.9.4",
-    "lucide-react": "^0.543.0"
+    "lucide-react": "^0.543.0",
+    "react-date-range": "^2.0.1",
+    "tailwind-scrollbar-hide": "^4.0.0"
   }
 }
