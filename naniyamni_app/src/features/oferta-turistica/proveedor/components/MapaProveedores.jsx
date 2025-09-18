@@ -11,10 +11,9 @@ const MapWithMarker = ({ proveedor }) => {
   useEffect(() => {
     if (!mapRef.current) return;
 
-    // Crear el mapa solo la primera vez
     if (!mapInstance.current) {
       mapInstance.current = L.map(mapRef.current, {
-        center: [0, 0], // inicializa en 0,0
+        center: [0, 0],
         zoom: 13,
         zoomControl: false,
       });
@@ -50,7 +49,6 @@ const MapWithMarker = ({ proveedor }) => {
       popupAnchor: [0, -62],
     });
 
-    // Si el marcador ya existe, moverlo
     if (markerRef.current) {
       markerRef.current.setLatLng([proveedor.latitud, proveedor.longitud]);
     } else {
@@ -62,7 +60,6 @@ const MapWithMarker = ({ proveedor }) => {
         .openPopup();
     }
 
-    // Centrar el mapa en la nueva posición
     mapInstance.current.setView([proveedor.latitud, proveedor.longitud], 13);
   }, [proveedor]);
 
@@ -70,7 +67,7 @@ const MapWithMarker = ({ proveedor }) => {
     <div
       ref={mapRef}
       id="map"
-      className="rounded outline-none max-h-93 overflow-y-hidden z-10"
+      className="z-10 max-h-100 hidden md:flex rounded outline-none lg:max-h-70 md:min-w-[15vw] lg:min-w-[20vw] md:max-h-50 overflow-y-hidden"
     />
   );
 };

@@ -59,7 +59,7 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
                       ( 
                         (isActive)
                       ? "text-blue-700 bg-blue-50"
-                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-50")
+                      : "text-gray-700 hover:text-gray-900 hover:bg-gray-100")
                     }
                   >
                     {link.name}
@@ -69,21 +69,20 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
             </ul>
           </nav>
 
-          <div className="flex items-center justify-end gap-3 lg:w-70">
+          <div className="flex items-center justify-end lg:gap-3 lg:w-70 w-fit">
             {(!token)
-              ?<div className="flex gap-2 items-center ">
-                  <NavLink to="/login" className={ ({isActive}) =>
-                          "px-3 py-2 rounded-md text-sm font-medium cursor-pointer" +
+              ?<div className="flex gap-2 items-center">
+                  <NavLink to="/login" className={ ({isActive}) => 
                           (isActive
-                              ? "text-blue-700 bg-blue-50"
-                              : "text-gray-700 hover:text-gray-900 hover:bg-gray-50")
+                              ? "text-blue-700 bg-blue-50 px-3 py-2 rounded-md text-sm font-medium cursor-pointer text-nowrap"
+                              : "text-zinc-700 bg-gray-100 hover:text-gray-900 hover:bg-gray-200 px-3 py-2 rounded-md text-sm font-medium cursor-pointer text-nowrap")
                           }
                   >
                       Log In
                   </NavLink>
-                  <div className="h-8 w-px bg-gray-300"></div>
-                  <NavLink to="/register" className="w-40">
-                      <Button clasName="w-full" text="Registrarse"></Button>
+                  <div className="h-9 w-px bg-gray-300"></div>
+                  <NavLink to="/register" className="w-30">
+                      <button className=  "text-zinc-700 rounded text-sm font-medium cursor-pointer p-2 border border-gray-300 hover:border-gray-400">Registrarse</button>
                   </NavLink>
              </div>
             :<NavLink to="/profile" className="">

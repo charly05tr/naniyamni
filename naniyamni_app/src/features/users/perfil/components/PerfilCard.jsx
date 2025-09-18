@@ -5,6 +5,9 @@ import { Avatar } from "@Avatar";
 
 export const PerfilCard = () => {
     const { loading, error, perfilData } = usePerfil();
+    localStorage.setItem("nombre_turista", perfilData.first_name);
+    localStorage.setItem("apellido_turista", perfilData.last_name);
+
     return (
         <div className="p-2 text-center border border-gray-200 m-2">
             {(!loading) 
@@ -12,7 +15,7 @@ export const PerfilCard = () => {
                     <>
                         <Title text={`${perfilData.first_name} ${perfilData.last_name}`}/>
                         <div className="flex justify-center m-5">
-                            <Avatar size="w-25 h-25"/>
+                            <Avatar imageUrl={perfilData.imagen} size="w-25 h-25" textSize="text-5xl"/>
                         </div>
                         <div>
                             <p className="text-gray-800">{perfilData.email}</p>

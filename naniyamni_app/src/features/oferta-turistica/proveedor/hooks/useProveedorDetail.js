@@ -28,5 +28,5 @@ export const useProveedorDetail = (id) => {
 
     }, [handleGetProveedor]);
 
-    return { error, loading, proveedor, refetch: handleGetProveedor}
+    return { error, loading, proveedor, refetch: handleGetProveedor }    
 }

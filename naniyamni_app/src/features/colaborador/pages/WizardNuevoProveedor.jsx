@@ -11,7 +11,7 @@ const WizardNuevoProveedor = () => {
     const { create, loading, error } = usePostProveedor();
     const { uploadImage } = useUploadImage();
     const [proveedorId, setProveedorId] = useState();
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(0);
 
     const handleCreate = async (proveedor) => {
             const data = await create(proveedor);

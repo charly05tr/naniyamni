@@ -1,18 +1,19 @@
 import { API_URL } from "@config";
 
-export const postServicios = async (servicios,  proveedorId) => {
+export const postReserva = async (reserva, tipo) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}oferta-turistica/alquileres/`, {
+    const response = await fetch(`${API_URL}reservas/?tipo=${tipo}`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
             'Authorization': `Token ${token}`
         },
-        body: JSON.stringify({...servicios, "proveedor": parseInt(proveedorId)})
+        body: JSON.stringify(reserva)
     });
 
     if (!response.ok) {
-        throw new Error("No se pudo crear el servicio.");
+        const errorData = await response.json();  
+        throw errorData;
     }
     const data = await response.json();
     return data;

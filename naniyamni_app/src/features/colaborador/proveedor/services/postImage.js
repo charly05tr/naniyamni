@@ -1,6 +1,6 @@
 import { API_URL } from "@config";
 
-export const postImage = async (imageFile, proveedorId=18, title="imagen-proveedor") => {
+export const postImage = async (imageFile, proveedorId=21, title="imagen-proveedor") => {
     const token = localStorage.getItem('token');
     
     const formData = new FormData();

@@ -1,0 +1,81 @@
+import { useState } from "react";
+import { Select } from "@FormStyled";
+
+export const Filtros = ({ tipo, setFiltro }) => {
+    const [seleccionados, setSeleccionados] = useState([]);
+
+    const handleCheckboxChange = (e) => {
+        const { value, checked } = e.target;
+
+        let nuevosSeleccionados;
+        if (checked) {
+            nuevosSeleccionados = [...seleccionados, value];
+        } else {
+            nuevosSeleccionados = seleccionados.filter((item) => item !== value);
+        }
+
+        setSeleccionados(nuevosSeleccionados);
+
+        if (nuevosSeleccionados.length === 0) {
+            setFiltro("all");
+        } else {
+            setFiltro(nuevosSeleccionados);
+        }
+    };
+
+    return (
+        <div className="w-full h-fit bg-gradient-to-r bg-zinc-200 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+            <div className="bg-white flex-shrink flex flex-col flex-wrap gap-4 justify-between rounded p-4">
+                <h1 className="flex-shrink text-xl text-zinc-700">Filtrar por:</h1>
+                <div className="flex gap-4 flex-2 flex-wrap">
+                    {(tipo === "H" || tipo === "HF" || tipo === "CH") && (
+                        <>
+                            <div className="flex-shrink flex items-center gap-2 text-zinc-600"> 
+                                <input
+                                    type="checkbox"
+                                    className="h-5 w-5 rounded border-gray-300"
+                                    value="SU"
+                                    checked={seleccionados.includes("SU")}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <label>Suite</label>
+                            </div>
+                            <div className="flex-shrink flex items-center gap-2 text-zinc-600"> 
+                                <input
+                                    type="checkbox"
+                                    value="S"
+                                    className="h-5 w-5 rounded border-gray-300"
+                                    checked={seleccionados.includes("S")}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <label>Single</label>
+                            </div>
+                            <div className="flex-shrink flex items-center gap-2 text-zinc-600"> 
+                                <input
+                                    type="checkbox"
+                                    value="D"
+                                    className="h-5 w-5 rounded border-gray-300"
+                                    checked={seleccionados.includes("D")}
+                                    onChange={handleCheckboxChange}
+                                />
+                                <label>Double</label>
+                            </div>
+                        </>
+                    )}
+                    {(tipo === "AV") && (
+                        <Select 
+                            name="categoria" 
+                            onChange={(e) => setFiltro(e.target.value || "all")}
+                        >
+                            <option value="">Categoría</option>
+                            <option value="Económico 4x2">Económico 4x2</option>
+                            <option value="Mini Manual">Mini Manual</option>
+                            <option value="Grande">Grande</option>
+                            <option value="Van Grande">Van Grande</option>
+                        </Select>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+}

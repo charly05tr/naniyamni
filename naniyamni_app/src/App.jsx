@@ -11,26 +11,29 @@ import { AuthProvider } from "@authContext";
 import WizardNuevoProveedor from './features/colaborador/pages/WizardNuevoProveedor';
 import WizardServicios from './features/colaborador/pages/WizardServicios';
 import ProveedorAdmin from './features/colaborador/pages/ProveedorAdmin';
+import { DisponibilidadProvider } from "././features/oferta-turistica/context/disponibilidadContext";
 
 function App() {
   return (
     <AuthProvider>
+      <DisponibilidadProvider>
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="/login" element={<LoginPage/>}/>
-            <Route path="/register" element={<RegisterPage/>}/>
-            <Route path="/oferta-turistica" element={<OfertaTuristica/>}/>
-            <Route path="/colaborador" element={<ColaboradorPage/>}/>
-            <Route path="/profile" element={<Perfil/>}/>
-            <Route path="/proveedor/:id" element={<ProveedorPage/>}/>
-            <Route path="/new-proveedor" element={<WizardNuevoProveedor/>}/>
-            <Route path="/proveedor/:id/new-servicio/tipo/:tipo/" element={<WizardServicios/>}/>
-            <Route path="/proveedor/:id/admin" element={<ProveedorAdmin/>}/>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/oferta-turistica" element={<OfertaTuristica />} />
+            <Route path="/profile" element={<Perfil />} />
+            <Route path="/proveedor/:id" element={<ProveedorPage />} />
+            <Route path="/new-proveedor" element={<WizardNuevoProveedor />} />
+            <Route path="/proveedor/:id/new-servicio/tipo/:tipo/" element={<WizardServicios />} />
+            <Route path="/proveedor/:id/admin" element={<ProveedorAdmin />} />
+            <Route path="/colaborador" element={<ColaboradorPage />} />
           </Routes>
         </BrowserRouter>
+      </DisponibilidadProvider>
     </AuthProvider>
-  )
+  );
 }
 
 export default App;

@@ -7,7 +7,7 @@ export const Label = styled.label`
 
 export const Title = ({text, margin=true}) => {
   return (
-    <h1 className={`lg:text-3xl md:text-2xl text-xl font-medium tracking-wide text-gray-700 ${(margin)?"mt-2 mb-4":""}`}>{text}</h1>
+    <h1 className={`md:text-3xl text-2xl font-medium tracking-wide text-gray-700 ${(margin)?"mt-2 mb-4":""}`}>{text}</h1>
   );
 }
 
