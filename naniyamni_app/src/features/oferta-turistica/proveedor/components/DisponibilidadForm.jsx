@@ -5,8 +5,9 @@ import "react-date-range/dist/theme/default.css";
 import { NumericInput } from "@NumericInput"; 
 import { Filtros } from "./Filtros";
 import { useDisponibilidad } from "../../context/disponibilidadContext";
+import { SelectLugarInicio } from "./Surcursales";
 
-export const DisponibilidadForm = ({ tipo, setFiltro }) => {
+export const DisponibilidadForm = ({ tipo, setFiltro, sucursales=[] }) => {
     const {
         range,
         setRange,
@@ -16,15 +17,16 @@ export const DisponibilidadForm = ({ tipo, setFiltro }) => {
         cantAdultos,
         cantHabitaciones,
         cantNinos,
+        setLugarInicio,
       } = useDisponibilidad();
  
     return (
-        <div className="bg-white h-full flex w-full flex-col items-start p-4 rounded-xl border border-gray-200">
+        <div className="bg-white gap-4 h-full flex w-full flex-col items-start p-4 rounded-xl border border-gray-200 shadow-sm transition-transform transform  hover:shadow-md duration-300">
             <div className="flex gap-2 items-start justify-between w-full">
-                <Title text="Disponibilidad"/>
+                <h2 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Disponibilidad</h2>
             </div>
             <div className="h-full flex-wrap flex w-full gap-4">
-                <div className="flex-shrink flex-1 md:min-w-87 min-w-80  h-fit bg-gradient-to-r bg-zinc-200 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+                <div className=" text-gray-900 flex-shrink flex-1 md:min-w-87 min-w-80  h-fit bg-gradient-to-r shadow-md rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
                     <DateRange
                         ranges={range}
                         onChange={(item) => setRange([item.selection])}
@@ -41,16 +43,19 @@ export const DisponibilidadForm = ({ tipo, setFiltro }) => {
                             </>
                         )}
                         {(tipo === "AV") && (
-                            <>
-                                 <NumericInput value={cantAdultos} onChange={setCantAdultos} min={1} max={10} step={1} text="Cantidad personas" />
-                                 <NumericInput value={cantHabitaciones} onChange={setCantHabitaciones} min={1} max={1} step={1} text="Vehículos" />
-                            </>
+                            <div className="w-full flex  gap-4 flex-1 flex-wrap justify-between">
+                                <>
+                                    <NumericInput value={cantAdultos} onChange={setCantAdultos} min={1} max={10} step={1} text="Cantidad personas" />
+                                    <NumericInput value={cantHabitaciones} onChange={setCantHabitaciones} min={1} max={1} step={1} text="Vehículos" />
+                                </>
+                                <div className="w-full">
+                                    <SelectLugarInicio sucursales={sucursales} setLugarInicio={setLugarInicio}/>
+                                </div>
+                            </div>
                         )}
                     </div>
-                    <Filtros tipo={tipo} setFiltro={setFiltro}/>
-                        {/* <div className="text-sm md:text-base text-nowrap flex-shrink self-end w-fit h-fit bg-gradient-to-r from-blue-200 to-yellow-100 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
-                            <button onClick={() => {}} className="bg-blue-200 p-2 rounded tracking-wide cursor-pointer hover:bg-blue-300 text-zinc-800">Ver disponibilidad</button>
-                        </div> */}
+                    {(tipo === "H" || tipo === "AV")&&
+                    <Filtros tipo={tipo} setFiltro={setFiltro}/>}
                 </div>
             </div>
         </div>

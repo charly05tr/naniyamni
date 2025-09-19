@@ -1,5 +1,6 @@
 import { useProveedor } from "./hooks/useProveedor";
 import { ProveedorCard } from "./components/ProveedorCard";
+import { Error } from "@Error";
 
 const OfertaTuristica = () => {
     const { proveedores, loading } = useProveedor();
@@ -12,7 +13,7 @@ const OfertaTuristica = () => {
                 ? proveedores.map(proveedor => (
                     <ProveedorCard key={proveedor.id} proveedor={proveedor}/>)
                 )
-                : <h1 className="col-span-6 m-[40dvh] text-center">No hay ofertas que mostrar.</h1>
+                :<div className="flex items-center w-full col-span-2  justify-center"> <Error>No hay ofertas que mostrar.</Error></div>
             :<h1 className="col-span-6 m-[40dvh] text-center">Cargando...</h1>}
         </div>                                               
     );

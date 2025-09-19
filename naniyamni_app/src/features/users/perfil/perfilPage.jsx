@@ -15,8 +15,8 @@ const Perfil = () => {
     return (
         <div className="flex justify-center mt-4">
         {token? (
-            <div className="flex w-150 flex-col rounded border border-gray-200 bg-white justify-between">
-                    <div className="w-40 mt-4 mr-2 mb-2 self-end">
+            <div className="flex w-150 flex-col shadow rounded-xl justify-between">
+                    <div className="w-40 m-2 self-end">
                         <Button text="Cerrar sesión" color="red" onClick={handleClick}/>
                     </div>
                     <PerfilCard />

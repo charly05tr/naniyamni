@@ -16,7 +16,15 @@ export const useProveedorDetail = (id) => {
             setProveedor(data);
 
         } catch(e) {
-            setError(e);
+            if (typeof e === "object") {
+                const firstKey = Object.keys(e)[0];
+                const firstMessage = e[firstKey][0];
+                setError(firstMessage);
+            }
+            else {
+                setError("Ocurrió un error inesperado.");
+            }
+            throw e;
         }
         finally {
             setLoading(false);

@@ -5,8 +5,10 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
   const galeriaRef = useRef(null);
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
   const [indiceSeleccionado, setIndiceSeleccionado] = useState(null);
+  const [isAnimating, setIsAnimating] = useState(false); // Nuevo estado para la animación de flash
 
   const tamSelOpciones = {
+    sm: "max-w-[60vw]",
     md: "max-w-[70vw]",
     lg: "max-w-[95vw]",
   };
@@ -14,36 +16,50 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
   const handleClick = (imagen, idx) => {
     setImagenSeleccionada(imagen);
     setIndiceSeleccionado(idx);
+    // document.body.classList.add('overflow-hidden'); // Descomentar si quieres evitar el scroll de fondo
   };
   const handleClose = () => {
     setImagenSeleccionada(null);
     setIndiceSeleccionado(null);
+    // document.body.classList.remove('overflow-hidden'); // Descomentar si quieres evitar el scroll de fondo
   };
 
+  const startAnimation = useCallback(() => {
+    setIsAnimating(true);
+    const timer = setTimeout(() => {
+      setIsAnimating(false);
+    }, 150); // Duración de la animación de flash (ajusta a tu gusto)
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleAnterior = useCallback(() => {
-    if (indiceSeleccionado === null) return;
+    if (indiceSeleccionado === null || !imagenes.length) return;
+    startAnimation(); // Inicia la animación antes de cambiar la imagen
     const nuevoIndice = (indiceSeleccionado - 1 + imagenes.length) % imagenes.length;
     setIndiceSeleccionado(nuevoIndice);
     setImagenSeleccionada(imagenes[nuevoIndice]);
-  }, [imagenes, indiceSeleccionado]);
+  }, [imagenes, indiceSeleccionado, startAnimation]);
 
   const handleSiguiente = useCallback(() => {
-    if (indiceSeleccionado === null) return;
+    if (indiceSeleccionado === null || !imagenes.length) return;
+    startAnimation(); // Inicia la animación antes de cambiar la imagen
     const nuevoIndice = (indiceSeleccionado + 1) % imagenes.length;
     setIndiceSeleccionado(nuevoIndice);
     setImagenSeleccionada(imagenes[nuevoIndice]);
-  }, [imagenes, indiceSeleccionado]);
+  }, [imagenes, indiceSeleccionado, startAnimation]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === "ArrowRight") {
-        handleSiguiente();
-      }
-      if (e.key === "ArrowLeft") {
-        handleAnterior();
-      }
-      if (e.key === "Escape") {
-        handleClose();
+      if (imagenSeleccionada) { // Solo si el modal está abierto
+        if (e.key === "ArrowRight") {
+          handleSiguiente();
+        }
+        if (e.key === "ArrowLeft") {
+          handleAnterior();
+        }
+        if (e.key === "Escape") {
+          handleClose();
+        }
       }
     };
   
@@ -52,11 +68,11 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [handleAnterior, handleSiguiente]);
+  }, [handleAnterior, handleSiguiente, handleClose, imagenSeleccionada]); // Añadido imagenSeleccionada para que el efecto solo ocurra si el modal está abierto
 
   useEffect(() => {
     const galeria = galeriaRef.current;
-    if (!galeria || imagenes.length < 2) return;
+    if (!galeria || imagenes.length < 2 || !duplicar) return;
 
     const anchoOriginal = galeria.scrollWidth / 2;
     const intervalMs = 5000;
@@ -80,7 +96,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
     }, intervalMs);
 
     return () => clearInterval(interval);
-  }, [imagenes]);
+  }, [imagenes, duplicar]);
 
   const listaFinal =
     imagenes.length > 3 && duplicar
@@ -98,7 +114,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
             key={`${imagen.id}-${idx}`}
             src={imagen.image_url}
             alt={imagen.title}
-            className="h-60 rounded cursor-pointer flex-shrink-0 hover:opacity-90"
+            className="h-60 rounded cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity duration-200"
             onClick={() => handleClick(imagen, idx % imagenes.length)}
             draggable={false}
           />
@@ -107,9 +123,14 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
 
       {imagenSeleccionada && (
         <div
-          className="fixed inset-0 backdrop-blur-sm bg-black/40 flex items-center justify-between z-50"
+          className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-between z-100"
           onClick={handleClose}
         >
+          {/* Superposición de flash blanco */}
+          {isAnimating && (
+            <div className="absolute inset-0 bg-white opacity-0 animate-flash-white z-50"></div>
+          )}
+
           <div
             onClick={(e) => e.stopPropagation()}
             >
@@ -127,7 +148,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
           <img
             src={imagenSeleccionada.image_url}
             alt={imagenSeleccionada.title}
-            className={`max-h-[90vh] md:max-w-[90vw] ${tamSelOpciones[tamSel]} rounded object-cover`}
+            className={`max-h-[90vh]  md:max-w-[90vw] ${tamSelOpciones[tamSel]} rounded object-contain transition-all duration-300 ease-in-out `}
           />
           <button
               className="absolute top-4 right-4  text-white px-1 py-1 rounded-full cursor-pointer z-100"
@@ -141,7 +162,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
                 <div className="h-[100vh] w-12 right-4 flex items-start lg:items-center justify-center absolute lg:relative">
                 {(imagenes.length > 2)? (
                   <button
-                    className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full hover:bg-black/70"
+                    className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full hover:bg-black/70 z-100"
                     onClick={handleSiguiente}
                   >
                     <ChevronRight className="w-8 h-8"/>

@@ -20,11 +20,10 @@ class Proveedor(models.Model):
         ('CDN', 'Centro de Diversión Nocturna'),
         ('AL', 'Albergue'),
     )
-
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
     # numeroLegal = models.CharField(unique=True)
-    # telefono = models.CharField(max_length=20)
+    telefono = models.CharField(max_length=20, default="")
     # correo = models.CharField(unique=True, max_length=100)
     direccion = models.CharField(max_length=255)
     ciudad = models.CharField(max_length=255)
@@ -60,12 +59,20 @@ class Proveedor(models.Model):
         default=list
     )
 
-
+#servicios
 class Caracteristica(models.Model):
     nombre = models.CharField(max_length=255)
 
 
 class Servicio(models.Model):
+    TIPOS = (
+        ("H", "habitacion"),
+        ("V", "vehiculo"),
+        ("A", "atraccion"),
+        ("VI", "viaje"),
+        ("G", "generico")
+    )
+
     nombre = models.CharField(max_length=255)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
@@ -74,6 +81,24 @@ class Servicio(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='servicios')
     caracteristicas = models.ManyToManyField(Caracteristica, related_name="servicios", blank=True)
+    tipo_servicio = models.CharField(choices=TIPOS, default="G")
+
+class Habitacion(Servicio):
+    tipos = (('S', 'single'), ('D', 'double'), ('SU', 'suite'))
+    tipo = models.CharField(choices=tipos, max_length=2)
+    capacidad = models.IntegerField()
+
+
+class Categoria(models.Model):
+    nombre = models.CharField(max_length=255)
+    cant_vehiculos = models.CharField(max_length=255)
+
+
+class Sucursal(models.Model):
+    latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)
+    longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)     
+    direccion = models.CharField(max_length=255)
+    proveedor = models.ForeignKey(Proveedor, related_name="sucursales", on_delete=models.CASCADE, null=True)
 
 
 class AlquilerVehiculo(Servicio):
@@ -82,15 +107,8 @@ class AlquilerVehiculo(Servicio):
     marca = models.CharField(max_length=255)
     transmision = models.CharField(choices=TIPO_TRANSMISION, default='A')
     cant_asientos = models.IntegerField(default=5)
-
-class ReservaVehiculo(AlquilerVehiculo):
-       fecha_recogida = models.DateField()
-       fecha_devolucion = models.DateField()
-       hora_recogida = models.DateTimeField()
-       hora_entrega  = models.DateTimeField()
-       lugar_recogida = models.CharField(max_length=255)
-       lugar_devolucion = models.CharField(blank=True)
-
+    sucursales = models.ForeignKey(Sucursal, on_delete=models.CASCADE, related_name="vehiculos", null=True)
+    categoria  = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="vehiculos", null=True)
 
 class ViajeDirecto(Servicio):
     origen = models.CharField(max_length=255)
@@ -98,38 +116,14 @@ class ViajeDirecto(Servicio):
     asientos_disponibles = models.IntegerField()
 
 
-class ReservaViaje(ViajeDirecto):
-       turista = models.ForeignKey(User,on_delete=models.PROTECT)
-       fecha_reserva = models.DateTimeField(auto_now=True)
-
 class Destino(models.Model):
     viaje = models.ForeignKey(ViajeDirecto, on_delete=models.CASCADE, related_name="destinos")
     nombre = models.CharField(max_length=100)
-
-
-class Habitacion(Servicio):
-    tipos = (('S', 'single'), ('D', 'double'), ('SU', 'suite'))
-    tipo = models.CharField(choices=tipos, max_length=2)
-    capacidad = models.IntegerField()
-
-
-class ReservaHabitacion(Habitacion):
-       turista = models.ForeignKey(User,on_delete=models.PROTECT)
-       fecha_reserva = models.DateTimeField(auto_now=True)
-       fecha_llegada = models.DateTimeField()
-       fecha_salida = models.DateTimeField()
-       hora_llegada = models.DateTimeField()
-       hora_salida  = models.DateTimeField()
        
 
-class Atracciones(Servicio):
+class Atraccion(Servicio):
     cupo_maximo = models.IntegerField(null=True, blank=True)      
-    guia_incluido = models.BooleanField(default=True)  
-
-class ReservaAtracciones(Atracciones):
-    turista = models.ForeignKey(User,on_delete=models.PROTECT)
-    fecha_reserva = models.DateTimeField()
-    duracion_minutos = models.IntegerField(null=True, blank=True)        
+    guia_incluido = models.BooleanField(default=True)          
 
 
 class Gastronomico(Servicio):
@@ -145,7 +139,7 @@ class Gastronomico(Servicio):
         default='A'
     )
 
-
+#imagenes
 class ProveedorImage(models.Model):
     title = models.CharField(max_length=255)
     image_url = models.URLField()

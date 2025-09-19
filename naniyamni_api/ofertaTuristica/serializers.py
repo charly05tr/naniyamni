@@ -1,6 +1,5 @@
 from rest_framework import serializers 
-from .models import ProveedorImage, Proveedor, ServicioImage, AlquilerVehiculo, ViajeDirecto, Gastronomico, Atracciones, Habitacion, Destino, Servicio, Caracteristica
-
+from .models import *
 
 class ProveedorImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,14 +7,20 @@ class ProveedorImageSerializer(serializers.ModelSerializer):
         fields = ["id", "title", "image_url"]
 
 
+class SucursalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sucursal
+        fields = ["id", "direccion"]
+
 class ProveedorDetailSerializer(serializers.ModelSerializer):
     imagenes = serializers.SerializerMethodField()
     imagen = serializers.SerializerMethodField()
     servicios = serializers.SerializerMethodField()
+    sucursales = SucursalSerializer(many=True)
 
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios", "longitud", "latitud"]
+        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios", "longitud", "latitud", "reglas", "sucursales"]
         read_only_fields = ["administrador"]
 
     def create(self, validated_data):
@@ -37,11 +42,11 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
         if obj.tipo == "H":  # Hotel
             return HabitacionSerializer(Habitacion.objects.filter(proveedor=obj), many=True).data
         elif obj.tipo == "AV":  # Arrendamiento de Vehículos
-            return AlquilerVehiculoSerializer(obj.servicios.all(), many=True).data
+            return AlquilerVehiculoSerializer(AlquilerVehiculo.objects.filter(proveedor=obj), many=True).data
         elif obj.tipo in ["TTT", "OV"]:  # Transporte o Tour
-            return ViajeDirectoSerializer(obj.servicios.all(), many=True).data
+            return ViajeDirectoSerializer(ViajeDirecto.objects.filter(proveedor=obj), many=True).data
         else:  # Restaurante, Bar, etc.
-            return ServicioSerializer(obj.servicios.all(), many=True).data
+            return ServicioSerializer(Servicio.objects.filter(proveedor=obj), many=True).data
 
 
 class ProveedorListSerializer(serializers.ModelSerializer):
@@ -118,6 +123,12 @@ class CaracteristicaSerializer(serializers.ModelSerializer):
         fields = ["id","nombre"]
 
 
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = ["id","nombre", "cant_vehiculos"]
+
+
 #serializer padre
 class ServicioSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
@@ -125,16 +136,28 @@ class ServicioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Servicio
-        fields = ["id", "nombre", "descripcion", "precio", "disponible", "proveedor", "imagenes", "caracteristicas"]
+        fields = ["id", "nombre", "descripcion", "precio", "disponible", "proveedor", "imagenes", "caracteristicas", "tipo_servicio"]
 
 
 class AlquilerVehiculoSerializer(serializers.ModelSerializer):
+    categoria = CategoriaSerializer(many=False)
     imagenes = ServicioImageSerializer(many=True, read_only=True)
-    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+    caracteristicas = CaracteristicaSerializer(many=True)
+    reservas_ocupadas = serializers.SerializerMethodField()
+    sucursales = SucursalSerializer(many=False)
 
     class Meta(ServicioSerializer.Meta):
         model = AlquilerVehiculo
-        fields = ServicioSerializer.Meta.fields + ["modelo", "marca", "transmision", "cant_asientos"]
+        fields = ServicioSerializer.Meta.fields + ["modelo", "marca", "transmision", "cant_asientos", "reservas_ocupadas", "sucursales", "categoria"]
+
+    def get_reservas_ocupadas(self, obj):
+        reservas = obj.reservas.all()
+        return [
+            {
+                "inicio": r.fecha_hora_recogida,
+                "fin": r.fecha_hora_entrega
+            } for r in reservas
+        ]
 
 
 class DestinoSerialiazer(serializers.ModelSerializer):
@@ -147,19 +170,35 @@ class ViajeDirectoSerializer(serializers.ModelSerializer):
     destinos = DestinoSerialiazer(many=True, read_only=True)
     imagenes = ServicioImageSerializer(many=True, read_only=True)
     caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+    reservas_ocupadas = serializers.SerializerMethodField()
 
     class Meta(ServicioSerializer.Meta):
         model = ViajeDirecto
-        fields = ServicioSerializer.Meta.fields + ["origen", "fecha_salida", "asientos_disponibles", "destinos"]
+        fields = ServicioSerializer.Meta.fields + ["origen", "fecha_salida", "asientos_disponibles", "destinos", "reservas_ocupadas"]
 
+    def get_reservas_ocupadas(self, obj):
+        reservas = obj.reservas.all()
+        return [
+            {
+                "inicio": r.fecha_hora_recogida,
+                "fin": r.fecha_hora_entrega
+            } for r in reservas
+        ]
 
-class AtraccionesSerializer(serializers.ModelSerializer):
+class AtraccionSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
     caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+    reservas_ocupadas = serializers.SerializerMethodField()
 
     class Meta(ServicioSerializer.Meta):
-        model = Atracciones
-        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo"]
+        model = Atraccion
+        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo", "reservas_ocupadas"]
+
+    def get_reservas_ocupadas(self, obj):
+        reservas = obj.reservas.all()
+        return [
+            {"inicio": r.fecha_reserva, "fin": r.fecha_reserva} for r in reservas
+        ]
 
 
 class GastronomicoSerializer(serializers.ModelSerializer):
@@ -174,7 +213,17 @@ class GastronomicoSerializer(serializers.ModelSerializer):
 class HabitacionSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
     caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+    reservas_ocupadas = serializers.SerializerMethodField()
 
-    class Meta(ServicioSerializer.Meta):
+    class Meta:
         model = Habitacion
-        fields = ServicioSerializer.Meta.fields + ["capacidad", "tipo"]
+        fields = ServicioSerializer.Meta.fields + ["capacidad", "tipo", "reservas_ocupadas"]
+
+    def get_reservas_ocupadas(self, obj):
+        reservas = obj.reservas.all()
+        return [
+            {
+                "inicio": r.fecha_hora_llegada,
+                "fin": r.fecha_hora_salida
+            } for r in reservas
+        ]

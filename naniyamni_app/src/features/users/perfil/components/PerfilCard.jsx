@@ -1,3 +1,4 @@
+import React from 'react';
 import { usePerfil } from "../hooks/usePerfil";
 import { Title } from "@TextStyled";
 import { ErrorText } from "@FormStyled";
@@ -5,37 +6,66 @@ import { Avatar } from "@Avatar";
 
 export const PerfilCard = () => {
     const { loading, error, perfilData } = usePerfil();
-    localStorage.setItem("nombre_turista", perfilData.first_name);
-    localStorage.setItem("apellido_turista", perfilData.last_name);
 
+    // Nota: Es mejor almacenar en localStorage dentro de un useEffect para evitar re-renders innecesarios.
+    // Aunque para este ejemplo lo mantendremos aquí por simplicidad.
+    if (perfilData) {
+        localStorage.setItem("nombre_turista", perfilData.first_name);
+        localStorage.setItem("apellido_turista", perfilData.last_name);
+    }
+    
+    // Clases base para el contenedor principal
+    const cardBaseClasses = "relative bg-white rounded-3xl shadow-md overflow-hidden p-6 md:p-8 transform transition-transform duration-300";
+
+    if (loading) {
+        return (
+            <div className={`${cardBaseClasses} flex items-center justify-center h-64`}>
+                <Title text="Cargando..." className="text-xl font-semibold text-gray-700"/>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={`${cardBaseClasses} flex items-center justify-center h-64`}>
+                <ErrorText>{error}</ErrorText>
+            </div>
+        );
+    }
+    
     return (
-        <div className="p-2 text-center border border-gray-200 m-2">
-            {(!loading) 
-                ?
-                    <>
-                        <Title text={`${perfilData.first_name} ${perfilData.last_name}`}/>
-                        <div className="flex justify-center m-5">
-                            <Avatar imageUrl={perfilData.imagen} size="w-25 h-25" textSize="text-5xl"/>
-                        </div>
-                        <div>
-                            <p className="text-gray-800">{perfilData.email}</p>
-                        </div>
-                        <div className="w-full flex flex-col text-gray-800 items-start bg-amber-50 mt-5 p-2 rounded border-gray-200">
-                            <div>
-                                {(perfilData.telefono != 0)?<p className="m-2">Teléfono: {perfilData.telefono}</p>:""}
+        <div className="max-w-md mx-auto my-10">
+            <div className={cardBaseClasses}>
+                {/* Background degradado para un toque de estilo */}
+                <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-br from-blue-50 to-cyan-50"></div>
+
+                {/* Contenedor del avatar */}
+                <div className="relative z-10 flex flex-col items-center -mt-4">
+                    <Avatar imageUrl={perfilData.imagen} size="w-34 h-34" textSize="text-6xl" />
+                    <Title 
+                        text={`${perfilData.first_name} ${perfilData.last_name}`} 
+                        className="text-2xl md:text-3xl font-bold mt-4 mb-1 text-gray-800"
+                    />
+                    <p className="text-gray-500 font-medium mt-6">{perfilData.rol}</p>
+                    <p className="text-gray-500 text-sm mt-1">{perfilData.email}</p>
+                </div>
+                
+                {/* Separador de contenido */}
+                <div className="border-t border-gray-200 mt-6 pt-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
+                        {perfilData.telefono !== 0 && (
+                            <div className="flex flex-col items-start">
+                                <span className="font-semibold text-gray-500 text-sm">Teléfono</span>
+                                <p className="text-base font-medium">{perfilData.telefono}</p>
                             </div>
-                            <div>
-                                <p className="m-2">Rol: {perfilData.rol}</p>
-                            </div>
-                            <div>
-                                <p className="m-2">Ciudad: {perfilData.ciudad}, {perfilData.pais}</p>
-                            </div>
+                        )}
+                        <div className="flex flex-col items-start">
+                            <span className="font-semibold text-gray-500 text-sm">Ubicación</span>
+                            <p className="text-base font-medium">{perfilData.ciudad}, {perfilData.pais}</p>
                         </div>
-                    </>    
-                :
-                    <Title text="Cargando..." />
-            }
-            {error && <ErrorText>{error}</ErrorText>}
+                    </div>
+                </div>
+            </div>
         </div>
    );
 };

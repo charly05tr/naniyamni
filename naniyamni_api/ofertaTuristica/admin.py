@@ -1,9 +1,12 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.postgres.forms import SimpleArrayField
+
 
 from .models import (
     Proveedor, Servicio, AlquilerVehiculo, ViajeDirecto, Destino,
-    Habitacion, Atracciones, Gastronomico, ProveedorImage, ServicioImage,
-    Caracteristica
+    Habitacion, Atraccion, Gastronomico, ProveedorImage, ServicioImage,
+    Caracteristica, Sucursal, Categoria
 )
 
 # ======================
@@ -22,8 +25,21 @@ class ServicioImageInline(admin.TabularInline):
 # ======================
 # Proveedor
 # ======================
+class ProveedorForm(forms.ModelForm):
+    reglas = SimpleArrayField(
+        forms.CharField(max_length=255),
+        delimiter=',',
+        required=False
+    )
+
+    class Meta:
+        model = Proveedor
+        fields = '__all__'
+
+
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):
+    form = ProveedorForm
     list_display = ("nombre", "tipo", "ciudad", "activo", "creado_en", "latitud", "longitud", "direccion", "amenidades", "reglas")
     list_filter = ("tipo", "activo", "ciudad")
     search_fields = ("nombre", "ciudad")
@@ -35,7 +51,7 @@ class ProveedorAdmin(admin.ModelAdmin):
 # ======================
 @admin.register(Servicio)
 class ServicioAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "proveedor", "precio", "disponible", "creado_en")
+    list_display = ("nombre", "proveedor", "precio", "disponible", "creado_en", "tipo_servicio")
     list_filter = ("disponible", "creado_en", "actualizado_en")
     search_fields = ("nombre", "descripcion", "proveedor__nombre")
     inlines = [ServicioImageInline]
@@ -48,9 +64,37 @@ class CaracteristicaAdmin(admin.ModelAdmin):
 # ======================
 # Especializaciones
 # ======================
+
+
 @admin.register(AlquilerVehiculo)
 class AlquilerVehiculoAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "marca", "modelo", "precio", "proveedor")
+    list_display = (
+        "nombre",
+        "marca",
+        "modelo",
+        "precio",
+        "proveedor",
+        "mostrar_categorias",
+        "mostrar_sucursales",
+    )
+
+    def mostrar_sucursales(self, obj):
+        return obj.sucursales.direccion if obj.sucursales else "-"
+    mostrar_sucursales.short_description = "Sucursal"
+
+    def mostrar_categorias(self, obj):
+        return obj.categoria.nombre if obj.categoria else "-"
+    mostrar_categorias.short_description = "Categoría"
+
+
+@admin.register(Sucursal)
+class SucursalAdmin(admin.ModelAdmin):
+    list_display = ("direccion", "latitud", "longitud")
+
+
+@admin.register(Categoria)
+class CategoriaAdmin(admin.ModelAdmin):
+    list_display = ("id","nombre", "cant_vehiculos")
 
 
 @admin.register(ViajeDirecto)
@@ -71,8 +115,8 @@ class HabitacionAdmin(admin.ModelAdmin):
     list_filter = ("tipo",)
 
 
-@admin.register(Atracciones)
-class AtraccionesAdmin(admin.ModelAdmin):
+@admin.register(Atraccion)
+class AtraccionAdmin(admin.ModelAdmin):
     list_display = ("nombre", "cupo_maximo", "proveedor", "guia_incluido")
 
 

@@ -13,14 +13,14 @@ import cloudinary.uploader
 from .serializers import *
 from .models import *
 from .permissions import IsProveedor, IsProveedorOwner
-from .filters import ProveedorFilter
+from .filters import ProveedorFilter                                                                                                                                                                
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
     filter_backends = [DjangoFilterBackend]
     filterset_class = ProveedorFilter
-    search_fields = ["nombre", "descripcion"] 
+    search_fields = ["nombre", "descripcion", "tipo", "ciudad"] 
 
     def get_permissions(self):
         if self.request.method == "GET":
@@ -85,10 +85,10 @@ class ViajeDirectoViewSet(viewsets.ModelViewSet):
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 
-class AtraccionesViewSet(viewsets.ModelViewSet):
-    queryset = Atracciones.objects.all()
+class AtraccionViewSet(viewsets.ModelViewSet):
+    queryset = Atraccion.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
-    serializer_class = AtraccionesSerializer
+    serializer_class = AtraccionSerializer
     
     def get_permissions(self):
         if self.request.method == "GET":

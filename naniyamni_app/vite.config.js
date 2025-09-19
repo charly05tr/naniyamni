@@ -22,6 +22,8 @@ export default defineConfig({
       '@RemoveButton': path.resolve(__dirname, 'src/shared/styled-components/RemoveButton.jsx'),
       '@ReadMoreText': path.resolve(__dirname, 'src/shared/components/ReadMoreText.jsx'),
       '@NumericInput': path.resolve(__dirname, 'src/shared/components/NumericInput.jsx'),
+      '@Alert': path.resolve(__dirname, 'src/shared/styled-components/Alert.jsx'),
+      '@Error': path.resolve(__dirname, 'src/shared/styled-components/Error.jsx'),
     }
   }
 })

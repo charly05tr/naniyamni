@@ -1,0 +1,54 @@
+import { tiposServicios } from "@config"
+
+export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpen }) => {
+  const {
+    id,
+    servicio,
+    lugar_recogida,
+    lugar_devolucion,
+    // fecha_hora_entrega,
+    // fecha_hora_recogida,
+    proveedor_nombre, 
+    total,
+  } = reserva;
+
+  const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
+  
+  return (
+    <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
+      <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
+        <img
+          src={imageUrl}
+          alt={`${servicio.marca} ${servicio.modelo}`}
+          className="w-full h-48 md:h-full object-cover rounded-md md:rounded-l-xl md:rounded-r-none"
+        />
+      </div>
+      <div className="p-6 md:p-8 flex-1">
+        <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.marca} ${servicio.modelo}`}</h3>
+        <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 mb-4">
+          <div className="flex items-start flex-col gap-1">
+            <span className="text-sm font-medium text-gray-500 mr-2">Recogida:</span>
+            <span className="text-sm text-gray-800 line-clamp-1">{lugar_recogida}</span>
+            {/* <span className="text-sm text-gray-700">{fecha_hora_recogida}</span> */}
+          </div>
+          <div className="flex items-start flex-col gap-1">
+            <span className="text-sm font-medium text-gray-500 mr-2">Devolución:</span>
+            <span className="text-sm text-gray-800 line-clamp-1">{lugar_devolucion}</span>
+            {/* <span className="text-sm text-gray-700">{fecha_hora_entrega}</span> */}
+          </div>
+          <div className="flex items-start">
+            <span className="text-sm font-medium text-gray-500 mr-2">Proveedor:</span>
+            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer">{proveedor_nombre}</a>
+          </div>
+        </div>
+        <div className='flex gap-2'>
+          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
+          <span className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Pagar solo este</span>
+          <span onClick={handleOpen} className='hover:text-gray-700 text-sm underline cursor-pointer self-end'>Ver detalle reserva</span>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -5,7 +5,7 @@ import { GaleriaImagenes } from "./components/GaleriaImagenes";
 import { ServicioCard } from "./components/ServicioCard";
 import MapWithMarket from "./components/MapaProveedores";
 import { DisponibilidadForm } from "./components/DisponibilidadForm";
-import { Title } from "@TextStyled";
+import { Error } from "@Error";
 import { useFiltros } from "./hooks/useFiltros";
 import { useState } from "react";
 
@@ -18,6 +18,7 @@ const ProveedorPage = () => {
         ...(proveedor?.imagenes || []),
         ...((proveedor?.servicios || []).map(s => s?.imagenes || []).flat())
       ];
+      
     return (
         <>
             {(!loading)
@@ -34,15 +35,15 @@ const ProveedorPage = () => {
                     </div>
                     <div>
                         <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] md:mb-4 mb-2 ">
-                            <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro}/>
-                            <div className="bg-white border border-gray-200 p-4 rounded-xl">
-                                <Title text="Comentarios Destacados"/> 
+                            <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
+                            <div className="rounded-xl bg-white border border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
+                               <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Comentarios Destacados</h1>
                             </div>
                         </div>
                         {(serviciosFiltrados.length > 0)
                         ?
-                            <ServicioCard servicios={serviciosFiltrados} tipo={proveedor.tipo} reglas={proveedor.reglas}/>
-                        :   <div className="p-4 border rounded bg-red-200 border-red-600 text-red-900 text-center">No hay Servicios disponibles</div>}
+                            <ServicioCard servicios={serviciosFiltrados} tipo={proveedor.tipo} sucursales={proveedor.sucursales}/>
+                        :   <Error>No hay servicios disponibles</Error>}
                     </div>
                 </div>
             :

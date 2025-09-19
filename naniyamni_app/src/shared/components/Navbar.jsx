@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { name: "Inicio", path: "/" },
   { name: "Oferta Turística", path: "/oferta-turistica" },
   { name: "Mapa", path: "/mapa" },
-  { name: "Mi Tour", path: "/tour" },
+  { name: "Mi Tour", path: "/MiTour" },
 ];
 
 const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {

@@ -1,9 +1,6 @@
-import { useState } from "react";
+import { SelectLugarDevolucion } from "./Surcursales";
 
-export const ReservaVehiculo = ({entrada, salida, servicio, dias, cantVehiculos, lugarInicio, LugarDevolucion}) => {
-    const [horaInicio, setHoraInicio] = useState(entrada.split("\n")[1]);
-    const [horaDevolucion, setHoraDevolucion] = useState(salida.split("\n")[1]);
-
+export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevolucion, setLugarDevolucion, sucursales = [] }) => {
     const generarOpcionesHoras = () => {
         const opciones = [];
         for (let h = 0; h < 24; h++) {
@@ -18,33 +15,33 @@ export const ReservaVehiculo = ({entrada, salida, servicio, dias, cantVehiculos,
     
     const opciones = generarOpcionesHoras();
 
-  const tarifaDiaria = servicio.precio; 
-  const recargoPorHora = 0.15; 
+    const tarifaDiaria = servicio.precio; 
+    const recargoPorHora = 0.15; 
     const horasExtras =
-    horaInicio !== horaDevolucion
-      ? calcularHorasExtras(horaInicio, horaDevolucion)
+    reserva.horaInicio !== reserva.horaDevolucion
+      ? calcularHorasExtras(reserva.horaInicio, reserva.horaDevolucion)
       : 0;
 
     const recargo = horasExtras > 0 ? Math.min(horasExtras * recargoPorHora * tarifaDiaria, tarifaDiaria) : 0;
 
     const handleChangeHoraInicio = (hora) => {
         setHoraInicio(hora);
-        if (horaDevolucion === salida.split("\n")[1]) {
+        if (reserva.horaDevolucion === "") {
             setHoraDevolucion(hora);
         }
     }
 
     return (
         <>
-            <div className="flex flex-shrink flex-1 flex-col gap-2 border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
+            <div className="text-zinc-800  flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
                 <h1 className="text-3xl font-semibold tracking-wide my-2">Tu reserva</h1>
-                <div className="flex gap-2 px-2 py-4 border border-gray-200">
+                <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
                     <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
                         <p className="text-sm">Fecha Inicio</p>
-                        <p className="font-bold">{entrada.split("\n")[0]}</p>
+                        <p className="font-bold">{reserva.entrada.split("\n")[0]}</p>
                         <p className="mt-3 text-sm">Hora Inicio</p>
                         <select
-                            value={horaInicio}
+                            value={reserva.horaInicio}
                             onChange={(e) => handleChangeHoraInicio(e.target.value)}
                             className="w-fit py-1 font-bold focus:outline-none cursor-pointer"
                         >
@@ -57,10 +54,10 @@ export const ReservaVehiculo = ({entrada, salida, servicio, dias, cantVehiculos,
                     </div>
                     <div className="flex flex-col gap-1 p-2">
                         <p className="text-sm">Fecha Devolución</p>
-                        <p className="font-bold">{salida.split("\n")[0]}</p>
+                        <p className="font-bold">{reserva.salida.split("\n")[0]}</p>
                         <p className="mt-3 text-sm">Hora Devolución</p>
                         <select
-                            value={horaDevolucion}
+                            value={reserva.horaDevolucion}
                             onChange={(e) => setHoraDevolucion(e.target.value)}
                             className="w-fit py-1 font-bold focus:outline-none cursor-pointer"
                         >
@@ -72,20 +69,30 @@ export const ReservaVehiculo = ({entrada, salida, servicio, dias, cantVehiculos,
                         </select>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200">
+                <div className="flex flex-col gap-2 p-2 mt-2 border border-gray-200 items-start rounded">
+                    <div className="flex flex-col gap-1 p-2 border-gray-300">
+                        <p className="text-sm">Lugar Inicio</p>
+                        <p className="font-bold">{reserva.lugarInicio.toLowerCase()}</p>
+                    </div>
+                    <div className="flex flex-col gap-1 p-2">
+                        <p className="text-sm">Lugar Devolución</p>
+                        <SelectLugarDevolucion sucursales={sucursales} setLugarDevolucion={setLugarDevolucion} lugarDevolucion={reserva.lugarDevolucion}/>
+                    </div>
+                </div>
+                <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200 rounded">
                     <p className="text-sm">Has seleccionado</p>
                     <strong className="flex gap-2 mb-3 flex-wrap">
-                            {cantVehiculos} {(cantVehiculos > 1)?"vehículos":"vehículo"} para {dias} {(dias > 1)?"días":"día"}
+                            {reserva.cantVehiculos} {(reserva.cantVehiculos > 1)?"vehículos":"vehículo"} para {reserva.dias} {(reserva.dias > 1)?"días":"día"}
                     </strong>
                     <p className="text-sm">1 x {servicio.nombre}</p>
                 </div>
-            {horasExtras > 0 && (
-                <div className="p-2 bg-yellow-100 text-yellow-800 rounded text-sm text-wrap w-fit max-w-100">
-                ⚠ Tu hora de devolución no coincide con la de inicio.  
-                Se aplicará un recargo de <strong>NIO {recargo.toFixed(2)}$</strong>  
-                ({horasExtras} hora(s) extra).
-                </div>
-            )}
+                {horasExtras > 0 && (
+                    <div className="p-2 bg-yellow-100 text-yellow-800 rounded text-sm text-wrap w-fit max-w-100">
+                        ⚠ Tu hora de devolución no coincide con la de inicio.  
+                        Se aplicará un recargo de <strong>NIO {recargo.toFixed(2)}$</strong>  
+                        ({horasExtras} hora(s) extra).
+                    </div>
+                )}
             </div>
         </>
     )

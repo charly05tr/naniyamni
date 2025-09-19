@@ -3,7 +3,7 @@ import { useMemo } from "react";
 export const useFiltros = (servicios = [], filtro = "all", tipo) => {
     const serviciosFiltrados = useMemo(() => {
         const lista = Array.isArray(servicios) ? servicios : [];
-        console.log(servicios);
+        
         if (filtro === "all" || (Array.isArray(filtro) && filtro.length === 0)) {
             return lista;
         }

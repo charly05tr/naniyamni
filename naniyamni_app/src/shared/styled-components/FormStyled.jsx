@@ -13,6 +13,7 @@ export const FormCard = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: rgba(255,255,255, 2);
+     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
 `
 
 export const Label = ({ text, forI }) => {
@@ -53,13 +54,13 @@ export const TextArea = ({ placeholder, value, onChange, ...props }) => {
 
 export const Select = ({ type = "text", placeholder, value, onChange, ...props }) => {
   return (
-    <div className="bg-gradient-to-r from-blue-200 to-yellow-100 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+    <div className="shadow bg-gradient-to-r bg-gray-200 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
       <select
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full border p-2 border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700"
+        className="bg-white w-full  p-2 rounded-sm focus:outline-none  text-gray-700"
         {...props}
       />
     </div>

@@ -6,5 +6,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),
     path('oferta-turistica/', include('ofertaTuristica.urls')),
+    path('reservas/', include('reservas.urls')),
     path('token-auth/', obtain_auth_token, name='api_token_auth'),
 ]

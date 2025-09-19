@@ -8,14 +8,17 @@ export const useDisponibilidad = () => {
     cantAdultos: 1,
     cantNinos: 0,
     cantHabitaciones: 1,
+    //AV
+    lugarInicio: "",
+    lugarDevolucion: "",
+    horaInicio: "",
+    horaDevolucion: "",
   });
 
-  // Persistir solo las fechas en sessionStorage
   useEffect(() => {
     sessionStorage.setItem("range", JSON.stringify(disponibilidad.range));
   }, [disponibilidad.range]);
 
-  // Funciones para actualizar cada valor
   const setRange = (range) =>
     setDisponibilidad((prev) => ({ ...prev, range }));
 
@@ -28,11 +31,29 @@ export const useDisponibilidad = () => {
   const setCantHabitaciones = (cantHabitaciones) =>
     setDisponibilidad((prev) => ({ ...prev, cantHabitaciones }));
 
+  //AV
+  const setLugarInicio = (lugarInicio) =>
+    setDisponibilidad((prev) => ({ ...prev, lugarInicio }));
+  
+  const setLugarDevolucion = (lugarDevolucion) =>
+    setDisponibilidad((prev) => ({ ...prev, lugarDevolucion }));
+  
+  const setHoraInicio = (horaInicio) =>
+    setDisponibilidad((prev) => ({ ...prev, horaInicio }));
+  
+  const setHoraDevolucion = (horaDevolucion) =>
+    setDisponibilidad((prev) => ({ ...prev, horaDevolucion }));
+
   return {
     ...disponibilidad,
     setRange,
     setCantAdultos,
     setCantNinos,
     setCantHabitaciones,
+    //AV
+    setLugarInicio,
+    setLugarDevolucion,
+    setHoraInicio,
+    setHoraDevolucion,
   };
 };

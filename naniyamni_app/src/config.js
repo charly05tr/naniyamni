@@ -61,3 +61,21 @@ export const formatDate = (date, type) => {
   
     return `${formatter.format(date)}\n${timeRange}`;
   };
+
+
+  
+  export const formatLocalDateTime = (date, time) => {
+    const pad = (n) => n.toString().padStart(2, "0");
+
+    const [hours, minutes] = time ? time.split(":").map(Number) : [0, 0];
+    const d = new Date(date);
+    d.setHours(hours, minutes, 0, 0);
+  
+    const y = d.getFullYear();
+    const m = pad(d.getMonth() + 1);
+    const day = pad(d.getDate());
+    const h = pad(d.getHours());
+    const min = pad(d.getMinutes());
+  
+    return `${y}-${m}-${day}T${h}:${min}`;
+};
