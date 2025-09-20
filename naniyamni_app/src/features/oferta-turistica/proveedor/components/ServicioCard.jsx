@@ -1,8 +1,7 @@
-import { Title } from "@TextStyled";
 import { GaleriaImagenes } from "./GaleriaImagenes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ReservaCard } from "./ReservaCard";
-import { Sliders, Users, Droplet, Tag  } from "lucide-react";
+import { Sliders, Users, Tag  } from "lucide-react";
 
 export const ServicioCard = ({ servicios, tipo, sucursales }) => {
 
@@ -24,16 +23,29 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
         setReservaCardOpen(servicio);
         setServicioReserva(servicio);
     } 
-    
+    useEffect(() => {
+      if (ReservaCardOpen) {
+        // Desactiva scroll del fondo
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "auto";
+      }
+  
+      // Limpieza cuando el componente se desmonta
+      return () => {
+        document.body.style.overflow = "auto";
+      };
+    }, [ReservaCardOpen]);
+
     const handleClose = () => {
         setReservaCardOpen(null);
     }
 
     return (
         <>
-  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-zinc-800">
+  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-zinc-800 ">
     {servicios?.map(servicio => (
-      <div key={servicio.id} className="bg-white p-4 border border-gray-200 rounded-2xl  transition-transform transform  shadow-sm  duration-300 flex flex-col hover:shadow-xl">
+      <div key={servicio.id} className="bg-white p-4 border border-gray-200 rounded-2xl  transition-transform transform  shadow-sm  duration-200 flex flex-col hover:shadow-xl">
         <div className="flex justify-between items-start gap-4 mb-2">
           <h2 className=" text-xl md:text-2xl font-semibold text-gray-800 flex-1">{servicio.nombre}</h2>
           <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
@@ -69,7 +81,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
           )}
         </div>
             <GaleriaImagenes imagenes={servicio?.imagenes} className="my-4"/>
-        <div className="my-2 mt-2 flex flex-wrap gap-2  max-h-18 scrollbar-hide overflow-y-hidden">
+        {/* <div className="my-2 mt-2 flex flex-wrap gap-2  max-h-18 scrollbar-hide overflow-y-hidden">
           {/* {servicio?.caracteristicas.sort((a,b)=> a.nombre.length - b.nombre.length).map(caracteristica => (
             <span 
               className="flex items-center gap-1 py-1.5 px-3 rounded-full border border-gray-300 bg-gray-100 text-gray-700 text-xs font-medium" 
@@ -81,13 +93,12 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
               {caracteristica.nombre}
             </span>
           ))} */}
-        </div>
       </div>
     ))}
   </div>
 
   {(ReservaCardOpen) && (
-    <div onClick={handleClose} className="overflow-y-auto fixed inset-0 backdrop-blur-sm bg-black/60 flex items-center justify-center z-50">
+    <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-black/60 flex items-center justify-center z-50">
         <button
           className="absolute top-4 right-4 text-white hidden md:block"
           onClick={handleClose}
@@ -96,7 +107,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-      <div onClick={(e) => e.stopPropagation()} className=" bg-white rounded-xl m-2 shadow-2xl">
+      <div onClick={(e) => e.stopPropagation()} className="bg-white md:rounded-xl md:m-2 shadow-2xl  md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
         <ReservaCard servicio={servicioReserva} handleClose={handleClose} sucursales={sucursales}/>
       </div>
     </div>

@@ -7,13 +7,16 @@ export const Form = styled.form`
 `;
 
 export const FormCard = styled.div`
-  max-width: 500px;
-  min-width: 400px;
+  max-width: 800px;
+  min-width: 340px;
   padding: 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
   background-color: rgba(255,255,255, 2);
      box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+     margin-bottom: 50px;
+  margin-left: 5px;
+  margin-right: 5px;
 `
 
 export const Label = ({ text, forI }) => {
@@ -23,13 +26,13 @@ export const Label = ({ text, forI }) => {
 }
 export const Input = ({ type = "text", placeholder, value, onChange, ...props }) => {
   return (
-    <div className="bg-gradient-to-r from-blue-200 to-yellow-100 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+    <div className="bg-gradient-to-r  rounded-lg border-none p-[1px]">
       <input
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full border p-2 border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700"
+        className="bg-white w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
         {...props}
       />
     </div>
@@ -38,12 +41,12 @@ export const Input = ({ type = "text", placeholder, value, onChange, ...props })
 
 export const TextArea = ({ placeholder, value, onChange, ...props }) => {
   return (
-    <div className="bg-gradient-to-r from-blue-200 to-yellow-100 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+    <div className="bg-gradient-to-r rounded-xl border-none px-[1px]">
       <textarea
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full border p-2 border-gray-300 rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-700 break-words"
+        className="bg-white w-full border p-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 break-words transition-all duration-200"
         rows="4"
         style={{ minHeight: '1.5em', overflow: 'hidden', resize: 'none' }}
         {...props}
@@ -70,12 +73,12 @@ export const Select = ({ type = "text", placeholder, value, onChange, ...props }
 export const Button = ({ text, disabled=false, color="blue", onClick=()=>{}}) => {
   const colorClasses = {
     red: "bg-red-400 hover:bg-red-500",
-    blue: "bg-blue-400 hover:bg-blue-500",
+    blue: "bg-blue-600 hover:bg-blue-700",
     green: "bg-green-400 hover:bg-green-500",
   };
 
   return (
-    <button onClick={onClick} className={`cursor-pointer w-full p-2 rounded-sm tracking-normal  ${colorClasses[color]}`} disabled={disabled}>
+    <button onClick={onClick} className={`cursor-pointer w-full px-2 py-3 rounded-lg tracking-tight font-bold text-white/95  ${colorClasses[color]}`} disabled={disabled}>
       {text}
     </button> 
   );

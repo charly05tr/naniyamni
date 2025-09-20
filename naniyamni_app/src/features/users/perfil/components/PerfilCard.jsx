@@ -1,7 +1,7 @@
 import React from 'react';
 import { usePerfil } from "../hooks/usePerfil";
 import { Title } from "@TextStyled";
-import { ErrorText } from "@FormStyled";
+import { Error } from "@Error";
 import { Avatar } from "@Avatar";
 
 export const PerfilCard = () => {
@@ -28,13 +28,14 @@ export const PerfilCard = () => {
     if (error) {
         return (
             <div className={`${cardBaseClasses} flex items-center justify-center h-64`}>
-                <ErrorText>{error}</ErrorText>
+                <Error>{error}</Error>
             </div>
         );
     }
     
     return (
         <div className="max-w-md mx-auto my-10">
+            {(!error)?
             <div className={cardBaseClasses}>
                 {/* Background degradado para un toque de estilo */}
                 <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-br from-blue-50 to-cyan-50"></div>
@@ -45,7 +46,7 @@ export const PerfilCard = () => {
                     <Title 
                         text={`${perfilData.first_name} ${perfilData.last_name}`} 
                         className="text-2xl md:text-3xl font-bold mt-4 mb-1 text-gray-800"
-                    />
+                        />
                     <p className="text-gray-500 font-medium mt-6">{perfilData.rol}</p>
                     <p className="text-gray-500 text-sm mt-1">{perfilData.email}</p>
                 </div>
@@ -65,7 +66,7 @@ export const PerfilCard = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>:<Error>No se pudo cargar tu perfil</Error>}
         </div>
    );
 };

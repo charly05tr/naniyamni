@@ -18,8 +18,15 @@ export const usePerfil = () => {
                 setPerfilData(data[0]);
     
             } catch(e) {
-                setError(e);
-                throw new Error(e);
+                if (typeof e === "object") {
+                    const firstKey = Object.keys(e)[0];
+                    const firstMessage = e[firstKey][0];
+                    setError(firstMessage);
+                }
+                else {
+                    setError("Ocurrió un error inesperado.");
+                }
+                throw e;
             } finally {
                 setLoading(false);
             }

@@ -6,7 +6,7 @@ from django.contrib.postgres.forms import SimpleArrayField
 from .models import (
     Proveedor, Servicio, AlquilerVehiculo, ViajeDirecto, Destino,
     Habitacion, Atraccion, Gastronomico, ProveedorImage, ServicioImage,
-    Caracteristica, Sucursal, Categoria
+    Caracteristica, Sucursal, Categoria, Itinerario, Hora_salida
 )
 
 # ======================
@@ -99,8 +99,18 @@ class CategoriaAdmin(admin.ModelAdmin):
 
 @admin.register(ViajeDirecto)
 class ViajeDirectoAdmin(admin.ModelAdmin):
-    list_display = ("nombre", "origen", "fecha_salida", "asientos_disponibles", "proveedor")
+    list_display = ("nombre", "origen", "asientos_disponibles", "precio", "descripcion")
     inlines = [ServicioImageInline]
+
+
+@admin.register(Itinerario)
+class ItinerarioAdmin(admin.ModelAdmin):
+    list_display = ("dia", "viaje")
+
+
+@admin.register(Hora_salida)
+class ItinerarioAdmin(admin.ModelAdmin):
+    list_display = ("id", "hora")
 
 
 @admin.register(Destino)

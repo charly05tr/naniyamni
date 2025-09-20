@@ -42,7 +42,7 @@ export const iconMap = {
     AL: "campground",  // Albergue
   };
 
-export const formatDate = (date, type) => {
+export const formatDateOld = (date, type) => {
     if (!(date instanceof Date) || isNaN(date)) return "Fecha no válida";
   
     const formatter = new Intl.DateTimeFormat("es-ES", {
@@ -63,6 +63,44 @@ export const formatDate = (date, type) => {
   };
 
 
+  export const formatDate = (dateTimeString, type = null) => {
+    if (!dateTimeString || typeof dateTimeString !== "string") {
+      return "Fecha no válida";
+    }
+  
+    // Dividir en fecha y hora
+    const [datePart, timePartRaw] = dateTimeString.split("T");
+    if (!datePart) return "Fecha no válida";
+  
+    // Procesar fecha
+    const [year, month, day] = datePart.split("-").map(Number);
+    const d = new Date(year, month - 1, day);
+  
+    // Procesar hora
+    let timeText = "";
+    if (timePartRaw) {
+      const [hh, mm] = timePartRaw.replace("Z", "").split(":");
+      timeText = `${hh.padStart(2, "0")}:${mm.padStart(2, "0")}`;
+    }
+  
+    // Formatear fecha en español
+    const formatter = new Intl.DateTimeFormat("es-ES", {
+      weekday: "short",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  
+    // Determinar si usar rango por type o la hora del string
+    if (type === "entrada") {
+      timeText = "14:00 - 23:30";
+    } else if (type === "salida") {
+      timeText = "07:30 - 12:00";
+    }
+  
+    return `${formatter.format(d)}${timeText ? " • " + timeText : ""}`;
+  };
+
   
   export const formatLocalDateTime = (date, time) => {
     const pad = (n) => n.toString().padStart(2, "0");
@@ -79,3 +117,35 @@ export const formatDate = (date, type) => {
   
     return `${y}-${m}-${day}T${h}:${min}`;
 };
+
+export const generarOpcionesHoras = () => {
+  const opciones = [];
+  for (let h = 0; h < 24; h++) {
+      for (let m of [0, 30]) {
+          const hora = String(h).padStart(2, "0");
+          const minutos = String(m).padStart(2, "0");
+          opciones.push(`${hora}:${minutos}`);
+      }
+  }
+  return opciones;
+};
+
+
+export const generarOpcionesNumeros = (n) => {
+  const opciones = [];
+  for (let i = 1; i <= n; i++) {
+    opciones.push(i);
+  }
+  return opciones;
+};
+
+
+export const diasSemana = {
+  "LU": "Lunes",
+  "MA": "Martes",
+  "MI": "Miércoles",
+  "JU": "Jueves",
+  "VI": "Viernes",
+  "SA": "Sábado",
+  "DO": "Domingo"
+}

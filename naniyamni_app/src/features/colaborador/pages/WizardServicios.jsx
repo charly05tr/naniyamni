@@ -16,7 +16,7 @@ const WizardServicios = () => {
     const [servicioId, setServicioId] = useState();
 
     const handlePostServicios = async (servicios) => {
-        const data = await createServicios(servicios, id);
+        const data = await createServicios(servicios, id, tipo);
         setServicioId(data);
         setStep(1);
     }

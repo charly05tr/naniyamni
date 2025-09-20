@@ -50,3 +50,6 @@ class ReservaViaje(Reserva):
     servicio = models.ForeignKey(
         ViajeDirecto, related_name="reservas", on_delete=models.PROTECT
     )
+    fecha_hora_salida = models.DateTimeField(null=True, blank=True)
+    cant_personas = models.IntegerField(default=1)
+

@@ -20,7 +20,7 @@ export const ProveedorDetailCard = ({ proveedor, loading, error }) => {
             </div>
             <div className="w-full flex flex-col items-start pb-2 pt-4 px-4 rounded">   
                 <ReadMoreText text={proveedor.descripcion || ""}/>
-                <div className="py-6 font-medium text-zinc-800/95">
+                <div className="py-6  text-zinc-800/95">
                     <p className="mb-4"><strong>Dirección:</strong> {proveedor.direccion?.toLowerCase()}</p>
                     <p className=""><strong>Categoría:</strong> {actividades.filter(item => item.value === proveedor.tipo)[0]?.label}</p>
                 </div>

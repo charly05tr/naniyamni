@@ -1,5 +1,6 @@
 #django
 from django.shortcuts import get_object_or_404
+import logging
 #DRF
 from rest_framework import permissions, authentication, status, viewsets, filters
 from rest_framework.views import APIView
@@ -13,7 +14,9 @@ import cloudinary.uploader
 from .serializers import *
 from .models import *
 from .permissions import IsProveedor, IsProveedorOwner
-from .filters import ProveedorFilter                                                                                                                                                                
+from .filters import ProveedorFilter    
+                                                                                                                                                            
+logger = logging.getLogger(__name__)
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
@@ -84,6 +87,15 @@ class ViajeDirectoViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
+    def create(self, request, *args, **kwargs):
+        logger.debug("CREATE Reserva payload: %s", request.data)
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
+            raise
+        return super().create(request, *args, **kwargs) 
 
 class AtraccionViewSet(viewsets.ModelViewSet):
     queryset = Atraccion.objects.all()

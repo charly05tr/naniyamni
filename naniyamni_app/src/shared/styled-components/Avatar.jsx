@@ -24,9 +24,12 @@ export const Avatar = ({ imageUrl, size = "w-9 h-9", textSize = "text-sm", onCli
           className="w-full h-full object-cover rounded-full"
         />
       ) : (
-        <span className={`text-white uppercase  ${textSize}`}>
+        <div>
+        {(nombre !== "undefined")?
+        (<span className={`text-white uppercase  ${textSize}`}>
           {iniciales}
-        </span>
+        </span>):<span className={`text-white uppercase  ${textSize}`}>NY</span>}
+      </div>
       )}
     </div>
   );

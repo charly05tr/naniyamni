@@ -5,10 +5,12 @@ export const getPerfil = async () => {
         "headers": {
             'Content-Type': 'application/json',
             "Authorization": `Token ${localStorage.getItem('token')}`,
-        }});
+        }
+    });
         
     if (!res.ok) {
-        throw new Error("No se pudo obtener los datos del perfil");
+        const errorData = await res.json();  
+        throw errorData;
     }
 
     const data = await res.json();

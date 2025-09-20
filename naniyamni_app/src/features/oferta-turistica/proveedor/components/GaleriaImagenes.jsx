@@ -18,11 +18,11 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
     setIndiceSeleccionado(idx);
     // document.body.classList.add('overflow-hidden'); // Descomentar si quieres evitar el scroll de fondo
   };
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setImagenSeleccionada(null);
     setIndiceSeleccionado(null);
     // document.body.classList.remove('overflow-hidden'); // Descomentar si quieres evitar el scroll de fondo
-  };
+  }, []);
 
   const startAnimation = useCallback(() => {
     setIsAnimating(true);
@@ -107,14 +107,14 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
     <div>
       <div
         ref={galeriaRef}
-        className="flex gap-2 flex-nowrap overflow-x-auto scrollbar-hide rounded bg-white"
+        className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-clip scrollbar-hide rounded bg-white"
       >
         {listaFinal.map((imagen, idx) => (
           <img
             key={`${imagen.id}-${idx}`}
             src={imagen.image_url}
             alt={imagen.title}
-            className="h-60 rounded cursor-pointer flex-shrink-0 hover:opacity-90 transition-opacity duration-200"
+            className="h-60 rounded cursor-pointer flex-shrink-0 hover:opacity-90 transition-all duration-200 transform hover:scale-101"
             onClick={() => handleClick(imagen, idx % imagenes.length)}
             draggable={false}
           />
@@ -148,7 +148,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
           <img
             src={imagenSeleccionada.image_url}
             alt={imagenSeleccionada.title}
-            className={`max-h-[90vh]  md:max-w-[90vw] ${tamSelOpciones[tamSel]} rounded object-contain transition-all duration-300 ease-in-out `}
+            className={`max-h-[90vh]  md:max-w-[90vw] ${tamSelOpciones[tamSel]} rounded object-contain transition-all duration-500 ease-in-out`}
           />
           <button
               className="absolute top-4 right-4  text-white px-1 py-1 rounded-full cursor-pointer z-100"

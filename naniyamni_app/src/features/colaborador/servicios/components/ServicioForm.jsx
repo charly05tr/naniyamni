@@ -2,21 +2,31 @@ import { useState } from "react";
 import { Input, Button, TextArea, Form } from "@FormStyled"
 import { HotelForm } from "./HotelForm";
 import { ArrendamientoVehiculoForm } from "./ArrendamientoVehiculoForm";
-import { TransporteForm } from "./TransporteForm";
+import ParentComponent from "./TransporteForm";
+import { transformDataForAPI } from "../../utils/transformDataForAPI";
 
 export const ServicioForm = ({ tipo, onSubmit }) => {
   const [formData, setFormData] = useState({});
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    console.log(formData)
     setFormData({
       ...formData,
       [name]: type === "checkbox" ? checked : value,
     });
-  };
+  };  
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (tipo === "TTT") {
+      setFormData({
+        ...formData,
+      });
+      console.log(transformDataForAPI(formData))
+      onSubmit(transformDataForAPI(formData));
+      return;
+    }
     onSubmit(formData);
   };
 
@@ -31,7 +41,7 @@ export const ServicioForm = ({ tipo, onSubmit }) => {
       <div>
         <Input type="number" step="0.01" name="precio" value={formData.precio} onChange={handleChange} placeholder="Precio" required />
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex mt-2 items-center gap-2">
         <input
             type="checkbox"
             id="disponible"
@@ -39,9 +49,9 @@ export const ServicioForm = ({ tipo, onSubmit }) => {
             onChange={(e) =>
             setFormData({ ...formData, disponible: e.target.checked })
             }
-            className="h-5 w-5 rounded border-gray-300 focus:ring-2 focus:ring-blue-500"
+            className="h-5 w-5 rounded-lg border-gray-100"
             />
-        <label htmlFor="disponible">Disponible</label>
+        <label htmlFor="disponible" className="text-gray-800/95">Disponible</label>
       </div>
       {tipo === "H" && (
         <HotelForm handleChange={handleChange} formData={formData}/>
@@ -50,7 +60,7 @@ export const ServicioForm = ({ tipo, onSubmit }) => {
         <ArrendamientoVehiculoForm handleChange={handleChange} formData={formData}/>
       )}
       {(tipo === "TTT" || tipo === "OV") && (
-        <TransporteForm handleChange={handleChange} formData={formData}/>
+        <ParentComponent handleChange={handleChange} formDataTrans={formData} setFormDataTrans={setFormData}/>
       )}
       <Button type="submit" className="w-full" text="Guardar servicio"/>
     </Form>

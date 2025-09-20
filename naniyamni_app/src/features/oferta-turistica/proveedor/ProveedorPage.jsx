@@ -8,6 +8,7 @@ import { DisponibilidadForm } from "./components/DisponibilidadForm";
 import { Error } from "@Error";
 import { useFiltros } from "./hooks/useFiltros";
 import { useState } from "react";
+import { TransporteCard } from "./components/TransporteCard";
 
 const ProveedorPage = () => {
     const { id } = useParams();
@@ -19,6 +20,7 @@ const ProveedorPage = () => {
         ...((proveedor?.servicios || []).map(s => s?.imagenes || []).flat())
       ];
       
+    console.log(proveedor.servicios);
     return (
         <>
             {(!loading)
@@ -29,21 +31,31 @@ const ProveedorPage = () => {
                             <ProveedorDetailCard proveedor={proveedor} loading={loading} error={error}/>
                             <MapWithMarket proveedor={proveedor}/>
                         </div>
+                        {(proveedor.tipo !== "TTT")&&
                         <div>
                             <GaleriaImagenes imagenes={todasLasImagenes} duplicar={false} tamSel={(proveedor.tipo === 'AV')?"md":"lg"}/>    
-                        </div>
+                        </div>}
                     </div>
                     <div>
                         <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] md:mb-4 mb-2 ">
-                            <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
-                            <div className="rounded-xl bg-white border border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
-                               <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Comentarios Destacados</h1>
-                            </div>
+                            {(proveedor.tipo !== "TTT")&&
+                            <>
+                                <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
+                                <div className="rounded-xl bg-white border border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
+                                <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Comentarios Destacados</h1>
+                                </div>
+                            </>}
                         </div>
                         {(serviciosFiltrados.length > 0)
-                        ?
+                        ?(proveedor.tipo !== "TTT") 
+                            ?
                             <ServicioCard servicios={serviciosFiltrados} tipo={proveedor.tipo} sucursales={proveedor.sucursales}/>
-                        :   <Error>No hay servicios disponibles</Error>}
+                            :<div>
+                                {proveedor.servicios?.map(servicio =>
+                                    <TransporteCard key={servicio.id} servicio={servicio}/>
+                                )}
+                            </div>
+                        :<Error>No hay servicios disponibles</Error>}
                     </div>
                 </div>
             :

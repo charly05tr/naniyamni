@@ -5,12 +5,12 @@ export const usePostServicios = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(""); 
 
-    const createServicios = async (servicios, proveedorId) => {
+    const createServicios = async (servicios, proveedorId, tipo) => {
         setLoading(true);
         setError("");
 
         try {
-            const data = await postServicios(servicios, proveedorId);    
+            const data = await postServicios(servicios, proveedorId, tipo);    
             return data.id;
         } catch(e) {
             throw new Error(e);

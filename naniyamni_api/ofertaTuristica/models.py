@@ -88,7 +88,7 @@ class Habitacion(Servicio):
     tipo = models.CharField(choices=tipos, max_length=2)
     capacidad = models.IntegerField()
 
-
+#Alquiler vehiculo
 class Categoria(models.Model):
     nombre = models.CharField(max_length=255)
     cant_vehiculos = models.CharField(max_length=255)
@@ -110,17 +110,29 @@ class AlquilerVehiculo(Servicio):
     sucursales = models.ForeignKey(Sucursal, on_delete=models.CASCADE, related_name="vehiculos", null=True)
     categoria  = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="vehiculos", null=True)
 
+#transporte
 class ViajeDirecto(Servicio):
     origen = models.CharField(max_length=255)
-    fecha_salida = models.DateTimeField()
     asientos_disponibles = models.IntegerField()
 
 
 class Destino(models.Model):
     viaje = models.ForeignKey(ViajeDirecto, on_delete=models.CASCADE, related_name="destinos")
-    nombre = models.CharField(max_length=100)
-       
+    nombre = models.CharField(max_length=255)
+    duracion = models.DurationField(null=True, blank=True)
 
+
+class Hora_salida(models.Model):
+    hora = models.TimeField(null=True, blank=True)
+
+
+class Itinerario(models.Model):
+    dias_semana = (('LU', 'Lunes'), ('MA', 'Martes'), ('MI', 'Miercoles'), ('JU', 'Jueves'), ('VI', 'Viernes'), ('SA', 'Sabado'), ('DO', 'Domingo'))
+    dia = models.CharField(null=True, blank=True, choices=dias_semana, max_length=2)
+    horas_salida = models.ManyToManyField(Hora_salida, related_name="itinerarios")
+    viaje = models.ForeignKey(ViajeDirecto, on_delete=models.CASCADE, related_name="itinerarios")
+
+#Atracciones
 class Atraccion(Servicio):
     cupo_maximo = models.IntegerField(null=True, blank=True)      
     guia_incluido = models.BooleanField(default=True)          

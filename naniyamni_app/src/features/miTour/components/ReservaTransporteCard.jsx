@@ -1,22 +1,19 @@
 import { tiposServicios, formatDate } from "@config"
 
-export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleOpen }) => {
+export const ReservaTransporteCard = ({ reserva, eliminar, irAProveedor, handleOpen }) => {
   const {
     id,
     servicio,
-    // cant_adultos,
-    // cant_ninos,
-    noches,
-    fecha_hora_llegada,
     fecha_hora_salida,
     proveedor_nombre, 
     total,
+    cant_personas,
   } = reserva;
 
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
   return (
-    <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
+    <div className="max-h-65 flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
       <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
@@ -27,14 +24,14 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
       <div className="p-6 md:p-8 flex-1">
         <div className="flex gap-2 justify-between items-center">
             <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.nombre}`}</h3>
-            <span className="text-gray-600/80">{noches} {(noches > 1)?"Noches":"Noche"}</span>
+            <span className="text-gray-600/80">{cant_personas} {(cant_personas > 1)?"Personas":"Persona"}</span>
         </div>
-        <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>
+        <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>  
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 mb-4">
           <div className="flex items-start flex-col gap-1">
-            <span className="text-sm font-medium text-gray-500 mr-2">Llegada:</span>
-            <span className="text-sm text-gray-800 line-clamp-1">{formatDate(fecha_hora_llegada)}</span>
+            <span className="text-sm font-medium text-gray-500 mr-2">Origen:</span>
+            <span className="text-sm text-gray-800 line-clamp-1">{servicio.origen}</span>
             {/* <span className="text-sm text-gray-700">{fecha_hora_recogida}</span> */}
           </div>
           <div className="flex items-start flex-col gap-1">
@@ -44,7 +41,7 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
           </div>
           <div className="flex items-start">
             <span className="text-sm font-medium text-gray-500 mr-2">Proveedor:</span>
-            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer">{proveedor_nombre}</a>
+            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer text-nowrap overflow-ellipsis">{proveedor_nombre}</a>
           </div>
         </div>
         <div className='flex gap-2'>

@@ -1,17 +1,7 @@
 import { SelectLugarDevolucion } from "./Surcursales";
+import { generarOpcionesHoras } from "@config";
 
 export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevolucion, setLugarDevolucion, sucursales = [] }) => {
-    const generarOpcionesHoras = () => {
-        const opciones = [];
-        for (let h = 0; h < 24; h++) {
-            for (let m of [0, 30]) {
-                const hora = String(h).padStart(2, "0");
-                const minutos = String(m).padStart(2, "0");
-                opciones.push(`${hora}:${minutos}`);
-            }
-        }
-        return opciones;
-    };
     
     const opciones = generarOpcionesHoras();
 
@@ -33,7 +23,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
 
     return (
         <>
-            <div className="text-zinc-800  flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
+            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
                 <h1 className="text-3xl font-semibold tracking-wide my-2">Tu reserva</h1>
                 <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
                     <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
@@ -69,7 +59,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
                         </select>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 p-2 mt-2 border border-gray-200 items-start rounded">
+                <div className="flex flex-col gap-2 p-2 border border-gray-200 items-start rounded">
                     <div className="flex flex-col gap-1 p-2 border-gray-300">
                         <p className="text-sm">Lugar Inicio</p>
                         <p className="font-bold">{reserva.lugarInicio.toLowerCase()}</p>
@@ -79,7 +69,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
                         <SelectLugarDevolucion sucursales={sucursales} setLugarDevolucion={setLugarDevolucion} lugarDevolucion={reserva.lugarDevolucion}/>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200 rounded">
+                <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded">
                     <p className="text-sm">Has seleccionado</p>
                     <strong className="flex gap-2 mb-3 flex-wrap">
                             {reserva.cantVehiculos} {(reserva.cantVehiculos > 1)?"vehículos":"vehículo"} para {reserva.dias} {(reserva.dias > 1)?"días":"día"}

@@ -159,30 +159,82 @@ class AlquilerVehiculoSerializer(serializers.ModelSerializer):
             } for r in reservas
         ]
 
-
-class DestinoSerialiazer(serializers.ModelSerializer):
+#serializers transporte
+class HoraSalidaSerializer(serializers.ModelSerializer):
     class Meta:
-        model: Destino 
-        fields = ["nombre"]
+        model = Hora_salida
+        fields = ["id", "hora"]
+
+
+class ItinerarioSerializer(serializers.ModelSerializer):
+    horas_salida = HoraSalidaSerializer(many=True)
+
+    class Meta:
+        model = Itinerario
+        fields = ["dia", "horas_salida"]
+
+    def create(self, validated_data):
+        horas_data = validated_data.pop("horas_salida", [])
+        # Crear horas de salida
+        horas_objs = [Hora_salida.objects.create(**hora) for hora in horas_data]
+
+        # Crear itinerario
+        itinerario = Itinerario.objects.create(**validated_data)
+        # Asociar las horas al itinerario (ManyToMany)
+        itinerario.horas_salida.set(horas_objs)
+
+        return itinerario
+
+
+class DestinoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Destino 
+        fields = ["nombre", "duracion"]
 
 
 class ViajeDirectoSerializer(serializers.ModelSerializer):
-    destinos = DestinoSerialiazer(many=True, read_only=True)
-    imagenes = ServicioImageSerializer(many=True, read_only=True)
-    caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
+    destinos = DestinoSerializer(many=True, read_only=False)
+    itinerarios = ItinerarioSerializer(many=True, read_only=False)
     reservas_ocupadas = serializers.SerializerMethodField()
+    imagenes = ServicioImageSerializer(many=True, read_only=True)
 
     class Meta(ServicioSerializer.Meta):
         model = ViajeDirecto
-        fields = ServicioSerializer.Meta.fields + ["origen", "fecha_salida", "asientos_disponibles", "destinos", "reservas_ocupadas"]
+        fields = ServicioSerializer.Meta.fields + [
+            "origen", 
+            "asientos_disponibles", 
+            "destinos", 
+            "reservas_ocupadas", 
+            "itinerarios",
+            "imagenes",
+        ]
+
+    def create(self, validated_data):
+        destinos_data = validated_data.pop("destinos", [])
+        itinerarios_data = validated_data.pop("itinerarios", [])
+
+        # Crear viaje
+        viaje = ViajeDirecto.objects.create(**validated_data)
+
+        # Crear destinos
+        for destino_data in destinos_data:
+            Destino.objects.create(viaje=viaje, **destino_data)
+
+        # Crear itinerarios
+        for itinerario_data in itinerarios_data:
+            horas_data = itinerario_data.pop("horas_salida", [])
+            itinerario = Itinerario.objects.create(viaje=viaje, **itinerario_data)
+            
+            # Crear horas de salida y asociarlas al itinerario
+            horas_objs = [Hora_salida.objects.create(**hora) for hora in horas_data]
+            itinerario.horas_salida.set(horas_objs)
+
+        return viaje
 
     def get_reservas_ocupadas(self, obj):
         reservas = obj.reservas.all()
         return [
-            {
-                "inicio": r.fecha_hora_recogida,
-                "fin": r.fecha_hora_entrega
-            } for r in reservas
+            {"inicio": r.fecha_reserva, "fin": r.fecha_reserva} for r in reservas
         ]
 
 class AtraccionSerializer(serializers.ModelSerializer):

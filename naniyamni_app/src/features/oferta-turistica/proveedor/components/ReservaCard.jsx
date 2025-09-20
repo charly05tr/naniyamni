@@ -1,5 +1,5 @@
 import { useDisponibilidad } from "../../context/disponibilidadContext";
-import { formatDate, tiposServicios, formatLocalDateTime } from "@config";
+import { formatDateOld, tiposServicios, formatLocalDateTime } from "@config";
 import { ReservaHabitacion } from "./ReservaHabitacion";
 import { ReservaVehiculo } from "./ReservaVehiculo";
 import { Percent, DollarSign, Coins, X } from "lucide-react";
@@ -11,10 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "@authContext";
 
+
 export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
     const { range, cantAdultos, cantNinos, cantHabitaciones, lugarInicio, lugarDevolucion, setLugarDevolucion, setHoraInicio, setHoraDevolucion, horaInicio, horaDevolucion } = useDisponibilidad();
-    const entrada = formatDate(range[0].startDate, "entrada");
-    const salida = formatDate(range[0].endDate, "salida");
+    const entrada = formatDateOld(range[0].startDate, "entrada");
+    const salida = formatDateOld(range[0].endDate, "salida");
     
     const { crearReserva, loading, error } = useReservar();
     const { noches, total, iva, TotalConIVA, startDate, endDate } = useReserva({servicio, startDate:range[0].startDate, endDate:range[0].endDate});
@@ -90,7 +91,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                 </button>  
             {(servicio.tipo_servicio === "H")?
                 <ReservaHabitacion cantAdultos={cantAdultos} cantHabitaciones={cantHabitaciones} cantNinos={cantNinos} servicio={servicio} entrada={entrada} salida={salida} noches={noches}/>
-            :
+            :(servicio.tipo_servicio === "V")&&
                 <ReservaVehiculo servicio={servicio} 
                     setLugarDevolucion={setLugarDevolucion} 
                     setHoraDevolucion={setHoraDevolucion} setHoraInicio={setHoraInicio}
@@ -106,7 +107,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                         lugarInicio,}}
                 />
             }
-            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-90 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
+            <div className="flex-shrink flex-1 md:p-4 p-0 md:border min-w-96 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
                 <div className="flex gap-3 flex-col">
                     <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between">
                         {(servicio.tipo_servicio === "V")?

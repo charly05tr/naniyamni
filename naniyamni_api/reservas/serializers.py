@@ -100,9 +100,17 @@ class ReservaHabitacionSerializer(serializers.ModelSerializer):
 
 class ReservaViajeSerializer(serializers.ModelSerializer):
     servicio = ViajeDirectoSerializer(read_only=True)
+    servicio_id = serializers.PrimaryKeyRelatedField(
+        queryset=ViajeDirecto.objects.all(),
+        source="servicio",
+        write_only=True
+    )
+
     class Meta:
         model = ReservaViaje
-        fields = "__all__"
+        fields = [
+            "id", "servicio", "servicio_id", "tipo", "total", "cant_personas", "fecha_hora_salida"
+        ]
         extra_kwargs = {
             "turista": {"read_only": True}  
         }

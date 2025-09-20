@@ -39,13 +39,34 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
     };
   }, []);
 
+  const [visible, setVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > lastScrollY) {
+        // scrolling hacia abajo
+        setVisible(false);
+      } else {
+        // scrolling hacia arriba
+        setVisible(true);
+      }
+      setLastScrollY(window.scrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
+
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200">
+    <header className={`sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-200/80 transition-transform duration-300 ${
+      visible ? "translate-y-0" : "-translate-y-full"
+    }`}>
       <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           
           <NavLink to="/" className="flex items-center gap-3 cursor-pointer lg:w-70">                                                                                             
-            <img src={logoSrc} alt={`${brandName} logo`} className="h-10 w-10" />
+            <img src={logoSrc} alt={`${brandName} logo`} className="h-10 w-10 transition-transform duration-300 hover:scale-105" />
             <span className="hidden sm:inline font-semibold text-gray-800">{brandName}</span>
           </NavLink>
           <nav aria-label="Primary" className="hidden md:flex md:items-center md:gap-2 w-fit">
