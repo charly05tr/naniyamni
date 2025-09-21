@@ -11,13 +11,14 @@ class Reserva(PolymorphicModel):
     total = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.BooleanField(default=False) 
     tipo = models.CharField(max_length=50, default='reserva')
+    
 
 class ReservaAtraccion(Reserva):
-    duracion_minutos = models.IntegerField(null=True, blank=True)
     cant_personas = models.IntegerField(default=1)
     servicio = models.ForeignKey(
         Atraccion, related_name="reservas", on_delete=models.PROTECT
     )
+    fecha_llegada = models.DateField(blank=True, null=True)
 
 
 class ReservaVehiculo(Reserva):

@@ -1,4 +1,3 @@
-import React from 'react';
 import { usePerfil } from "../hooks/usePerfil";
 import { Title } from "@TextStyled";
 import { Error } from "@Error";
@@ -7,14 +6,6 @@ import { Avatar } from "@Avatar";
 export const PerfilCard = () => {
     const { loading, error, perfilData } = usePerfil();
 
-    // Nota: Es mejor almacenar en localStorage dentro de un useEffect para evitar re-renders innecesarios.
-    // Aunque para este ejemplo lo mantendremos aquí por simplicidad.
-    if (perfilData) {
-        localStorage.setItem("nombre_turista", perfilData.first_name);
-        localStorage.setItem("apellido_turista", perfilData.last_name);
-    }
-    
-    // Clases base para el contenedor principal
     const cardBaseClasses = "relative bg-white rounded-3xl shadow-md overflow-hidden p-6 md:p-8 transform transition-transform duration-300";
 
     if (loading) {
@@ -34,13 +25,10 @@ export const PerfilCard = () => {
     }
     
     return (
-        <div className="max-w-md mx-auto my-10">
+        <div className="md:w-2/3 w-full mx-auto my-10">
             {(!error)?
-            <div className={cardBaseClasses}>
-                {/* Background degradado para un toque de estilo */}
+            <div className={cardBaseClasses}>   
                 <div className="absolute inset-x-0 top-0 h-52 bg-gradient-to-br from-blue-50 to-cyan-50"></div>
-
-                {/* Contenedor del avatar */}
                 <div className="relative z-10 flex flex-col items-center -mt-4">
                     <Avatar imageUrl={perfilData.imagen} size="w-34 h-34" textSize="text-6xl" />
                     <Title 
@@ -50,8 +38,6 @@ export const PerfilCard = () => {
                     <p className="text-gray-500 font-medium mt-6">{perfilData.rol}</p>
                     <p className="text-gray-500 text-sm mt-1">{perfilData.email}</p>
                 </div>
-                
-                {/* Separador de contenido */}
                 <div className="border-t border-gray-200 mt-6 pt-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-700">
                         {perfilData.telefono !== 0 && (

@@ -39,5 +39,12 @@ export const usePerfil = () => {
             navigate("/");
         }
 
+        useEffect(() => {
+            if (perfilData) {
+                localStorage.setItem("nombre_turista", perfilData.first_name);
+                localStorage.setItem("apellido_turista", perfilData.last_name);
+            }
+        }, [perfilData]);
+
     return { loading, error, perfilData, handleLogout };
 }

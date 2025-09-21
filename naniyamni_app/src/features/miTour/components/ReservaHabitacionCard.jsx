@@ -16,7 +16,7 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
   return (
-    <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
+    <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl  mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
       <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
@@ -27,7 +27,7 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
       <div className="p-6 md:p-8 flex-1">
         <div className="flex gap-2 justify-between items-center">
             <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.nombre}`}</h3>
-            <span className="text-gray-600/80">{noches} {(noches > 1)?"Noches":"Noche"}</span>
+            <span className="text-gray-600/80 text-nowrap ml-2">{noches} {(noches > 1)?"noches":"noche"}</span>
         </div>
         <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>
 
@@ -44,7 +44,7 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
           </div>
           <div className="flex items-start">
             <span className="text-sm font-medium text-gray-500 mr-2">Proveedor:</span>
-            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer">{proveedor_nombre}</a>
+            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-nowrap text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer">{proveedor_nombre}</a>
           </div>
         </div>
         <div className='flex gap-2'>

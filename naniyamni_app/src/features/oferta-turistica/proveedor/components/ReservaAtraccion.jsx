@@ -6,22 +6,35 @@ import { Percent, DollarSign, Coins, X } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { useReservarTransporte } from "../hooks/useReservarTransporte";
-import { tiposServicios, formatLocalDateTime, formatDateOld } from "@config";
-import { generarOpcionesNumeros, convertirHora } from "@config"; 
+import { tiposServicios, formatDateOld } from "@config";
+import { generarOpcionesNumeros, formatearFechaParaDjango } from "@config"; 
 
-export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClose}) => {
+export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuedeReservar }) => {
     const { crearReserva, loading, error } = useReservar();
     const { total, cantPersonas, IVA, TotalConIVA, setCantPersonas } = useReservarTransporte({servicio});
     const navigate = useNavigate();
-    
+
     const irADetalle = () => {
         navigate("/MiTour/");
     };
     const { token } = useContext(AuthContext);
     
-    if (fechaSalida == null || horaSalida == null) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (fecha_llegada == null) {
         return (
-            <Alert>Para reservar debe seleccionar una fecha y una hora de salida.</Alert>
+            <Alert>Para reservar debe seleccionar la fecha en la que planea llegar.</Alert>
+        );
+    }
+    else if (fecha_llegada < today) {
+        return (
+            <Alert>Sea serio.</Alert>
+        )
+    }
+    else if (noPuedeReservar) {
+        return (
+            <Alert>Ese día no abrimos, por favor selecciona un día que sea: {servicio.dias_abierto}</Alert>
         );
     }
 
@@ -30,9 +43,7 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
             servicio_id: servicio.id, 
             cant_personas: cantPersonas,
             total: TotalConIVA,
-            fecha_hora_salida: formatLocalDateTime(fechaSalida, horaSalida),
-            //hacer que la persona pueda seleccionar el destino
-            destino: servicio.destinos[0].id
+            fecha_llegada: formatearFechaParaDjango(fecha_llegada),
         };
     };
 
@@ -51,13 +62,12 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
                 <div className="flex flex-col gap-2">
                     <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
                         <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
-                            <p className="text-sm">Sale</p>
-                                <strong>{formatDateOld(fechaSalida)}</strong> 
-                                <p>a las {convertirHora(horaSalida)}</p>
+                            <p className="text-sm">Reserva para</p>
+                                <strong>{formatDateOld(fecha_llegada)}</strong> 
                         </div>
                         <div className="flex flex-col gap-1 p-2">
-                            <p className="text-sm">Origen</p>
-                            <strong>{servicio.origen}</strong>
+                            <p className="text-sm">Duración reserva:</p>
+                            <strong>{(servicio.duracion === "23:30:00")?"Todo el día":`${servicio.duracion} hrs`}</strong>
                         </div>
                     </div>
                     <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
@@ -79,7 +89,7 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
                     <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded">
                         <p className="text-sm">Has seleccionado</p>
                         <strong className="flex gap-2 mb-3 flex-wrap">
-                        Un viaje a {servicio.destinos.at(-1).nombre}
+                            entradas para {cantPersonas} {(cantPersonas>1)?"personas":"persona"}
                         </strong>
                         <p className="text-sm">1 x {servicio.nombre}</p>
                     </div>

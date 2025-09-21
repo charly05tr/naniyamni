@@ -137,7 +137,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
             <div className="h-[100vh] w-12 left-4 flex lg:items-center absolute items-start lg:relative justify-center">
             {(imagenes.length > 2)? (
             <button
-                className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full hover:bg-black/70"
+                className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full md:hover:bg-black/60 hover:bg-black/50"
                 onClick={handleAnterior}
               >
               <ChevronLeft className="w-8 h-8" />
@@ -162,7 +162,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
                 <div className="h-[100vh] w-12 right-4 flex items-start lg:items-center justify-center absolute lg:relative">
                 {(imagenes.length > 2)? (
                   <button
-                    className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full hover:bg-black/70 z-100"
+                    className="cursor-pointer md:bg-black/50 bg-black/20 text-white text-2xl px-1 py-1 rounded-full md:hover:bg-black/60 hover:bg-black/50 z-100"
                     onClick={handleSiguiente}
                   >
                     <ChevronRight className="w-8 h-8"/>

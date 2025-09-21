@@ -134,8 +134,12 @@ class Itinerario(models.Model):
 
 #Atracciones
 class Atraccion(Servicio):
-    cupo_maximo = models.IntegerField(null=True, blank=True)      
-    guia_incluido = models.BooleanField(default=True)          
+    cupo_maximo = models.IntegerField(null=True, blank=True) 
+    hora_cierre = models.TimeField(null=True, blank=True)
+    hora_apertura = models.TimeField(null=True, blank=True)
+    dias_abierto = models.CharField(null=True, blank=True)
+    guia_incluido = models.BooleanField(default=False, blank=True)
+    duracion = models.TimeField(null=True, blank=True)          
 
 
 class Gastronomico(Servicio):

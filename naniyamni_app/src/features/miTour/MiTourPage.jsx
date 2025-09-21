@@ -15,12 +15,12 @@ const MiTourPage = () => {
     return (
         <div className="flex justify-between mb-5">
             <div></div>
-            <div className="flex flex-col gap-2 mt-5">
+            <div className="flex flex-col gap-2 mt-5  px-4">
                 <h1 className="py-3 text-2xl text-zinc-800 font-bold">Mi Tour</h1>
-                <div className="flex gap-5">
+                <div className="flex gap-5 flex-wrap-reverse md:flex-nowrap">
                     <div className="flex flex-col gap-2 rounded max-w-200">
                         {(!loading && reservas)?
-                            <div className="flex flex-wrap gap-4">
+                            <div className="flex flex-wrap gap-4 justify-center">
                                 {reservas?.map(reserva => (
                                         <MiTourCard 
                                             key={reserva.id}
@@ -38,7 +38,7 @@ const MiTourPage = () => {
                     </div>
                     {(reservas.length > 0) 
                         ?
-                    <div className="p-4 bg-gray-200/40 h-fit rounded-xl min-w-80 sticky top-17">
+                    <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-80 md:min-w-63 sticky md:top-17 md:w-fit w-full">
                         <div className="flex justify-between mb-2 text-sm">
                             <p>Servicios ({reservas.length})</p>
                             C$ {total}

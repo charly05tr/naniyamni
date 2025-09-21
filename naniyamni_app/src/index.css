@@ -1,6 +1,13 @@
-/* body {
-    background-color: #F8F8FF;
-} */
+body {
+    /* background-image: url('https://res.cloudinary.com/drxgsb2ez/image/upload/v1758420146/vew8bjhznpwgxsghybao.jpg'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#root {
+  background-size: cover;
+}
 
 .leaflet-control-attribution {
     display:none

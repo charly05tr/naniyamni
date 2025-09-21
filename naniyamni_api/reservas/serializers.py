@@ -4,11 +4,20 @@ from ofertaTuristica.serializers import *
 from .models import *
 from django.db.models.functions import TruncDate
 
+
 class ReservaAtraccionSerializer(serializers.ModelSerializer):
     servicio = AtraccionSerializer(read_only=True)
+    servicio_id = serializers.PrimaryKeyRelatedField(
+        queryset= Atraccion.objects.all(),
+        source="servicio",
+        write_only=True
+    )
+
     class Meta:
         model = ReservaAtraccion
-        fields = "__all__"
+        fields = ["id", "servicio", "servicio_id", "total",
+            "cant_personas", "turista", "tipo", "fecha_llegada"
+        ]
         extra_kwargs = {
             "turista": {"read_only": True}  
         }
@@ -25,8 +34,8 @@ class ReservaVehiculoSerializer(serializers.ModelSerializer):
         model = ReservaVehiculo
         fields = [
             "id", "turista", "servicio", "servicio_id", "total",
-             "fecha_hora_entrega", "fecha_hora_recogida",
-             "lugar_recogida", "lugar_devolucion", "tipo"
+            "fecha_hora_entrega", "fecha_hora_recogida",
+            "lugar_recogida", "lugar_devolucion", "tipo"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  

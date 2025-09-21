@@ -39,12 +39,14 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
         return ProveedorImageSerializer(imagenes, many=True).data
 
     def get_servicios(self, obj):
-        if obj.tipo == "H":  # Hotel
+        if obj.tipo in ["H", "HF"]:  # Hotel
             return HabitacionSerializer(Habitacion.objects.filter(proveedor=obj), many=True).data
         elif obj.tipo == "AV":  # Arrendamiento de Vehículos
             return AlquilerVehiculoSerializer(AlquilerVehiculo.objects.filter(proveedor=obj), many=True).data
         elif obj.tipo in ["TTT", "OV"]:  # Transporte o Tour
             return ViajeDirectoSerializer(ViajeDirecto.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo in ["CR", "CP", "AL"]:  # Centro recreativo, canopy o albergue
+            return AtraccionSerializer(Atraccion.objects.filter(proveedor=obj), many=True).data
         else:  # Restaurante, Bar, etc.
             return ServicioSerializer(Servicio.objects.filter(proveedor=obj), many=True).data
 
@@ -244,7 +246,7 @@ class AtraccionSerializer(serializers.ModelSerializer):
 
     class Meta(ServicioSerializer.Meta):
         model = Atraccion
-        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo", "reservas_ocupadas"]
+        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo", "reservas_ocupadas", "hora_cierre", "hora_apertura", "dias_abierto", "duracion"]
 
     def get_reservas_ocupadas(self, obj):
         reservas = obj.reservas.all()

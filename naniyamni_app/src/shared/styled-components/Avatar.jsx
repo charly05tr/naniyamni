@@ -1,9 +1,15 @@
-import React from 'react';
+import { useEffect, useState } from "react";;
 
 export const Avatar = ({ imageUrl, size = "w-9 h-9", textSize = "text-sm", onClick = null }) => {
 
-  const nombre = localStorage.getItem('nombre_turista');
-  const apellido = localStorage.getItem('apellido_turista');
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  useEffect(() =>  {
+
+    setNombre(localStorage.getItem('nombre_turista'));
+    setApellido(localStorage.getItem('apellido_turista'));
+
+  }, []);
 
   const iniciales =
     (nombre?.charAt(0) || "") +

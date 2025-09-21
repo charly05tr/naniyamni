@@ -54,9 +54,9 @@ export const formatDateOld = (date, type) => {
   
     let timeRange = "";
     if (type === "entrada") {
-      timeRange = "14:00 - 23:30";
+      timeRange = convertirHora("14:00");
     } else if (type === "salida") {
-      timeRange = "7:30 - 12:00";
+      timeRange = convertirHora("12:00");
     }
   
     return `${formatter.format(date)}\n${timeRange}`;
@@ -81,6 +81,7 @@ export const formatDateOld = (date, type) => {
     if (timePartRaw) {
       const [hh, mm] = timePartRaw.replace("Z", "").split(":");
       timeText = `${hh.padStart(2, "0")}:${mm.padStart(2, "0")}`;
+      timeText= convertirHora(timePartRaw);
     }
   
     // Formatear fecha en español
@@ -148,4 +149,64 @@ export const diasSemana = {
   "VI": "Viernes",
   "SA": "Sábado",
   "DO": "Domingo"
+}
+
+export const DAYS = [
+  { key: "mon", label: "Lunes" },
+  { key: "tue", label: "Martes" },
+  { key: "wed", label: "Miércoles" },
+  { key: "thu", label: "Jueves" },
+  { key: "fri", label: "Viernes" },
+  { key: "sat", label: "Sábado" },
+  { key: "sun", label: "Domingo" },
+];
+
+
+export const convertirHora = (horaMilitar) => {
+  // separar horas y minutos (ignorando los segundos)
+  let [hora, minutos] = horaMilitar.split(":").map(Number);
+
+  // determinar AM o PM
+  let sufijo = hora >= 12 ? "PM" : "AM";
+
+  // convertir a formato de 12 horas
+  hora = hora % 12;
+  hora = hora ? hora : 12; // si es 0 se convierte en 12
+
+  return `${hora}:${minutos.toString().padStart(2, "0")} ${sufijo}`;
+}
+
+export const diasSemanaIndice = {
+  Domingo: 0,
+  Lunes: 1,
+  Martes: 2,
+  Miércoles: 3,
+  Jueves: 4,
+  Viernes: 5,
+  Sábado: 6
+};
+
+export const esDiaPermitido = (fecha, diasPermitidos) => {
+  // fecha puede ser un string tipo "2025-09-21" o un Date
+  let date = new Date(fecha);
+
+  // obtener el día (0 = domingo ... 6 = sábado)
+  let dia = date.getDay();
+
+  // verificar si está en los días permitidos
+  return diasPermitidos.includes(dia);
+}
+
+export const formatearFechaParaDjango = (inputValue) => {
+  if (!inputValue) return null; // si está vacío
+
+  // convertir a objeto Date
+  const fecha = new Date(inputValue);
+
+  // obtener año, mes y día con padding
+  const year = fecha.getFullYear();
+  const month = String(fecha.getMonth() + 1).padStart(2, "0"); // meses base 0
+  const day = String(fecha.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`; // formato YYYY-MM-DD
 }

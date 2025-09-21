@@ -24,6 +24,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
     const irADetalle = () => {
         navigate("/MiTour/");
     };
+
     const { token } = useContext(AuthContext);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -58,16 +59,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                 noches: noches,
                 total: TotalConIVA,
             };
-        } else if (servicio.tipo_servicio === "A") {
-            // Reserva de atracción
-            return {
-                duracion_minutos: noches * 60 * 24, 
-                cant_personas: cantAdultos + cantNinos,
-                servicio_id: servicio.id,
-                total: total,
-                iva: iva,
-                total_con_iva: TotalConIVA,
-            };
+
         } else if (servicio.tipo_servicio === "V") {
             // Reserva de vehiculo
             return {
@@ -107,7 +99,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                         lugarInicio,}}
                 />
             }
-            <div className="flex-shrink flex-1 md:p-4 p-0 md:border min-w-96 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
+            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
                 <div className="flex gap-3 flex-col">
                     <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between">
                         {(servicio.tipo_servicio === "V")?

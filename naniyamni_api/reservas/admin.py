@@ -20,7 +20,7 @@ from .models import (
 class ReservaAtraccionAdmin(PolymorphicChildModelAdmin):
     base_model = ReservaAtraccion
     show_in_index = True  # para que aparezca en el menú lateral
-    list_display = ("id", "turista", "servicio", "cant_personas", "duracion_minutos", "total", "estado", "fecha_reserva")
+    list_display = ("id", "turista", "servicio", "cant_personas", "total", "estado", "fecha_reserva")
 
 
 @admin.register(ReservaVehiculo)

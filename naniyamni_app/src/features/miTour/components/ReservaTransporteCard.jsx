@@ -13,7 +13,7 @@ export const ReservaTransporteCard = ({ reserva, eliminar, irAProveedor, handleO
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
   return (
-    <div className="max-h-65 flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
+    <div className="md:max-h-63 flex flex-col md:flex-row bg-white rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
       <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
@@ -24,7 +24,7 @@ export const ReservaTransporteCard = ({ reserva, eliminar, irAProveedor, handleO
       <div className="p-6 md:p-8 flex-1">
         <div className="flex gap-2 justify-between items-center">
             <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.nombre}`}</h3>
-            <span className="text-gray-600/80">{cant_personas} {(cant_personas > 1)?"Personas":"Persona"}</span>
+            <span className="text-gray-600/80 text-nowrap ml-2">{cant_personas} {(cant_personas > 1)?"personas":"persona"}</span>
         </div>
         <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>  
 

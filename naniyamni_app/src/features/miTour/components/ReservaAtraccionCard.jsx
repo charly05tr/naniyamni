@@ -1,19 +1,14 @@
-import { tiposServicios } from "@config"
-import { differenceInDays } from "date-fns";
+import { tiposServicios, formatDate } from "@config"
 
-export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpen }) => {
+export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOpen }) => {
   const {
     id,
     servicio,
-    lugar_recogida,
-    lugar_devolucion,
-    fecha_hora_entrega,
-    fecha_hora_recogida,
+    cant_personas,
+    fecha_llegada,
     proveedor_nombre, 
     total,
-  } = reserva;  
-
-  const dias = differenceInDays(fecha_hora_entrega, fecha_hora_recogida) || 0;
+  } = reserva;
 
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
@@ -22,31 +17,28 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
       <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
-          alt={`${servicio.marca} ${servicio.modelo}`}
+          alt={`${servicio.nombre}`}
           className="w-full h-48 md:h-full object-cover rounded-md md:rounded-l-xl md:rounded-r-none"
         />
       </div>
       <div className="p-6 md:p-8 flex-1">
-      <div className="flex gap-2 justify-between items-center">
-          <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.marca} ${servicio.modelo}`}</h3>
-          <span className="text-gray-600/80 text-nowrap ml-2">{dias} {(dias > 1)?"días":"día"}</span>
+        <div className="flex gap-2 justify-between items-center">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-1">{`${servicio.nombre}`}</h3>
+            <span className="text-gray-600/80 text-nowrap ml-2">{cant_personas} {(cant_personas > 1)?"personas":"persona"}</span>
         </div>
         <p className="text-xl font-bold text-blue-600 mb-2">C$ {total}</p>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 mb-4">
           <div className="flex items-start flex-col gap-1">
-            <span className="text-sm font-medium text-gray-500 mr-2">Recogida:</span>
-            <span className="text-sm text-gray-800 line-clamp-1">{lugar_recogida}</span>
-            {/* <span className="text-sm text-gray-700">{fecha_hora_recogida}</span> */}
+            <span className="text-sm font-medium text-gray-500 mr-2">Llegada:</span>
+            <span className="text-sm text-gray-800 line-clamp-1">{formatDate(fecha_llegada)}</span>
           </div>
           <div className="flex items-start flex-col gap-1">
-            <span className="text-sm font-medium text-gray-500 mr-2">Devolución:</span>
-            <span className="text-sm text-gray-800 line-clamp-1">{lugar_devolucion}</span>
-            {/* <span className="text-sm text-gray-700">{fecha_hora_entrega}</span> */}
+            <span className="text-sm font-medium text-gray-500 mr-2">Duración reserva:</span>
+            <span className="text-sm text-gray-800 line-clamp-1">{(servicio.duracion === "23:30:00")?"Todo el día":`${servicio.duracion} hrs`}</span>
           </div>
           <div className="flex items-start">
             <span className="text-sm font-medium text-gray-500 mr-2">Proveedor:</span>
-            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-nowrap text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer">{proveedor_nombre}</a>
+            <a onClick={() => irAProveedor(servicio.proveedor)} className="text-sm text-gray-800 underline hover:text-gray-700 cursor-pointer text-nowrap overflow-ellipsis">{proveedor_nombre}</a>
           </div>
         </div>
         <div className='flex gap-2'>
