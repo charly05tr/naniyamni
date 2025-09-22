@@ -1,31 +1,29 @@
 import { useState, useEffect, useCallback } from "react";
 import { getProveedores } from "../services/getProveedores";
 
-export const useProveedor = () => {
+export const useProveedor = (initialSearch = "") => {
     const [proveedores, setProveedores] = useState([]);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleGetServicio = useCallback(async () => {
+    const handleGetServicio = useCallback(async (search = "") => {
         setLoading(true);
         setError("");
 
         try {
-            const data = await getProveedores();
+            const data = await getProveedores(search);
             setProveedores(data);
             
         } catch(e) {
             setError(e);
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     }, []);
 
     useEffect(() => {
-        handleGetServicio();
+        handleGetServicio(initialSearch);
+    }, [handleGetServicio, initialSearch]);
 
-    }, [handleGetServicio]);
-
-    return { error, loading, proveedores, refetch: handleGetServicio}
+    return { error, loading, proveedores, refetch: handleGetServicio };
 }

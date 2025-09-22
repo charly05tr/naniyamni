@@ -14,21 +14,37 @@ import cloudinary.uploader
 from .serializers import *
 from .models import *
 from .permissions import IsProveedor, IsProveedorOwner
+from django.db.models import Q
 from .filters import ProveedorFilter    
-                                                                                                                                                            
+from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery
+from rest_framework.filters import SearchFilter
+from django.contrib.postgres.search import TrigramSimilarity
 logger = logging.getLogger(__name__)
 
 class ProveedorViewSet(viewsets.ModelViewSet):
-    queryset = Proveedor.objects.all()
-    authentication_classes = [authentication.TokenAuthentication]
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = ProveedorFilter
-    search_fields = ["nombre", "descripcion", "tipo", "ciudad"] 
+    def get_queryset(self):
+        queryset = Proveedor.objects.all()
+        q = self.request.GET.get('search')
+        if q:
+            # Vector de búsqueda combinando varios campos
+            vector = (
+                SearchVector('nombre', weight='A') +
+                SearchVector('descripcion', weight='B') +
+                SearchVector('tipo', weight='C') +
+                SearchVector('ciudad', weight='C')
+            )
+            query = SearchQuery(q)
+
+            # Anotar ranking de relevancia
+            queryset = queryset.annotate(rank=SearchRank(vector, query)) \
+                               .filter(rank__gte=0.1) \
+                               .order_by('-rank')
+        return queryset
 
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
-        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
+        return super().get_permissions()
 
     def get_serializer_class(self):
         if self.action == 'list':

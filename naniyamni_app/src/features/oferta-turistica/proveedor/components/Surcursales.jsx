@@ -47,7 +47,7 @@ export const SelectLugarDevolucion = ({ sucursales, setLugarDevolucion, lugarDev
     return (
         <select 
             name="Sucursal" 
-            className="py-1 font-bold focus:outline-none cursor-pointer max-w-83"
+            className="py-1 font-bold focus:outline-none cursor-pointer max-w-83 dark:bg-[#181818]"
             onChange={(e) => setLugarDevolucion(e.target.value)}
             value={lugarDevolucion}
         >

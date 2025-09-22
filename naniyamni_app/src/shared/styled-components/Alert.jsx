@@ -7,10 +7,10 @@ export const Alert = ({ children, size="lg" }) => {
     }
 
     return (
-        <div className="flex items-center justify-center p-4  md:p-6 bg-yellow-50 border border-yellow-200 rounded-xl shadow-md text-center text-sm md:text-base text-yellow-800 tracking-wide font-medium  max-w-xl mx-auto">
+        <div className="flex items-center justify-center p-4  md:p-6 bg-[#FFBF00]/20 border border-[#FFBF00] rounded-xl shadow-md text-center text-sm md:text-base text-[#FFBF00] tracking-wide font-medium  max-w-xl mx-auto">
                 <svg 
                     xmlns="http://www.w3.org/2000/svg" 
-                    className="h-6 w-6 mr-3 text-yellow-500" 
+                    className="h-12 w-12 mr-3 text-[#FFBF00]" 
                     fill="none" 
                     viewBox="0 0 24 24" 
                     stroke="currentColor" 

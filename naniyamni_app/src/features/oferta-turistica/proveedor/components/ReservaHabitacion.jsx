@@ -1,10 +1,10 @@
 export const ReservaHabitacion = ({ cantAdultos, cantHabitaciones, cantNinos, servicio, entrada, salida, noches }) => {
     return (
         <>
-            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
+            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-300 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB]">
                 <h1 className="text-3xl font-semibold tracking-wide my-2">Tu reserva</h1>
-                <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
-                    <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
+                <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
+                    <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300 dark:border-[#AAAAAA]/30">
                         <p className="text-sm">Entrada</p>
                         <strong>{entrada.split("\n")[0]}</strong>
                         <p>{entrada.split("\n")[1]}</p>
@@ -15,7 +15,7 @@ export const ReservaHabitacion = ({ cantAdultos, cantHabitaciones, cantNinos, se
                         <p>{salida.split("\n")[1]}</p>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200 rounded">
+                <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
                     <p className="text-sm">Has seleccionado</p>
                     <strong className="flex gap-2 mb-3 flex-wrap">
                         {noches} {noches === 1 ? "noche, " : "noches, "}

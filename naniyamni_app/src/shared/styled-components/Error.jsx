@@ -1,9 +1,9 @@
 export const Error = ({children}) => {
     return (
-        <div className="flex items-center justify-center p-4 md:p-5 bg-red-50 border border-red-300 rounded-lg shadow-sm text-center text-sm md:text-base text-red-700 font-medium max-w-lg mx-auto">
+        <div className="flex items-center justify-center p-4 md:p-5 bg-[#E53935]/10 border border-[#E53935] rounded-lg shadow-sm text-center text-sm md:text-base text-[#E53935] font-medium max-w-lg mx-auto">
         <svg 
         xmlns="http://www.w3.org/2000/svg" 
-        className="h-6 w-6 mr-3 text-red-500" 
+        className="h-10 w-10 mr-3 text-[#E53935]" 
         fill="none" 
         viewBox="0 0 24 24" 
         stroke="currentColor" 

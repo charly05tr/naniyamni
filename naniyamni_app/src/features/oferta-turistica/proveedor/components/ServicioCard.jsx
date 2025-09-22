@@ -43,40 +43,40 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
 
     return (
         <>
-  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-zinc-800 ">
+  <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 text-zinc-800">
     {servicios?.map(servicio => (
-      <div key={servicio.id} className="bg-white p-4 border border-gray-200 rounded-2xl  transition-transform transform  shadow-sm  duration-200 flex flex-col hover:shadow-xl">
+      <div key={servicio.id} className="p-6 border border-gray-200 dark:text-[#F9FAFB]  dark:border-[#AAAAAA]/30 rounded-2xl transition-transform transform  shadow-sm  duration-200 flex flex-col hover:shadow-xl">
         <div className="flex justify-between items-start gap-4 mb-2">
-          <h2 className=" text-xl md:text-2xl font-semibold text-gray-800 flex-1">{servicio.nombre}</h2>
-          <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
+          <h2 className=" text-xl md:text-2xl font-semibold text-gray-800 flex-1 dark:text-[#F9FAFB]">{servicio.nombre}</h2>
+          <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500 dark:bg-[#F9FAFB]">
             <button
               onClick={() => handleReserva(servicio)}
-              className="bg-blue-500 py-2 px-5 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
+              className="bg-blue-500 py-2 px-5 rounded-full cursor-pointer dark:bg-[#F9FAFB] dark:text-[#181818]  text-white/95 font-bold tracking-tight"
             >
               Reservar
             </button>
           </div>
         </div>
-        <div className="w-full flex flex-col text-gray-900 items-start bg-blue-50/50 p-5 rounded-xl">
+        <div className="w-full flex flex-col text-gray-900 items-start bg-blue-50/50 dark:bg-[#AAAAAA]/10 mb-2 p-5 rounded-xl">
           {(tipo === "H" || tipo === "OF" || tipo === "CH") && (
             <>
-              <div className="flex gap-2 mb-4 text-2xl font-bold text-gray-700">
+              <div className="flex gap-2 mb-4 text-2xl font-bold text-gray-700 dark:text-[#F9FAFB]">
                 <p>C$</p>
                 <p>{servicio.precio}</p>
               </div>
-              <div className="mb-2 text-sm text-gray-600 flex gap-1 items-center"><Tag className="w-6 h-6 text-blue-300" /> {tipoHabitacion[servicio.tipo]}</div>
-              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center"><Users className="w-6 h-6 text-blue-300" />{servicio.capacidad}</div>
+              <div className="mb-2 text-sm text-gray-600 flex gap-1 items-center dark:text-[#F9FAFB]"><Tag className="w-6 h-6 text-blue-300" /> {tipoHabitacion[servicio.tipo]}</div>
+              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center dark:text-[#F9FAFB]"><Users className="w-6 h-6 text-blue-300" />{servicio.capacidad}</div>
             </>
           )}
           {(tipo === "AV") && (
             <>
-              <div className="flex gap-2 mb-4 text-2xl font-bold text-gray-700">
+              <div className="flex gap-2 mb-4 text-2xl font-bold text-gray-700 dark:text-[#F9FAFB]">
                 <p>C$</p>
                 <p>{servicio.precio}</p>
               </div>
-              <p className="mb-4  text-gray-600"><strong className="text-gray-800">{servicio.marca} {servicio.modelo}</strong> o similares</p>
-              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center"><Sliders className="w-6 h-6 text-blue-300" />{tipoTransmision[servicio.transmision]}</div>
-              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center"><Users className="w-6 h-6 text-blue-300" />{servicio.cant_asientos}</div>
+              <p className="mb-4  text-gray-600 dark:text-[#F9FAFB]/70"><strong className="text-gray-800 dark:text-[#F9FAFB]">{servicio.marca} {servicio.modelo}</strong> o similares</p>
+              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center dark:text-[#F9FAFB]"><Sliders className="w-6 h-6 text-blue-300" />{tipoTransmision[servicio.transmision]}</div>
+              <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center dark:text-[#F9FAFB]"><Users className="w-6 h-6 text-blue-300" />{servicio.cant_asientos}</div>
             </>
           )}
         </div>
@@ -98,7 +98,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
   </div>
 
   {(ReservaCardOpen) && (
-    <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-black/60 flex items-center justify-center z-50">
+    <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-center z-50">
         <button
           className="absolute top-4 right-4 text-white hidden md:block"
           onClick={handleClose}
@@ -107,7 +107,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-      <div onClick={(e) => e.stopPropagation()} className="bg-white md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
+      <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
         <ReservaCard servicio={servicioReserva} handleClose={handleClose} sucursales={sucursales}/>
       </div>
     </div>

@@ -1,6 +1,8 @@
 from django.db import models
 from users.models import User
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
+from django.contrib.postgres.search import SearchVectorField
 
 class Proveedor(models.Model):
 
@@ -20,11 +22,10 @@ class Proveedor(models.Model):
         ('CDN', 'Centro de Diversión Nocturna'),
         ('AL', 'Albergue'),
     )
+
     nombre = models.CharField(max_length=50)
     descripcion = models.TextField()
-    # numeroLegal = models.CharField(unique=True)
     telefono = models.CharField(max_length=20, default="")
-    # correo = models.CharField(unique=True, max_length=100)
     direccion = models.CharField(max_length=255)
     ciudad = models.CharField(max_length=255)
     tipo = models.CharField(max_length=3, choices=actividades)
@@ -34,11 +35,7 @@ class Proveedor(models.Model):
     latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)
     longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)      
     administrador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='proveedor')
-    reglas = ArrayField(
-        models.CharField(max_length=255),
-        blank=True,
-        default=list
-    )
+    reglas = ArrayField(models.CharField(max_length=255), blank=True, default=list)
 
     AMENIDADES = [
         ("piscina", "Piscina al aire libre"),
@@ -53,11 +50,15 @@ class Proveedor(models.Model):
         ("desayuno", "Muy buen desayuno"),
     ]
 
-    amenidades = ArrayField(
-        models.CharField(max_length=50, choices=AMENIDADES),
-        blank=True,
-        default=list
-    )
+    amenidades = ArrayField(models.CharField(max_length=50, choices=AMENIDADES), blank=True, default=list)
+
+    class Meta:
+        indexes = [
+            GinIndex(fields=['nombre'], name='proveedor_nombre_gin', opclasses=['gin_trgm_ops']),
+            GinIndex(fields=['descripcion'], name='proveedor_descripcion_gin', opclasses=['gin_trgm_ops']),
+            GinIndex(fields=['tipo'], name='proveedor_tipo_gin', opclasses=['gin_trgm_ops']),
+            GinIndex(fields=['ciudad'], name='proveedor_ciudad_gin', opclasses=['gin_trgm_ops']),
+        ]
 
 #servicios
 class Caracteristica(models.Model):

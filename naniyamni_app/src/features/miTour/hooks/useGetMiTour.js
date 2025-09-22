@@ -16,8 +16,12 @@ export const useGetMiTour = () => {
         } catch(e) {
             if (typeof e === "object") {
                 const firstKey = Object.keys(e)[0];
-                const firstMessage = e[firstKey][0];
-                setError(firstMessage);
+                const firstMessage = e[firstKey];
+                if (firstMessage === "Invalid token.") {
+                    setError("Tienes que iniciar sesión para crear un Tour");
+                } else {
+                    setError(firstMessage);
+                }
             }
             else {
                 setError("Ocurrió un error inesperado.");

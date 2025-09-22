@@ -21,17 +21,19 @@ export const DisponibilidadForm = ({ tipo, setFiltro, sucursales=[] }) => {
       } = useDisponibilidad();
  
     return (
-        <div className="bg-white gap-4 h-full flex w-full flex-col items-start p-4 rounded-xl border border-gray-200 shadow-sm transition-transform transform  hover:shadow-md duration-300">
+        <div className="dark:text-[#F9FAFB] gap-4 h-full flex w-full flex-col items-start p-4 rounded-xl border dark:border-[#AAAAAA]/10 border-gray-200 shadow-sm transition-transform transform  hover:shadow-md duration-300">
             <div className="flex gap-2 items-start justify-between w-full">
-                <h2 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Disponibilidad</h2>
+                <h2 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1 dark:text-[#F9FAFB] ">Disponibilidad</h2>
             </div>
             <div className="h-full flex-wrap flex w-full gap-4">
-                <div className=" text-gray-900 flex-shrink flex-1 md:min-w-87 min-w-80  h-fit bg-gradient-to-r shadow-md rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
-                    <DateRange
-                        ranges={range}
-                        onChange={(item) => setRange([item.selection])}
-                        moveRangeOnFirstSelection={false}
-                    /> 
+                <div className=" text-gray-900 flex-shrink rounded flex-1  h-fit bg-gradient-to-r shadow-md border-none p-[1px] hover:from-blue-300/40 hover:to-yellow-200/40">
+                    <div className="dark:bg-[#181818] dark:text-[#F9FAFB] dark:border-[#AAAAAA]/10 dark:border rounded dark:hover:text-[#F9FAFB] bg-[#F9FAFB] text-[#181818]">
+                        <DateRange
+                            ranges={range}
+                            onChange={(item) => setRange([item.selection])}
+                            moveRangeOnFirstSelection={false}
+                        /> 
+                    </div>
                 </div>
                 <div className="items-center justify-between flex-shrink flex-1 flex-wrap gap-4 flex flex-col min-w-36">
                     <div className="justify-between flex-shrink flex flex-wrap h-auto gap-4 min-w-36 w-full">

@@ -9,18 +9,18 @@ export const ProveedorDetailCard = ({ proveedor, loading, error }) => {
 
     return (  
         <div>
-            <div className="flex items-center bg-white gap-2 tracking-wide text-zinc-800">
+            <div className="flex items-center gap-2 tracking-wide text-zinc-800 dark:text-[#F9FAFB]">
                 <div>
                     <img src ={proveedor.imagen?.image_url || "/src/assets/placeholder.png"} alt={proveedor.imagen?.title} className="h-18 w-18 md:h-20 md:w-20 m-2 rounded-full"/>
                 </div>
                 <div className="mb-2">
                     <Title text={proveedor?.nombre} margin={false}/>
-                    <small className="text-zinc-600">{proveedor?.ciudad}</small>
+                    <small className="text-zinc-600 dark:text-[#F9FAFB]/80">{proveedor?.ciudad}</small>
                 </div>
             </div>
             <div className="w-full flex flex-col items-start pb-2 pt-4 px-4 rounded">   
                 <ReadMoreText text={proveedor.descripcion || ""}/>
-                <div className="py-6  text-zinc-800/95">
+                <div className="py-6  text-zinc-800/95 dark:text-[#F9FAFB]/95">
                     <p className="mb-4"><strong>Dirección:</strong> {proveedor.direccion?.toLowerCase()}</p>
                     <p className=""><strong>Categoría:</strong> {actividades.filter(item => item.value === proveedor.tipo)[0]?.label}</p>
                 </div>

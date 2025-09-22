@@ -74,7 +74,7 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
     };
 
     return (
-            <div onClick={(e) => e.stopPropagation()} className="z-70 flex flex-wrap md:gap-4 gap-2 w-fit  p-1 md:p-4 md:border rounded-xl border-gray-200 bg-white/95 text-zinc-800">
+            <div onClick={(e) => e.stopPropagation()} className="z-70 flex flex-wrap md:gap-4 gap-2 w-fit  p-1 md:p-4 md:border rounded-xl border-gray-300 bg-gray-50/95 text-zinc-800 dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/10">
                 <button
                     className="md:hidden  right-4 text-zinc-700 px-1 py-1 absolute rounded-full cursor-pointer"
                     onClick={handleClose}
@@ -99,17 +99,17 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                         lugarInicio,}}
                 />
             }
-            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
+            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-100 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30">
                 <div className="flex gap-3 flex-col">
-                    <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between">
+                    <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between dark:text-[#F9FAFB] dark:border-[#AAAAAA]/30 dark:bg-[#AAAAAA]/10">
                         {(servicio.tipo_servicio === "V")?
                             <p>{(noches > 1)?"Días":"Día"} ({noches})</p>:<p>{(noches > 1)?"Noches":"Noche"} ({noches})</p>}
                         <p>
                             C$ {total}
                         </p>
                     </div>
-                    <div className="text-zinc-800 flex flex-col gap-4 p-4 border border-gray-200 rounded">
-                        <p className="text-lg border-b border-gray-200 pb-2 lg:text-center">Información sobre el precio final</p>
+                    <div className="text-zinc-800 flex flex-col gap-4 p-4 border border-gray-200 rounded dark:text-[#F9FAFB] dark:border-[#AAAAAA]/30">
+                        <p className="text-lg border-b border-gray-200 pb-2 lg:text-center dark:border-[#AAAAAA]/30">Información sobre el precio final</p>
                         <div>
                             {(servicio.tipo_servicio === "H")?
                                 <div className="flex gap-1 items-center justify-between">
@@ -145,9 +145,9 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                         </div>
                     </div>
                 </div>
-                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
+                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-600 hover:to-yellow-300/80 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
                     <button 
-                        className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
+                        className="bg-blue-500 dark:bg-[#007bff]/90 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
                         onClick={() => {
                             if (token){
                                 const payload = buildReservaPayload();

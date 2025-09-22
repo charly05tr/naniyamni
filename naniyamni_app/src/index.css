@@ -25,16 +25,57 @@ input[type=number] {
 }
 
 
+.rdrCalendarWrapper,
+.rdrMonth,
+.rdrDateDisplayWrapper {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+/* Días individuales */
+.rdrDayNumber span {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+/* Días seleccionados */
+.rdrDaySelected,
+.rdrDaySelected span,
+.rdrDayStartPreview,
+.rdrDayInPreview,
+.rdrDayEndPreview,
+.rdrDayInRange {
+  background-color: inherit !important; /* hereda del padre */
+  color: inherit !important;       
+  width: 100% !important;      /* texto también */
+}
+
+/* Hover de días */
+.rdrDay:hover,
+.rdrDayNumber span:hover {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+.rdrDayNumber span {
+  color: #181818 !important; /* negro */
+}
+
+/* Tema oscuro (cuando el SO está en dark mode) */
+@media (prefers-color-scheme: dark) {
+  .rdrDayNumber span {
+    color: #F9FAFB !important; /* blanco */
+  }
+}
+
 .rdrCalendarWrapper {
-    width: 100% !important;     
-    border-radius: 4px;    
-  }
+  width: 100% !important;
+}
 
-  .rdrMonth {
-    width: 100% !important;  
-    border-radius: 5px;   
-  }
+.rdrDateDisplayWrapper { 
+  width: 100% !important;
+}
 
-  .rdrDateDisplayWrapper {
-    border-radius: 5px; 
-  }
+.rdrMonth { 
+  width: 100% !important;
+}

@@ -74,7 +74,7 @@ export const ReadMoreText = ({ id, text, maxHeight = 100  }) => {
       </div>
       
       {/* Contenedor principal con flexbox para alinear texto y botón */}
-      <div className="flex flex-wrap text-zinc-800/95">
+      <div className="flex flex-wrap text-zinc-800/95 dark:text-[#F9FAFB]/95">
         <span
           id={id}
           ref={contentRef}

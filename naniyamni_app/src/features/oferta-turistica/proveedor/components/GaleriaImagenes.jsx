@@ -107,7 +107,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
     <div>
       <div
         ref={galeriaRef}
-        className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-clip scrollbar-hide rounded bg-white"
+        className="flex gap-2 flex-nowrap overflow-x-auto overflow-y-clip scrollbar-hide rounded"
       >
         {listaFinal.map((imagen, idx) => (
           <img
@@ -123,7 +123,7 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
 
       {imagenSeleccionada && (
         <div
-          className="fixed inset-0 backdrop-blur-sm bg-black/50 flex items-center justify-between z-100"
+          className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-between z-100"
           onClick={handleClose}
         >
           {/* Superposición de flash blanco */}

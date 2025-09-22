@@ -10,6 +10,7 @@ import { useFiltros } from "./hooks/useFiltros";
 import { useState } from "react";
 import { TransporteCard } from "./components/TransporteCard";
 import { AtraccionCard } from "./components/AtraccionCard";
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 
 const ProveedorPage = () => {
     const { id } = useParams();
@@ -25,24 +26,24 @@ const ProveedorPage = () => {
         <>
             {(!loading)
             ?
-            <div className="p-2 bg-white/10 flex flex-col m-2 gap-2 rounded border-gray-200">
-                <div className="bg-white flex flex-col gap-2">
-                    <div className="bg-white gap-2 lg:gap-4 grid lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[4fr_1fr] md:grid-cols-[4fr_2fr] justify-between min-h-80 max-h-300">
+            <div className="p-2 flex flex-col m-2 gap-2 rounded">
+                <div className="flex flex-col gap-2">
+                    <div className="gap-2 lg:gap-4 grid lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[4fr_1fr] md:grid-cols-[4fr_2fr] justify-between min-h-80 max-h-300 mb-5">
                         <ProveedorDetailCard proveedor={proveedor} loading={loading} error={error}/>
                         <MapWithMarket proveedor={proveedor}/>
                     </div>
                     {(proveedor.tipo !== "TTT")&&
                     <div>
-                        <GaleriaImagenes imagenes={todasLasImagenes} duplicar={false} tamSel={(proveedor.tipo === 'AV')?"md":"lg"}/>    
+                        <GaleriaImagenes imagenes={todasLasImagenes} tamSel={(proveedor.tipo === 'AV')?"md":"lg"}/>    
                     </div>}
                 </div>
                 <div>
-                    <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] md:mb-4 mb-2 ">
+                    <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] mb-14 mt-12">
                         {(proveedor.tipo !== "TTT" && proveedor.tipo !== "CR")&&
                         <>
                             <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
-                            <div className="rounded-xl bg-white border border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
-                            <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1">Comentarios Destacados</h1>
+                            <div className="rounded-xl border dark:border-[#AAAAAA]/10 border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
+                                <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
                             </div>
                         </>}
                     </div>
@@ -61,9 +62,9 @@ const ProveedorPage = () => {
                                 </div>
                                 :
                                 <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
-                                    <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
-                                        <h1 className="text-gray-800/90 font-bold text-xl mb-2">Comentarios Destacados</h1>
-                                        <div className="text-center p-4 border rounded-full border-gray-200">
+                                    <div className="dark:bg-[#0A192FE6]/9 h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
+                                        <h1 className="text-gray-800/90 font-bold text-xl mb-2 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
+                                        <div className="text-center p-4 border rounded-full border-gray-200 dark:border-[#AAAAAA]/30">
                                             No hay comentarios.
                                         </div>
                                     </div>
@@ -73,10 +74,10 @@ const ProveedorPage = () => {
                                         )}
                                     </div>
                                     {(proveedor?.reglas.length > 0)?
-                                    <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100 rounded-xl shadow">
-                                        <h1 className="text-gray-800/90 font-bold text-xl mb-4">Normas</h1>
-                                        {proveedor.reglas?.map(regla => (
-                                            <li className="tracking-tight text-gray-800/95 text-sm">{regla}</li>
+                                    <div className="h-fit lg:w-1/4 flex flex-col gap-3 w-fit flex-wrap p-6 lg:min-w-50 max-w-100 rounded-xl shadow">
+                                        <h1 className="text-gray-800/90 font-bold text-xl mb-4 dark:text-[#F9FAFB] flex flex-col gap-2">Normas</h1>
+                                        {proveedor.reglas?.map((regla, index) => (
+                                            <p key={index} className="tracking-tight text-gray-800/95 text-sm dark:text-[#F9FAFB]/90 flex gap-2"><ArrowRightIcon className="h-4 w-4 max-w-4 max-h-4 min-w-4 min-h-4" /> {regla}</p>
                                         ))}
                                     </div>
                                     :<div></div>}

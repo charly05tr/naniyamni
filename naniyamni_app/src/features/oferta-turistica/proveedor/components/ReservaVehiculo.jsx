@@ -23,17 +23,17 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
 
     return (
         <>
-            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
+            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-300 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB]">
                 <h1 className="text-3xl font-semibold tracking-wide my-2">Tu reserva</h1>
-                <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
-                    <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
+                <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
+                    <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300 dark:border-[#AAAAAA]/30">
                         <p className="text-sm">Fecha Inicio</p>
                         <p className="font-bold">{reserva.entrada.split("\n")[0]}</p>
                         <p className="mt-3 text-sm">Hora Inicio</p>
                         <select
                             value={reserva.horaInicio}
                             onChange={(e) => handleChangeHoraInicio(e.target.value)}
-                            className="w-fit py-1 font-bold focus:outline-none cursor-pointer"
+                            className="w-fit py-1 font-bold focus:outline-none cursor-pointer dark:bg-[#181818]"
                         >
                             {opciones.map((op) => (
                                 <option key={op} value={op}>
@@ -49,7 +49,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
                         <select
                             value={reserva.horaDevolucion}
                             onChange={(e) => setHoraDevolucion(e.target.value)}
-                            className="w-fit py-1 font-bold focus:outline-none cursor-pointer"
+                            className="w-fit py-1 font-bold focus:outline-none cursor-pointer dark:bg-[#181818]"
                         >
                             {opciones.map((op) => (
                                 <option key={op} value={op}>
@@ -59,7 +59,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
                         </select>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 p-2 border border-gray-200 items-start rounded">
+                <div className="flex flex-col gap-2 p-2 border border-gray-200 items-start rounded dark:border-[#AAAAAA]/30">
                     <div className="flex flex-col gap-1 p-2 border-gray-300">
                         <p className="text-sm">Lugar Inicio</p>
                         <p className="font-bold">{reserva.lugarInicio.toLowerCase()}</p>
@@ -69,7 +69,7 @@ export const ReservaVehiculo = ({ reserva, servicio, setHoraInicio, setHoraDevol
                         <SelectLugarDevolucion sucursales={sucursales} setLugarDevolucion={setLugarDevolucion} lugarDevolucion={reserva.lugarDevolucion}/>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded">
+                <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
                     <p className="text-sm">Has seleccionado</p>
                     <strong className="flex gap-2 mb-3 flex-wrap">
                             {reserva.cantVehiculos} {(reserva.cantVehiculos > 1)?"vehículos":"vehículo"} para {reserva.dias} {(reserva.dias > 1)?"días":"día"}

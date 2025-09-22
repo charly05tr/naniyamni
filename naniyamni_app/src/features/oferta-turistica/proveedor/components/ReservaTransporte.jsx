@@ -9,7 +9,7 @@ import { useReservarTransporte } from "../hooks/useReservarTransporte";
 import { tiposServicios, formatLocalDateTime, formatDateOld } from "@config";
 import { generarOpcionesNumeros, convertirHora } from "@config"; 
 
-export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClose}) => {
+export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClose }) => {
     const { crearReserva, loading, error } = useReservar();
     const { total, cantPersonas, IVA, TotalConIVA, setCantPersonas } = useReservarTransporte({servicio});
     const navigate = useNavigate();
@@ -18,10 +18,18 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
         navigate("/MiTour/");
     };
     const { token } = useContext(AuthContext);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
     
-    if (fechaSalida == null || horaSalida == null) {
+    if (fechaSalida === null || horaSalida === null) {
         return (
             <Alert>Para reservar debe seleccionar una fecha y una hora de salida.</Alert>
+        );
+    }
+    else if (fechaSalida < today) {
+        return (
+            <Alert>Para reservar debe seleccionar una fecha válida.</Alert>
         );
     }
 
@@ -39,18 +47,18 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
     const opciones = generarOpcionesNumeros(10);
 
     return (
-        <div className="flex gap-4 p-4 flex-wrap ">
+        <div className="bg-gray-50 dark:bg-[#181818]/90 flex gap-4 p-4 flex-wrap">
             <button
                     className="md:hidden right-4 text-zinc-700 px-1 py-1 absolute rounded-full cursor-pointer"
                     onClick={handleClose}
                 >
                     <X className="w-8 h-8"/> 
                 </button>  
-            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90">
+            <div className="text-zinc-800 flex flex-shrink flex-1 flex-col gap-2 md:border border-gray-200 md:p-4 p-2 rounded-lg w-fit md:min-w-100 min-w-90 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB]">
                 <h1 className="text-3xl font-semibold tracking-wide my-2">Tu reserva</h1>
                 <div className="flex flex-col gap-2">
-                    <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
-                        <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300">
+                    <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
+                        <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300 dark:border-[#AAAAAA]/30">
                             <p className="text-sm">Sale</p>
                                 <strong>{formatDateOld(fechaSalida)}</strong> 
                                 <p>a las {convertirHora(horaSalida)}</p>
@@ -60,13 +68,13 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
                             <strong>{servicio.origen}</strong>
                         </div>
                     </div>
-                    <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded">
+                    <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
                         <div className="flex flex-col gap-1 p-2">
                             <p className="mt-3 text-sm">Cantidad de personas</p>
                             <select
                                 value={cantPersonas}
                                 onChange={(e) => setCantPersonas(e.target.value)}
-                                className="w-fit py-1 font-bold focus:outline-none cursor-pointer"
+                                className="w-fit py-1 font-bold focus:outline-none cursor-pointer dark:border-[#AAAAAA]/30 dark:bg-[#181818]"
                             >
                                 {opciones.map((op) => (
                                     <option key={op} value={op}>
@@ -76,7 +84,7 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
                             </select>
                         </div>
                     </div>
-                    <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded">
+                    <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
                         <p className="text-sm">Has seleccionado</p>
                         <strong className="flex gap-2 mb-3 flex-wrap">
                         Un viaje a {servicio.destinos.at(-1).nombre}
@@ -85,16 +93,16 @@ export const ReservaTransporte = ({ servicio, fechaSalida, horaSalida, handleClo
                     </div>
                 </div>
             </div>
-            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-90 gap-4 border-gray-200 flex flex-col rounded-lg justify-between">
+            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-90 gap-4 border-gray-200 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB]">
                 <div className="flex gap-3 flex-col">
-                    <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between">
+                    <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between dark:border-[#AAAAAA]/30 dark:bg-[#AAAAAA]/10 dark:text-[#F9FAFB]">
                         <p>{(cantPersonas > 1)?"Personas":"Persona"} ({cantPersonas})</p>
                         <p>
                             C$ {total}
                         </p>
                     </div>
-                    <div className="text-zinc-800 flex flex-col gap-4 p-4 border border-gray-200 rounded">
-                        <p className="text-lg border-b border-gray-200 pb-2 lg:text-center">Información sobre el precio final</p>
+                    <div className="text-zinc-800 flex flex-col gap-4 p-4 border border-gray-200 rounded dark:text-[#F9FAFB] dark:border-[#AAAAAA]/30">
+                        <p className="text-lg border-b border-gray-200 pb-2 lg:text-center dark:border-[#AAAAAA]/30">Información sobre el precio final</p>
                         <div>
                                 <div className="flex gap-1 items-center justify-between">
                                     <div className="flex gap-1 items-center">

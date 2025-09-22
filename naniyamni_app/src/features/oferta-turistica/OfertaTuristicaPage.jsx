@@ -1,11 +1,15 @@
 import { useProveedor } from "./hooks/useProveedor";
 import { ProveedorCard } from "./components/ProveedorCard";
-import { Error } from "@Error";
+import { Search } from "./components/Search";
 
 const OfertaTuristica = () => {
-    const { proveedores, loading } = useProveedor();
+    const { proveedores, loading, refetch } = useProveedor();
 
     return (
+        <>
+            <div className="md:p-4 py-4 px-2">
+                <Search refetch={refetch} categories={["Hoteles", "Rent a car", "Transporte", "Museos", "Parques", "Centros turísticos"]}/>
+            </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-4 lg:m-4 m-2 gap-2">
             {(!loading)
             ?
@@ -13,9 +17,10 @@ const OfertaTuristica = () => {
                 ? proveedores.map(proveedor => (
                     <ProveedorCard key={proveedor.id} proveedor={proveedor}/>)
                 )
-                :<div className="flex items-center w-full col-span-2  justify-center"> <Error>No hay ofertas que mostrar.</Error></div>
+                :<div className="flex items-center w-full col-span-2  justify-center"> No hay ofertas que mostrar.</div>
             :<h1 className="col-span-6 m-[40dvh] text-center">Cargando...</h1>}
-        </div>                                               
+        </div>     
+        </>                                          
     );
 }
 

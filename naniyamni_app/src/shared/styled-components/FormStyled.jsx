@@ -6,18 +6,13 @@ export const Form = styled.form`
   gap: 12px;
 `;
 
-export const FormCard = styled.div`
-  max-width: 800px;
-  min-width: 340px;
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: rgba(255,255,255, 2);
-     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-     margin-bottom: 50px;
-  margin-left: 5px;
-  margin-right: 5px;
-`
+export const FormCard = ({ children }) => {
+  return (
+    <div className="max-w-[800px] min-w-[340px] p-4 border dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/30 border-gray-300 rounded-lg bg-gray-50 shadow-md mb-[50px] mx-[5px] lg:min-w-[450px]">
+      {children}
+    </div>
+  );
+};
 
 export const Label = ({ text, forI }) => {
   return (
@@ -32,7 +27,7 @@ export const Input = ({ type = "text", placeholder, value, onChange, ...props })
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+        className="bg-gray-50 w-full dark:border-[#AAAAAA]/30 px-4 py-3 border dark:text-[#F9FAFB] dark:bg-[#181818] border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-[#AAAAAA] transition-all duration-200"
         {...props}
       />
     </div>
@@ -46,7 +41,7 @@ export const TextArea = ({ placeholder, value, onChange, ...props }) => {
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full border p-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-800 break-words transition-all duration-200"
+        className="bg-white w-full border p-2 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB] dark:bg-[#181818] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#AAAAAA] text-gray-800 break-words transition-all duration-200"
         rows="4"
         style={{ minHeight: '1.5em', overflow: 'hidden', resize: 'none' }}
         {...props}
@@ -57,13 +52,13 @@ export const TextArea = ({ placeholder, value, onChange, ...props }) => {
 
 export const Select = ({ type = "text", placeholder, value, onChange, ...props }) => {
   return (
-    <div className="shadow bg-gradient-to-r bg-gray-200 rounded-sm border-none p-[1px] hover:from-blue-300 hover:to-yellow-200">
+    <div className="bg-gradient-to-r  rounded-lg border-none p-[1px]">
       <select
         type={type}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className="bg-white w-full  p-2 rounded-sm focus:outline-none  text-gray-700"
+        className="bg-gray-50 w-full dark:border-[#AAAAAA]/30 px-4 py-3 border dark:text-[#F9FAFB] dark:bg-[#181818] border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-1 focus:ring-[#AAAAAA]/50 transition-all duration-200"
         {...props}
       />
     </div>
@@ -72,8 +67,8 @@ export const Select = ({ type = "text", placeholder, value, onChange, ...props }
 
 export const Button = ({ text, disabled=false, color="blue", onClick=()=>{}}) => {
   const colorClasses = {
-    red: "bg-red-400 hover:bg-red-500",
-    blue: "bg-blue-600 hover:bg-blue-700",
+    red: "bg-red-400 hover:bg-red-500 dark:bg-[#E53935]/70 dark:hover:bg-[#E53935]/80",
+    blue: "bg-blue-600 hover:bg-blue-700 dark:bg-[#007bff]/90 dark:hover:bg-[#007bff]",
     green: "bg-green-400 hover:bg-green-500",
   };
 
@@ -86,7 +81,7 @@ export const Button = ({ text, disabled=false, color="blue", onClick=()=>{}}) =>
 
 export const GoogleButton = ({text}) => {
   return (
-    <button className="flex justify-center items-center gap-4 border border-gray-300 p-2 rounded-sm bg-white-400 cursor-pointer text-gray-800 hover:border-gray-400">
+    <button className="flex dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-gray-500 justify-center items-center gap-4 border border-gray-300 p-2 rounded-sm bg-white-400 cursor-pointer text-gray-800 hover:border-gray-400">
       <svg className="w-4 h-auto" width="46" height="47" viewBox="0 0 46 47" fill="none">
           <path d="M46 24.0287C46 22.09 45.8533 20.68 45.5013 19.2112H23.4694V27.9356H36.4069C36.1429 30.1094 34.7347 33.37 31.5957 35.5731L31.5663 35.8669L38.5191 41.2719L38.9885 41.3306C43.4477 37.2181 46 31.1669 46 24.0287Z" fill="#4285F4"/>
           <path d="M23.4694 47C29.8061 47 35.1161 44.9144 39.0179 41.3012L31.625 35.5437C29.6301 36.9244 26.9898 37.8937 23.4987 37.8937C17.2793 37.8937 12.0281 33.7812 10.1505 28.1412L9.88649 28.1706L2.61097 33.7812L2.52296 34.0456C6.36608 41.7125 14.287 47 23.4694 47Z" fill="#34A853"/>
@@ -101,9 +96,9 @@ export const GoogleButton = ({text}) => {
 export const Hr = ({ text="o"}) => {
   return (
     <div className="relative flex items-center mt-2 mb-2">
-      <div className="flex-grow border-t border-gray-300"></div>
-      <span className="mx-4 text-gray-500">{text}</span>
-      <div className="flex-grow border-t border-gray-300"></div>
+      <div className="flex-grow border-t border-gray-300 dark:border-[#AAAAAA]/30"></div>
+      <span className="mx-4 text-gray-500 dark:text-[#F9FAFB] dark:bg-[#181818]">{text}</span>
+      <div className="flex-grow border-t border-gray-300 dark:border-[#AAAAAA]/30"></div>
   </div>
   );
 }
