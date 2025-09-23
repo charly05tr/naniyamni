@@ -2,7 +2,6 @@ import { ReservaVehiculoCard } from "./ReservaVehiculoCard";
 import { useEliminarDeTour } from "../hooks/useEliminarDeMiTour";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@Error";
-import { ReservaCard } from "../../oferta-turistica/proveedor/components/ReservaCard";
 import { ReservaHabitacionCard } from "./ReservaHabitacionCard";
 import { ReservaTransporteCard } from "./ReservaTransporteCard";
 import { ReservaAtraccionCard } from "./ReservaAtraccionCard";
@@ -24,19 +23,20 @@ export const MiTourCard  = ({ reserva, setReservas, handleOpen }) => {
           }
     }
 
+    console.log(reserva);
     return (
         <div>
         {(reserva.polymorphic_ctype === "reservavehiculo")?
             (!loading) &&
-            <ReservaVehiculoCard irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaVehiculoCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
         :(reserva.polymorphic_ctype === "reservahabitacion")?
             (!loading) &&
-            <ReservaHabitacionCard irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaHabitacionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
         :(reserva.polymorphic_ctype === "reservaviaje")?
             (!loading) &&
-            <ReservaTransporteCard irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaTransporteCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
         :(!loading) &&
-            <ReservaAtraccionCard irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>}
+            <ReservaAtraccionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>}
         {(error)&&<Error>{error}</Error>}
         </div>
     )

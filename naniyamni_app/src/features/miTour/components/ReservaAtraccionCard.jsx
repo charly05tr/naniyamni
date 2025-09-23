@@ -44,7 +44,7 @@ export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOp
         <div className='flex gap-2'>
           <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
           <span className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>
-          <span onClick={handleOpen} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
+          <span onClick={() => handleOpen(reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
         </div>
       </div>
     </div>

@@ -6,44 +6,36 @@ import { Percent, DollarSign, Coins, X } from "lucide-react";
 import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { useReservarTransporte } from "../hooks/useReservarTransporte";
-import { tiposServicios, formatDateOld } from "@config";
+import { tiposServicios } from "@config";
 import { generarOpcionesNumeros, formatearFechaParaDjango } from "@config"; 
 
-export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuedeReservar }) => {
+export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour = false }) => {
     const { crearReserva, loading, error } = useReservar();
-    const { total, cantPersonas, IVA, TotalConIVA, setCantPersonas } = useReservarTransporte({servicio});
+    const { total, cantPersonas, IVA, TotalConIVA, setCantPersonas } = useReservarTransporte({servicio:reserva.servicio, reserva });
     const navigate = useNavigate();
 
     const irADetalle = () => {
         navigate("/MiTour/");
     };
     const { token } = useContext(AuthContext);
-    
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    if (fecha_llegada == null) {
+    if (reserva.fecha_llegada == "Fecha no válida") {
         return (
             <Alert>Para reservar debe seleccionar la fecha en la que planea llegar.</Alert>
         );
     }
-    else if (fecha_llegada < today) {
-        return (
-            <Alert>Sea serio.</Alert>
-        )
-    }
     else if (noPuedeReservar) {
         return (
-            <Alert>Ese día no abrimos, por favor selecciona un día que sea: {servicio.dias_abierto}</Alert>
+            <Alert>Ese día no abrimos, por favor selecciona un día que sea: {reserva.servicio.dias_abierto}</Alert>
         );
     }
 
     const buildReservaPayload = () => {
         return {
-            servicio_id: servicio.id, 
+            servicio_id: reserva.servicio.id, 
             cant_personas: cantPersonas,
             total: TotalConIVA,
-            fecha_llegada: formatearFechaParaDjango(fecha_llegada),
+            fecha_llegada: formatearFechaParaDjango(reserva.fecha_llegada),
         };
     };
 
@@ -63,11 +55,11 @@ export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuede
                     <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
                         <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300 dark:border-[#AAAAAA]/30">
                             <p className="text-sm">Reserva para</p>
-                                <strong>{formatDateOld(fecha_llegada)}</strong> 
+                                <strong>{reserva.fecha_llegada}</strong> 
                         </div>
                         <div className="flex flex-col gap-1 p-2">
                             <p className="text-sm">Duración reserva:</p>
-                            <strong>{(servicio.duracion === "23:30:00")?"Todo el día":`${servicio.duracion} hrs`}</strong>
+                            <strong>{(reserva.servicio.duracion === "23:30:00")?"Todo el día":`${reserva.servicio.duracion} hrs`}</strong>
                         </div>
                     </div>
                     <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
@@ -91,7 +83,7 @@ export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuede
                         <strong className="flex gap-2 mb-3 flex-wrap">
                             entradas para {cantPersonas} {(cantPersonas>1)?"personas":"persona"}
                         </strong>
-                        <p className="text-sm">1 x {servicio.nombre}</p>
+                        <p className="text-sm">1 x {reserva.servicio.nombre}</p>
                     </div>
                 </div>
             </div>
@@ -111,7 +103,7 @@ export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuede
                                         <Coins className="w-6 h-4 text-indigo-600" />
                                         <p>Precio por persona</p>
                                     </div>
-                                        <p>C$ {servicio.precio}</p>
+                                        <p>C$ {reserva.servicio.precio}</p>
                                 </div>
                             <div className="flex gap-1 items-center mt-2 justify-between">
                                 <div className="flex gap-1 items-center">
@@ -130,20 +122,21 @@ export const ReservaAtraccion = ({ servicio, fecha_llegada, handleClose, noPuede
                         </div>
                     </div>
                 </div>
+                {(!inTour) &&
                 <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
                     <button 
                         className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
                         onClick={() => {
                             if (token){
                                 const payload = buildReservaPayload();
-                                crearReserva(payload, tiposServicios[servicio.tipo_servicio]);
+                                crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
                                 irADetalle();
                                 return;
                             }
                             navigate("/login")
                           }} 
                      >{(!loading)?"Agregar a mi Tour":"Agregando..."}</button>
-                </div>
+                </div>}
                 {!token && (
                     <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
                 )}

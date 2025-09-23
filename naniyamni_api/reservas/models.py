@@ -33,7 +33,7 @@ class ReservaVehiculo(Reserva):
     servicio = models.ForeignKey(
         AlquilerVehiculo, related_name="reservas", on_delete=models.PROTECT
     )
-
+    dias = models.IntegerField(default=1)
 
 class ReservaHabitacion(Reserva):
     fecha_hora_llegada = models.DateTimeField()

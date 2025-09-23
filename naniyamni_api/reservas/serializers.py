@@ -35,7 +35,7 @@ class ReservaVehiculoSerializer(serializers.ModelSerializer):
         fields = [
             "id", "turista", "servicio", "servicio_id", "total",
             "fecha_hora_entrega", "fecha_hora_recogida",
-            "lugar_recogida", "lugar_devolucion", "tipo"
+            "lugar_recogida", "lugar_devolucion", "tipo", "dias"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  

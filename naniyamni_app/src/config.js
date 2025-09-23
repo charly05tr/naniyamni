@@ -63,7 +63,7 @@ export const formatDateOld = (date, type) => {
   };
 
 
-  export const formatDate = (dateTimeString, type = null) => {
+  export const formatDate = (dateTimeString, type = null, puntito=true) => {
     if (!dateTimeString || typeof dateTimeString !== "string") {
       return "Fecha no válida";
     }
@@ -98,8 +98,8 @@ export const formatDateOld = (date, type) => {
     } else if (type === "salida") {
       timeText = "07:30 - 12:00";
     }
-  
-    return `${formatter.format(d)}${timeText ? " • " + timeText : ""}`;
+    const separador = (puntito)?" • ":" ";
+    return `${formatter.format(d)}${timeText ? separador + timeText : ""}`;
   };
 
   
@@ -209,4 +209,36 @@ export const formatearFechaParaDjango = (inputValue) => {
   const day = String(fecha.getDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`; // formato YYYY-MM-DD
+}
+
+
+export const separarFechaHora = (fecha_hora_salida) =>  {
+  const fechaObj = new Date(fecha_hora_salida);
+
+  // Extraer fecha en formato YYYY-MM-DD
+  const fecha = fechaObj.toISOString().split("T")[0];
+
+  // Extraer hora en formato HH:MM
+  const hora = fechaObj.toISOString().split("T")[1].slice(0, 5);
+
+  return { fecha, hora };
+}
+
+
+export const convertirAMPMaMilitar = (horaAMPM) => {
+  // horaAMPM: por ejemplo "03:45 PM" o "12:10 AM"
+  const [horaMin, periodo] = horaAMPM.trim().split(" ");
+  let [hora, minutos] = horaMin.split(":").map(Number);
+
+  if (periodo.toUpperCase() === "AM") {
+    if (hora === 12) hora = 0; // 12 AM → 00
+  } else if (periodo.toUpperCase() === "PM") {
+    if (hora !== 12) hora += 12; // 1 PM → 13, 2 PM → 14, etc.
+  }
+
+  // Asegurar siempre 2 dígitos
+  const horaStr = hora.toString().padStart(2, "0");
+  const minutosStr = minutos.toString().padStart(2, "0");
+
+  return `${horaStr}:${minutosStr}`;
 }

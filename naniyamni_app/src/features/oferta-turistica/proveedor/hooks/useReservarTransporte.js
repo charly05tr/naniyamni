@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react"
 
-export const useReservarTransporte = ({ servicio = [] }) => {
-    const [total, setTotal] = useState(0);
+export const useReservarTransporte = ({ servicio = [], reserva }) => {
+    const [total, setTotal] = useState((reserva.total / (1+0.15)) || 0);
     const [IVA, setIVA] = useState(0);
-    const [TotalConIVA, setTotalConIVA] = useState(0);
-    const [cantPersonas, setCantPersonas] = useState(1);
+    const [TotalConIVA, setTotalConIVA] = useState(reserva.total || 0);
+    const [cantPersonas, setCantPersonas] = useState(reserva.cant_personas || 1);
 
     useEffect(() => {
         setTotal(cantPersonas * parseFloat(servicio.precio));

@@ -62,7 +62,7 @@ const ProveedorPage = () => {
                                 </div>
                                 :
                                 <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
-                                    <div className="dark:bg-[#0A192FE6]/9 h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
+                                    <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
                                         <h1 className="text-gray-800/90 font-bold text-xl mb-2 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
                                         <div className="text-center p-4 border rounded-full border-gray-200 dark:border-[#AAAAAA]/30">
                                             No hay comentarios.

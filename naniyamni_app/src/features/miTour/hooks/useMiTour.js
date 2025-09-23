@@ -1,17 +1,17 @@
 import { useState, useEffect, useCallback } from "react";
 
 export const useMiTour = (reservas) => {
-    const [ReservaCardOpen, setReservaCardOpen] = useState(false);
+    const [ReservaCardOpen, setReservaCardOpen] = useState(null);
     const [total, setTotal] = useState(0);
     const [subTotal, setSubTotal] = useState(0);
     const [descuento, setDescuento] = useState(0);
 
     const handleClose = () => {
-        setReservaCardOpen(false);
+        setReservaCardOpen(null);
     };
 
-    const handleOpen = () => {
-        setReservaCardOpen(true);
+    const handleOpen = (reserva) => {
+        setReservaCardOpen(reserva);
     }
 
     const calTotal = useCallback(() => {

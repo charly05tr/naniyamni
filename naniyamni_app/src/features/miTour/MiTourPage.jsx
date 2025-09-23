@@ -3,16 +3,34 @@ import { MiTourCard } from "./components/MiTourCard";
 import { useMiTour } from "./hooks/useMiTour";
 import { useNavigate } from "react-router-dom";
 import { Error } from "@Error";
+import { useContext } from "react";
+import { AuthContext } from "@authContext";
+import { ReservaAtraccion } from "../oferta-turistica/proveedor/components/ReservaAtraccion";
+import { ReservaTransporte } from "../oferta-turistica/proveedor/components/ReservaTransporte";
+import { formatDate, separarFechaHora, convertirHora, formatDateOld } from "@config";
+import { ReservaHabitacion } from "../oferta-turistica/proveedor/components/ReservaHabitacion";
+import { ReservaVehiculo } from "../oferta-turistica/proveedor/components/ReservaVehiculo";
+import { useDisponibilidad } from "../oferta-turistica/context/disponibilidadContext";
 
 const MiTourPage = () => {
     const { loading, error, reservas, setReservas } = useGetMiTour();
     const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservas);
+    const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
     const navigate = useNavigate();
 
     const irAPagar = () => {
         navigate("/pay/");
     };
 
+    const { token } = useContext(AuthContext);
+
+    if (!token) {
+        return (
+            <div className="p-10">
+                <Error>{error}</Error>
+            </div>
+        )
+    }
     return (
         <div className="flex justify-between mb-5">
             <div></div>
@@ -64,6 +82,58 @@ const MiTourPage = () => {
                     </div>
                     }
                 </div>
+                {(ReservaCardOpen) && (
+                    <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-center z-50">
+                        <button
+                          className="absolute top-4 right-4 text-white hidden md:block"
+                          onClick={handleClose}
+                        >
+                          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
+                        {(ReservaCardOpen.polymorphic_ctype === "reservaatraccion")
+                            ?
+                                <ReservaAtraccion reserva={{...ReservaCardOpen, fecha_llegada:formatDate(ReservaCardOpen.fecha_llegada)}} handleClose={handleClose} inTour={true}/>
+                            :(ReservaCardOpen.polymorphic_ctype === "reservaviaje")?
+                                <ReservaTransporte reserva={{...ReservaCardOpen, fecha_salida:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_salida).fecha), hora_salida:convertirHora(separarFechaHora(ReservaCardOpen.fecha_hora_salida).hora)}} handleClose={handleClose} inTour={true}/>
+                            :(ReservaCardOpen.polymorphic_ctype === "reservahabitacion")?
+                                <ReservaHabitacion 
+                                    handleClose={handleClose} inTour={true}
+                                    reserva={{
+                                        entrada:formatDate(ReservaCardOpen.fecha_hora_llegada, null, false),
+                                        salida:formatDate(ReservaCardOpen.fecha_hora_salida, null, false),
+                                        cantHabitaciones:ReservaCardOpen.cant_habitaciones,
+                                        cantNinos:ReservaCardOpen.cant_ninos,
+                                        cantAdultos:ReservaCardOpen.cant_adultos,
+                                        servicio:ReservaCardOpen.servicio,
+                                        noches:ReservaCardOpen.noches,
+                                        total:ReservaCardOpen.total
+                                    }}
+                                />:
+                            <ReservaVehiculo 
+                                handleClose={handleClose} inTour={true}
+                                reserva={{
+                                    entrada: formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_recogida).fecha),
+                                    salida:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_entrega).fecha),
+                                    lugarInicio:ReservaCardOpen.lugar_recogida,
+                                    lugarDevolucion:ReservaCardOpen.lugar_devolucion,
+                                    servicio:ReservaCardOpen.servicio,
+                                    cantVehiculos:ReservaCardOpen.cant_vehiculos,
+                                    noches: ReservaCardOpen.dias,
+                                    horaInicio:separarFechaHora(ReservaCardOpen.fecha_hora_recogida).hora,
+                                    horaDevolucion:separarFechaHora(ReservaCardOpen.fecha_hora_entrega).hora,
+                                    sucursales:[ReservaCardOpen.servicio.sucursales],
+                                }}
+                                setHoraDevolucion={setHoraDevolucion}
+                                setLugarDevolucion={setLugarDevolucion}
+                                setHoraInicio={setHoraInicio}
+                            />
+                        }
+                      </div>
+                    </div>
+                  )}
             </div>
             <div></div>
         </div>

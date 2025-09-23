@@ -1,7 +1,8 @@
 import { FaBus, FaMapMarkerAlt } from 'react-icons/fa';
 import { ReservaTransporte } from './ReservaTransporte';
 import { useTransporteCard } from '../hooks/useTransporteCard';
-import { convertirHora } from '@config';
+import { convertirHora, formatDateOld } from '@config';
+import { Alert } from"@Alert"
 
 export const TransporteCard = ({ servicio }) => {
     
@@ -37,6 +38,13 @@ export const TransporteCard = ({ servicio }) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
+    const reservaPayload = () => {
+        return {
+            servicio:servicio,
+            hora_salida:convertirHora(selectedHour),
+            fecha_salida:formatDateOld(selectedDate),
+        }
+    }
     return (
         <>
         <div className="rounded-2xl shadow-md overflow-hidden max-w-2xl mx-auto p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -154,7 +162,11 @@ export const TransporteCard = ({ servicio }) => {
             </svg>
             </button>
             <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl m-2 shadow-2xl md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip dark:bg-[#181818]/90 dark:border dark:border-[#AAAAAA]/10">
-                <ReservaTransporte servicio={servicio} fechaSalida={selectedDate} horaSalida={selectedHour} handleClose={handleClose}/>
+                {(selectedDate === null || selectedHour === null)?
+                    <Alert>Para reservar debe seleccionar una fecha y una hora de salida.</Alert>
+                :(selectedDate < today)?
+                    <Alert>Para reservar debe seleccionar una fecha válida.</Alert>
+                :<ReservaTransporte reserva={reservaPayload()} handleClose={handleClose}/>}
             </div>
         </div>
         )}

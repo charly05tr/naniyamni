@@ -107,7 +107,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-      <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
+      <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[85dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
         <ReservaCard servicio={servicioReserva} handleClose={handleClose} sucursales={sucursales}/>
       </div>
     </div>

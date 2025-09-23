@@ -1,6 +1,7 @@
 import { useAtraccionCard } from "../hooks/useAtraccionCard";
-import { convertirHora } from "@config";
+import { convertirHora, formatDateOld } from "@config";
 import { ReservaAtraccion } from "./ReservaAtraccion";
+import { Alert } from "@Alert";
 
 export const AtraccionCard = ({ servicio }) => {
     const {
@@ -18,12 +19,22 @@ export const AtraccionCard = ({ servicio }) => {
             handleDateSelect, handleClose,
             handleOpen,
             ReservaCardOpen, noPuedeReservar
-    } = useAtraccionCard(dias_abierto,);
+    } = useAtraccionCard(dias_abierto);
 
     const imageUrl =
         imagenes.length > 0
         ? imagenes[0].image_url
         : 'https://via.placeholder.com/600x400.png?text=Imagen+no+disponible';
+
+    const payloadRerserva = () => {
+        return {
+            servicio: servicio,
+            fecha_llegada: formatDateOld(selectedDate)
+        }
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     return (
         <>
@@ -62,7 +73,7 @@ export const AtraccionCard = ({ servicio }) => {
                 </div>    
                 <div className="flex items-center flex-wrap gap-2 justify-between text-lg font-medium text-gray-900 border-t pt-4 border-gray-100 dark:border-[#AAAAAA]/50">
                     <div className="flex items-center space-x-2">
-                    <span className="text-sm font-semibold text-gray-500 dark:text-[#F9FAFB]/70">Duración estadía:</span>
+                    <span className="text-sm font-semibold text-gray-500 dark:text-[#F9FAFB]/70">Duración reserva:</span>
                         <span className="text-gray-900/90 font-semibold text-nowrap dark:text-[#F9FAFB]">{(duracion === "23:30:00")?"Todo el día":`${duracion} hrs`}</span>
                     </div>
                 <div className="flex items-center space-x-2">
@@ -93,7 +104,9 @@ export const AtraccionCard = ({ servicio }) => {
             </svg>
             </button>
             <div onClick={(e) => e.stopPropagation()} className=" bg-[#181818]/90 md:rounded-xl m-2 shadow-2xl md:max-h-[80dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip dark:border-[#AAAAAA]/5 dark:border">
-                <ReservaAtraccion servicio={servicio} fecha_llegada={selectedDate}  handleClose={handleClose} noPuedeReservar={noPuedeReservar}/>
+            {(selectedDate <  today) ?
+                <Alert>Seleccione una fecha válida.</Alert>:
+                <ReservaAtraccion reserva={payloadRerserva()}  handleClose={handleClose} noPuedeReservar={noPuedeReservar}/>}
             </div>
         </div>
         )}
