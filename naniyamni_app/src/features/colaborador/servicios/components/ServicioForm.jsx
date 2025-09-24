@@ -30,7 +30,7 @@ export const ServicioForm = ({ tipo, onSubmit }) => {
                     }
                     className="h-5 w-5 rounded-lg border-gray-100"
                 />
-                <label htmlFor="disponible" className="text-gray-800/95">Disponible</label>
+                <label htmlFor="disponible" className="text-gray-800/95 dark:text-[#F9FAFB]">Disponible</label>
             </div>
             {tipo === "H" && (
                 <HotelForm handleChange={handleChange} formData={formData}/>

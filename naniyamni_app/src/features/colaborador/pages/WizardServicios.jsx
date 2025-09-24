@@ -12,7 +12,7 @@ const WizardServicios = () => {
     const { id, tipo } = useParams();
     const { createServicios } = usePostServicios();
     const [step, setStep] = useState(0);
-    const { uploadImageServicio } = useUploadImageServicio();
+    const { uploadImageServicio, loading2 } = useUploadImageServicio();
     const [servicioId, setServicioId] = useState();
 
     const handlePostServicios = async (servicios) => {
@@ -37,7 +37,7 @@ const WizardServicios = () => {
             {step === 1 &&
                 <FormCard className="mt-4">
                     <Title text="Seleccione las imágenes que describan el servicio."/>
-                    <SubirImagen  onUploadImage={handleUploadImageServicio} />
+                    <SubirImagen  onUploadImage={handleUploadImageServicio} loading2={loading2}/>
                 </FormCard>}
         </div>
     )

@@ -13,6 +13,7 @@ export const useMisProveedores = () => {
         try {
             const data = await getMisProveedores();
             setProveedores(data);
+            console.log(data)
 
         } catch(e) {
             setError(e);
@@ -27,5 +28,5 @@ export const useMisProveedores = () => {
 
     }, [handleGetServicio]);
 
-    return { error, loading, proveedores, refetch: handleGetServicio }
+    return { error, loading, proveedores, refetch: handleGetServicio, setProveedores }
 }

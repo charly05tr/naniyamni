@@ -19,11 +19,14 @@ from .filters import ProveedorFilter
 from django.contrib.postgres.search import SearchVector, SearchRank, SearchQuery
 from rest_framework.filters import SearchFilter
 from django.contrib.postgres.search import TrigramSimilarity
+
 logger = logging.getLogger(__name__)
 
-class ProveedorViewSet(viewsets.ModelViewSet):
+class ProveedorViewSet(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = [authentication.TokenAuthentication]
+
     def get_queryset(self):
-        queryset = Proveedor.objects.all()
+        queryset = Proveedor.objects.filter(activo=True)
         q = self.request.GET.get('search')
         if q:
             # Vector de búsqueda combinando varios campos
@@ -44,22 +47,32 @@ class ProveedorViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.request.method == "GET":
             return [AllowAny()]
-        return super().get_permissions()
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
     def get_serializer_class(self):
         if self.action == 'list':
             return ProveedorListSerializer
         return ProveedorDetailSerializer
 
-
-class MisProveedoresViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = ProveedorListSerializer
-    permission_classes = [permissions.IsAuthenticated]
+class MisProveedoresViewSet(viewsets.ModelViewSet):
+    serializer_class = ProveedorListAdminSerializer
     authentication_classes = [authentication.TokenAuthentication]
     
     def get_queryset(self):
         return Proveedor.objects.filter(administrador=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        logger.debug("CREATE Reserva payload: %s", request.data)
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
+            raise
+        return super().create(request, *args, **kwargs) 
+
+    def get_permissions(self):
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
 class ServicioViewSet(viewsets.ModelViewSet):
     queryset = Servicio.objects.all()
@@ -82,6 +95,16 @@ class HabitacionViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
+    def create(self, request, *args, **kwargs):
+        logger.debug("CREATE Reserva payload: %s", request.data)
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
+            raise
+        return super().create(request, *args, **kwargs) 
+
 class AlquilerVehiculoViewSet(viewsets.ModelViewSet):
     queryset = AlquilerVehiculo.objects.all()
     serializer_class = AlquilerVehiculoSerializer
@@ -92,6 +115,15 @@ class AlquilerVehiculoViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
+    def create(self, request, *args, **kwargs):
+        logger.debug("CREATE Reserva payload: %s", request.data)
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
+            raise
+        return super().create(request, *args, **kwargs) 
 
 class ViajeDirectoViewSet(viewsets.ModelViewSet):
     queryset = ViajeDirecto.objects.all()
@@ -113,6 +145,7 @@ class ViajeDirectoViewSet(viewsets.ModelViewSet):
             raise
         return super().create(request, *args, **kwargs) 
 
+
 class AtraccionViewSet(viewsets.ModelViewSet):
     queryset = Atraccion.objects.all()
     authentication_classes = [authentication.TokenAuthentication]
@@ -122,6 +155,16 @@ class AtraccionViewSet(viewsets.ModelViewSet):
         if self.request.method == "GET":
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
+
+    def create(self, request, *args, **kwargs):
+        logger.debug("CREATE Reserva payload: %s", request.data)
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError:
+            logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
+            raise
+        return super().create(request, *args, **kwargs) 
 
 
 class GastronomicoViewSet(viewsets.ModelViewSet):
@@ -137,8 +180,12 @@ class GastronomicoViewSet(viewsets.ModelViewSet):
 
 class ProveedorImageView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
     parser_classes = [MultiPartParser]
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
     def get_object(self, image_id):
         try:
@@ -216,8 +263,11 @@ class ProveedorImageView(APIView):
 
 class ServicioImageView(APIView):
     parser_classes = [MultiPartParser]
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated, IsProveedor, IsProveedorOwner]
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
 
     def get_object(self, image_id):
         try:

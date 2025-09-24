@@ -1,6 +1,7 @@
 import { Title } from "@TextStyled"; 
 import { useNavigate } from "react-router-dom";
 import { Rating } from "./Rating";
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export const ProveedorCard = ({ proveedor }) => {
     const navigate = useNavigate();
@@ -20,7 +21,7 @@ export const ProveedorCard = ({ proveedor }) => {
                             <Title text={proveedor.nombre} margin={false}/>
                             <Rating />
                         </div>
-                        <small className="text-zinc-600 dark:text-[#F9FAFB]/60">{proveedor.ciudad}</small>
+                        <small className="text-zinc-600 dark:text-[#F9FAFB]/60 flex gap-1 mt-1 items-center"><FaMapMarkerAlt className="" />{proveedor.ciudad}</small>
                         <div>
                             <p className="hidden  md:line-clamp-2 lg:line-clam-3  text-zinc-700 dark:text-[#F9FAFB]/80 mt-3">{proveedor.descripcion}</p>
                         </div>

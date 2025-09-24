@@ -17,13 +17,16 @@ import WizardNuevoProveedor from './features/colaborador/pages/WizardNuevoProvee
 import WizardServicios from './features/colaborador/pages/WizardServicios';
 import ProveedorAdmin from './features/colaborador/pages/ProveedorAdmin';
 import Pagos from './features/miTour/components/Pago';
+import ActualizarProveedor from './features/colaborador/proveedor/components/ActualizarProveedor';
+import { usePerfil } from './features/users/perfil/hooks/usePerfil';
 
 function App() {
+  const { perfilData, loading } = usePerfil();
   return (
     <AuthProvider>
       <DisponibilidadProvider>
         <BrowserRouter>
-          <Navbar />
+          <Navbar user={perfilData} loading={loading}/>
           <Routes>
             //turista
             <Route path="/login" element={<LoginPage />} />
@@ -38,6 +41,7 @@ function App() {
             <Route path="/proveedor/:id/new-servicio/tipo/:tipo/" element={<WizardServicios />} />
             <Route path="/proveedor/:id/admin" element={<ProveedorAdmin />} />
             <Route path="/colaborador" element={<ColaboradorPage />} />
+            <Route path="/proveedor/:id/admin/actualizar/" element={<ActualizarProveedor />} />
           </Routes>
         </BrowserRouter>
       </DisponibilidadProvider>

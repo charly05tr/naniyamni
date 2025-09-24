@@ -6,7 +6,7 @@ import { ReservaHabitacionCard } from "./ReservaHabitacionCard";
 import { ReservaTransporteCard } from "./ReservaTransporteCard";
 import { ReservaAtraccionCard } from "./ReservaAtraccionCard";
 
-export const MiTourCard  = ({ reserva, setReservas, handleOpen }) => {
+export const MiTourCard  = ({ reserva, setReservas, handleOpen, inPay=false }) => {
     const { eliminarDeTour, loading, error } = useEliminarDeTour();
     const navigate = useNavigate();
 
@@ -22,21 +22,20 @@ export const MiTourCard  = ({ reserva, setReservas, handleOpen }) => {
             console.error("Error al eliminar", e);
           }
     }
-
-    console.log(reserva);
+    
     return (
         <div>
         {(reserva.polymorphic_ctype === "reservavehiculo")?
             (!loading) &&
-            <ReservaVehiculoCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaVehiculoCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen} inPay={inPay}/>
         :(reserva.polymorphic_ctype === "reservahabitacion")?
             (!loading) &&
-            <ReservaHabitacionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaHabitacionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen} inPay={inPay}/>
         :(reserva.polymorphic_ctype === "reservaviaje")?
             (!loading) &&
-            <ReservaTransporteCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>
+            <ReservaTransporteCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen} inPay={inPay}/>
         :(!loading) &&
-            <ReservaAtraccionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen}/>}
+            <ReservaAtraccionCard  irAProveedor={irAProveedor} reserva={reserva} eliminar={handleEliminarDeTour} handleOpen={handleOpen} inPay={inPay}/>}
         {(error)&&<Error>{error}</Error>}
         </div>
     )

@@ -1,18 +1,18 @@
 import { API_URL } from "@config";
 
-export const postProveedor = async (proveedor) => {
+export const deleteImage = async (imageId) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`${API_URL}oferta-turistica/mis-proveedores/`, {
-        method: "POST",
+    const response = await fetch(`${API_URL}oferta-turistica/proveedor/imagen/${imageId}/`, {
+        method: "DELETE",
         headers: {
             "Content-Type": "application/json",
             'Authorization': `Token ${token}`
         },
-        body: JSON.stringify(proveedor)
     });
 
-    if (!response.ok) {
-        throw new Error("No se pudo crear el proveedor.");
+    if (response.status !== 204) {
+        const errorData = await response.json();  
+        throw errorData;
     }
 
     const data = await response.json();

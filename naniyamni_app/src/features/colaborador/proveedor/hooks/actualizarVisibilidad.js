@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { postProveedor } from "../services/postProveedor";
+import { actualizarVisibilidad } from "../services/actualizarVisibilidad";
 
-export const usePostProveedor = () => {
+export const useActualizarVisibilidad = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(""); 
 
-    const create = async (proveedor) => {
+    const patch = async (id, visibilidad) => {
         setLoading(true);
         setError("");
         try {
-            const data = await postProveedor(proveedor);
+            const data = await actualizarVisibilidad(id, visibilidad);
             return data;
         } catch(e) {
             if (typeof e === "object") {
@@ -17,12 +17,12 @@ export const usePostProveedor = () => {
                 const firstMessage = e[firstKey];
                 setError(firstMessage);
             }
-            setError("Error al subir el formulario");
+            setError("Error al actualizar");
         }
         finally {
             setLoading(false);
         };
     };
 
-    return {create, loading, error};
+    return {patch, loading, error};
 };

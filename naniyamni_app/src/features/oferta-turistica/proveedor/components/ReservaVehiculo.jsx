@@ -136,7 +136,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                     </div>
                 )}
             </div>
-            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-100 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30">
+            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-300 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30">
                 <div className="flex gap-3 flex-col">
                     <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between dark:text-[#F9FAFB] dark:border-[#AAAAAA]/30 dark:bg-[#AAAAAA]/10">
                             <p>{( dias > 1)?"Días":"Día"} ({ dias})</p>
@@ -172,6 +172,10 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                     </div>
                 </div>
                 {(!inTour) &&
+                <div className="flex flex-col gap-2">
+                    {!token && (
+                        <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
+                    )}
                 <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
                     <button 
                         className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
@@ -185,14 +189,11 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                             navigate("/login")
                           }} 
                      >{(!loading)?"Agregar a mi Tour":"Agregando..."}</button>
-                </div>}
-                {!token && (
-                    <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
-                )}
+                </div>
                 {error && (
                     <Error>{error}</Error>
                 )}
-
+                </div>}
             </div>
         </div>
     )

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { postImageServicio } from "../services/postImageServicio";
 
 export function useUploadImageServicio() {
-    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
   
@@ -21,5 +21,5 @@ export function useUploadImageServicio() {
       }
     };
   
-    return { uploadImageServicio, loading, error, data };
+    return { uploadImageServicio, loading2, error, data };
   }

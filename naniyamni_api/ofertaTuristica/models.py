@@ -37,20 +37,7 @@ class Proveedor(models.Model):
     administrador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='proveedor')
     reglas = ArrayField(models.CharField(max_length=255), blank=True, default=list)
 
-    AMENIDADES = [
-        ("piscina", "Piscina al aire libre"),
-        ("traslado", "Traslado aeropuerto"),
-        ("movilidad", "Adaptado personas movilidad reducida"),
-        ("restaurante", "Restaurante"),
-        ("gimnasio", "Gimnasio"),
-        ("no_fumadores", "Habitaciones sin humo"),
-        ("wifi", "WiFi gratis"),
-        ("parking", "Parking gratis"),
-        ("bar", "Bar"),
-        ("desayuno", "Muy buen desayuno"),
-    ]
-
-    amenidades = ArrayField(models.CharField(max_length=50, choices=AMENIDADES), blank=True, default=list)
+    amenidades = ArrayField(models.CharField(max_length=255), blank=True, default=list)
 
     class Meta:
         indexes = [

@@ -7,10 +7,11 @@ import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { ReservaAtraccion } from "../oferta-turistica/proveedor/components/ReservaAtraccion";
 import { ReservaTransporte } from "../oferta-turistica/proveedor/components/ReservaTransporte";
-import { formatDate, separarFechaHora, convertirHora, formatDateOld } from "@config";
+import { formatDate, separarFechaHora, convertirHora } from "@config";
 import { ReservaHabitacion } from "../oferta-turistica/proveedor/components/ReservaHabitacion";
 import { ReservaVehiculo } from "../oferta-turistica/proveedor/components/ReservaVehiculo";
 import { useDisponibilidad } from "../oferta-turistica/context/disponibilidadContext";
+import Cargando from "@Cargando";
 
 const MiTourPage = () => {
     const { loading, error, reservas, setReservas } = useGetMiTour();
@@ -18,8 +19,15 @@ const MiTourPage = () => {
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
     const navigate = useNavigate();
 
-    const irAPagar = () => {
-        navigate("/pay/");
+    const irAPagar = (subtotal, totalPedido, descuentoPedido, reservasPedido) => {
+        navigate("/pay", {
+            state: {
+                subtotal,
+                totalPedido,
+                descuentoPedido,
+                reservasPedido
+            }
+        });
     };
 
     const { token } = useContext(AuthContext);
@@ -29,6 +37,12 @@ const MiTourPage = () => {
             <div className="p-10">
                 <Error>{error}</Error>
             </div>
+        )
+    }
+
+    if (loading) {
+        return (
+            <Cargando>Cargando...</Cargando>
         )
     }
     return (
@@ -73,7 +87,7 @@ const MiTourPage = () => {
                             C$ {subTotal}
                         </div>
                         <div className="flex justify-center mt-5">
-                            <button onClick={irAPagar} className="w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">Completar la transacción</button>
+                            <button onClick={() => irAPagar(subTotal, total, descuento, reservas)} className="w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">Completar la transacción</button>
                         </div>
                     </div>
                     :

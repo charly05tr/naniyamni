@@ -4,10 +4,10 @@ export const RemoveButton = ({ onClick }) => {
     return (
         <button
             type="button"                                                                          
-            className="cursor-pointer absolute top-2 right-2 bg-red-500 text-sm p-1 opacity-80 font-extrabold rounded-full"
+            className="cursor-pointer absolute top-2 right-2 bg-[#181818]/40 hover:bg-[#181818]/60  p-0.5 font-extrabold rounded-full"
             onClick={onClick}
         > 
-            <XMarkIcon className="h-4 w-4 text-zinc-800"/>
+            <XMarkIcon className="h-5 w-5 text-[#F9FAFB] font-extrabold"/>
         </button>
     );
 }

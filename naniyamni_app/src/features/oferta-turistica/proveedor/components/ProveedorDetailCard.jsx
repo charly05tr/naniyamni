@@ -1,6 +1,7 @@
 import { Title } from "@TextStyled"; 
 import { actividades } from "@config";
 import { ReadMoreText } from "@ReadMoreText";
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export const ProveedorDetailCard = ({ proveedor, loading, error }) => {
 
@@ -15,12 +16,12 @@ export const ProveedorDetailCard = ({ proveedor, loading, error }) => {
                 </div>
                 <div className="mb-2">
                     <Title text={proveedor?.nombre} margin={false}/>
-                    <small className="text-zinc-600 dark:text-[#F9FAFB]/80">{proveedor?.ciudad}</small>
+                    <small className="text-zinc-600 dark:text-[#F9FAFB]/80 flex gap-1 mt-1 items-center"><FaMapMarkerAlt className="" />{proveedor?.ciudad}</small>
                 </div>
             </div>
             <div className="w-full flex flex-col items-start pb-2 pt-4 px-4 rounded">   
                 <ReadMoreText text={proveedor.descripcion || ""}/>
-                <div className="py-6  text-zinc-800/95 dark:text-[#F9FAFB]/95">
+                <div className="  text-zinc-800/95 dark:text-[#F9FAFB]/95 dark:border-[#AAAAAA]/30 border-t border-gray-300 w-full mt-5 pt-5">
                     <p className="mb-4"><strong>Dirección:</strong> {proveedor.direccion?.toLowerCase()}</p>
                     <p className=""><strong>Categoría:</strong> {actividades.filter(item => item.value === proveedor.tipo)[0]?.label}</p>
                 </div>

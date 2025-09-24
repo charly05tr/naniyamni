@@ -24,6 +24,7 @@ export default defineConfig({
       '@NumericInput': path.resolve(__dirname, 'src/shared/components/NumericInput.jsx'),
       '@Alert': path.resolve(__dirname, 'src/shared/styled-components/Alert.jsx'),
       '@Error': path.resolve(__dirname, 'src/shared/styled-components/Error.jsx'),
+      '@Cargando': path.resolve(__dirname, 'src/shared/components/Cargando.jsx'),
     }
   }
 })

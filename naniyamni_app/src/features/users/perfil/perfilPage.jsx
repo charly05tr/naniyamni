@@ -2,14 +2,14 @@ import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { Button } from "@FormStyled";
 import { PerfilCard } from "./components/PerfilCard";
-import { usePerfil } from "./hooks/usePerfil";
+import { useNavigate } from "react-router-dom";
 
 const Perfil = () => {
     const { token, logout } = useContext(AuthContext);
-    const { handleLogout } = usePerfil();
-
+    const navigate = useNavigate();
     const handleClick = () => {
-        handleLogout(logout);
+        logout();
+        navigate("/");
     };
     
     return (
@@ -17,7 +17,9 @@ const Perfil = () => {
         {token? (
             <div className="flex w-2xl flex-col shadow rounded-xl justify-between">
                     <div className="w-40 m-2 self-end">
-                        <Button text="Cerrar sesión" color="red" onClick={handleClick}/>
+                        <a href="/">
+                            <Button text="Cerrar sesión" color="red" onClick={handleClick}/>
+                        </a>
                     </div>
                     <PerfilCard />
             </div>

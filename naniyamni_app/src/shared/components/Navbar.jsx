@@ -3,30 +3,31 @@ import { NavLink } from "react-router-dom";
 import ThemeSwitch from "./ThemeSwitch"
 import { Avatar } from "../styled-components/Avatar";
 import { AuthContext } from "@authContext";
+import Cargando from "@Cargando";
 
-const NAV_LINKS = [
-  { name: "Inicio", path: "/" },
-  { name: "Oferta Turística", path: "/oferta-turistica" },
-  { name: "Mi Tour", path: "/MiTour" },
-];
-
-const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
+const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, loading}) => {
   const { token } = useContext(AuthContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef(null);
   const buttonRef = useRef(null);
-
+  const dashboard = (user?.rol === "Proveedor")?{ name: "Dashboard", path: "/colaborador"}:{ name: "Mi Tour", path: "/MiTour" };
+  const NAV_LINKS = [
+    { name: "Inicio", path: "/" },
+    { name: "Oferta Turística", path: "/oferta-turistica" },
+    dashboard,
+  ];
+  
   useEffect(() => {
     function onDocClick(e) {
-        if (
-          mobileRef.current &&
-          !mobileRef.current.contains(e.target) &&
-          buttonRef.current &&
-          !buttonRef.current.contains(e.target)
-        ) {
-          setMobileOpen(false);
-        }
+      if (
+        mobileRef.current &&
+        !mobileRef.current.contains(e.target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(e.target)
+      ) {
+        setMobileOpen(false);
       }
+    }
     function onKey(e) {
       if (e.key === "Escape") setMobileOpen(false);
     }
@@ -37,10 +38,10 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
       document.removeEventListener("keydown", onKey);
     };
   }, []);
-
+  
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-
+  
   useEffect(() => {
     const handleScroll = () => {
       if (mobileOpen) {
@@ -55,11 +56,16 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
       }
       setLastScrollY(window.scrollY);
     };
-
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, mobileOpen]);
-
+  
+  if (loading) {
+    return (
+      <Cargando></Cargando>
+    )
+  }
   return (
     <header className={`sticky top-0 z-50 bg-gray-50/80 backdrop-blur-sm border-b border-gray-200/80 transition-transform duration-300 dark:bg-[#202124]/50 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB] ${
       visible ? "translate-y-0" : "-translate-y-full"
@@ -110,7 +116,7 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png" }) => {
                   </NavLink>
              </div>
             :<NavLink to="/profile" className="">
-                <Avatar />
+                <Avatar uApellido={user.last_name} uNombre={user.first_name} />
               </NavLink>
             }
             <button

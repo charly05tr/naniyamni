@@ -2,7 +2,7 @@ import { useState } from "react";
 import { postImage } from "../services/postImage";
 
 export function useUploadImage() {
-    const [loading, setLoading] = useState(false);
+    const [loading2, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
   
@@ -18,8 +18,9 @@ export function useUploadImage() {
         throw err;
       } finally {
         setLoading(false);
+        window.location.reload();
       }
     };
   
-    return { uploadImage, loading, error, data };
+    return { uploadImage, loading2, error, data };
   }

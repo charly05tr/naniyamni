@@ -1,9 +1,16 @@
 import { useProveedor } from "./hooks/useProveedor";
 import { ProveedorCard } from "./components/ProveedorCard";
 import { Search } from "./components/Search";
+import Cargando from "@Cargando";
 
 const OfertaTuristica = () => {
     const { proveedores, loading, refetch } = useProveedor();
+    
+    if (loading) {
+          return (
+            <Cargando>Cargando...</Cargando>
+          );
+    }
 
     return (
         <>

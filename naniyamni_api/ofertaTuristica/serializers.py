@@ -1,5 +1,7 @@
 from rest_framework import serializers 
 from .models import *
+from reservas.models import *
+from django.db.models import Sum
 
 class ProveedorImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,17 +18,11 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
     imagenes = serializers.SerializerMethodField()
     imagen = serializers.SerializerMethodField()
     servicios = serializers.SerializerMethodField()
-    sucursales = SucursalSerializer(many=True)
 
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios", "longitud", "latitud", "reglas", "sucursales"]
-        read_only_fields = ["administrador"]
+        fields = ["id", "nombre", "descripcion", "direccion", "imagenes", "ciudad", "activo", "tipo", "administrador", "imagen", "servicios", "longitud", "latitud", "reglas", "amenidades"]
 
-    def create(self, validated_data):
-        # Asignar el usuario autenticado como administrador
-        validated_data['administrador'] = self.context['request'].user
-        return super().create(validated_data)
 
     def get_imagen(self, obj):
         primera = obj.imagenes.first()
@@ -53,16 +49,18 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
 
 class ProveedorListSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField()
+    cantidad_servicios = serializers.SerializerMethodField()
+
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "imagen", "ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas"]
+        fields = ["id", "nombre", "descripcion", "imagen","ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas", "cantidad_servicios", "direccion"]
 
     def get_imagen(self, obj):
         primera = obj.imagenes.first()
         if primera:
             return ProveedorImageSerializer(primera).data
         return None
-    
+
     def get_cantidad_servicios(self, obj):
         """Devuelve un desglose polimórfico de servicios disponibles"""
         servicios = obj.servicios.filter(disponible=True)
@@ -76,6 +74,250 @@ class ProveedorListSerializer(serializers.ModelSerializer):
                     "double": servicios.filter(habitacion__tipo="D").count(),
                     "suite": servicios.filter(habitacion__tipo="SU").count(),
                 },
+            }
+            return resumen
+
+        # Arrendamiento de Vehículos
+        elif obj.tipo == "AV":
+            resumen = {
+                "total": servicios.count(),
+                "vehiculos_por_marca": dict(
+                    servicios.values_list("alquilervehiculo__marca")
+                    .order_by()
+                    .annotate(cantidad=models.Count("id"))
+                ),
+            }
+            return resumen
+
+        # Transporte turístico terrestre / Operadora de viaje → Viajes directos
+        elif obj.tipo in ["TTT", "OV"]:
+            resumen = {
+                "total": servicios.count(),
+                "viajes": {
+                    "origenes": list(
+                        servicios.values_list("viajedirecto__origen", flat=True).distinct()
+                    ),
+                    "con_asientos": servicios.filter(
+                        viajedirecto__asientos_disponibles__gt=0
+                    ).count(),
+                },
+            }
+            return resumen
+
+        # Resto de tipos (Restaurante, Bar, etc.)
+        else:
+            return {
+                "total": servicios.count()
+            }
+
+
+class ProveedorListAdminSerializer(serializers.ModelSerializer):
+    imagen = serializers.SerializerMethodField()
+    cantidad_servicios = serializers.SerializerMethodField()
+    total_vendido = serializers.SerializerMethodField()
+    reservas = serializers.SerializerMethodField()
+    total_en_tour = serializers.SerializerMethodField()
+    imagenes = serializers.SerializerMethodField()
+    servicios = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Proveedor
+        fields = ["id", "nombre", "descripcion", "imagen", "servicios", "ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas", "cantidad_servicios", "total_vendido", "reservas", "direccion", "total_en_tour", "administrador", "imagenes"]
+        read_only_fields = ["administrador"]
+
+    def create(self, validated_data):
+        # Asignar el usuario autenticado como administrador
+        validated_data['administrador'] = self.context['request'].user
+        return super().create(validated_data)
+
+    def get_servicios(self, obj):
+        if obj.tipo in ["H", "HF"]:  # Hotel
+            return HabitacionSerializer(Habitacion.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo == "AV":  # Arrendamiento de Vehículos
+            return AlquilerVehiculoSerializer(AlquilerVehiculo.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo in ["TTT", "OV"]:  # Transporte o Tour
+            return ViajeDirectoSerializer(ViajeDirecto.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo in ["CR", "CP", "AL"]:  # Centro recreativo, canopy o albergue
+            return AtraccionSerializer(Atraccion.objects.filter(proveedor=obj), many=True).data
+        else:  # Restaurante, Bar, etc.
+            return ServicioSerializer(Servicio.objects.filter(proveedor=obj), many=True).data
+
+    def get_total_vendido(self, obj):
+        total = 0
+        total += ReservaAtraccion.objects.filter(servicio__proveedor=obj, estado=True).aggregate(s=Sum("total"))["s"] or 0
+        total += ReservaVehiculo.objects.filter(servicio__proveedor=obj, estado=True).aggregate(s=Sum("total"))["s"] or 0
+        total += ReservaHabitacion.objects.filter(servicio__proveedor=obj, estado=True).aggregate(s=Sum("total"))["s"] or 0
+        total += ReservaViaje.objects.filter(servicio__proveedor=obj, estado=True).aggregate(s=Sum("total"))["s"] or 0
+        return total
+
+    def get_reservas(self, obj):
+        reservas = []
+
+        for r in ReservaAtraccion.objects.filter(servicio__proveedor=obj, estado=True):
+            reservas.append({
+                "id": r.id,
+                "tipo": "atraccion",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "cant_personas": r.cant_personas,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaVehiculo.objects.filter(servicio__proveedor=obj, estado=True):
+            reservas.append({
+                "id": r.id,
+                "tipo": "vehiculo",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "inicio": r.fecha_hora_recogida,
+                "fin": r.fecha_hora_entrega,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaHabitacion.objects.filter(servicio__proveedor=obj, estado=True):
+            reservas.append({
+                "id": r.id,
+                "tipo": "habitacion",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "inicio": r.fecha_hora_llegada,
+                "fin": r.fecha_hora_salida,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaViaje.objects.filter(servicio__proveedor=obj, estado=True):
+            reservas.append({
+                "id": r.id,
+                "tipo": "viaje",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "salida": r.fecha_hora_salida,
+                "cant_personas": r.cant_personas,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        return reservas
+
+    def get_total_en_tour(self, obj):
+        en_tour = []
+
+        for r in ReservaAtraccion.objects.filter(servicio__proveedor=obj):
+            en_tour.append({
+                "id": r.id,
+                "tipo": "atraccion",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "cant_personas": r.cant_personas,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaVehiculo.objects.filter(servicio__proveedor=obj):
+            en_tour.append({
+                "id": r.id,
+                "tipo": "vehiculo",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "inicio": r.fecha_hora_recogida,
+                "fin": r.fecha_hora_entrega,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaHabitacion.objects.filter(servicio__proveedor=obj):
+            en_tour.append({
+                "id": r.id,
+                "tipo": "habitacion",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "inicio": r.fecha_hora_llegada,
+                "fin": r.fecha_hora_salida,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        for r in ReservaViaje.objects.filter(servicio__proveedor=obj):
+            en_tour.append({
+                "id": r.id,
+                "tipo": "viaje",
+                "total": r.total,
+                "fecha": r.fecha_reserva,
+                "salida": r.fecha_hora_salida,
+                "cant_personas": r.cant_personas,
+                "servicio": r.servicio.nombre,
+                "turista": {"first_name":r.turista.first_name,
+                            "last_name":r.turista.last_name,
+                            "id":r.turista.id,
+                            "telefono":r.turista.telefono,
+                            "email":r.turista.email,
+                            }
+            })
+
+        return en_tour
+
+    def get_imagen(self, obj):
+        primera = obj.imagenes.first()
+        if primera:
+            return ProveedorImageSerializer(primera).data
+        return None
+    
+    def get_imagenes(self, obj):
+        imagenes = obj.imagenes.all()[1:]
+        return ProveedorImageSerializer(imagenes, many=True).data
+
+    def get_cantidad_servicios(self, obj):
+        """Devuelve un desglose polimórfico de servicios disponibles"""
+        servicios = obj.servicios.filter(disponible=True)
+
+        # Hotel, Hostal, Casa de Huésped, Albergue → Habitaciones
+        if obj.tipo in ["H", "HF", "CH", "AL"]:
+            resumen = {
+                "total": servicios.count(),
+                "habitaciones": {
+                    "single": servicios.filter(habitacion__tipo="S").count(),
+                    "double": servicios.filter(habitacion__tipo="D").count(),
+                    "suite": servicios.filter(habitacion__tipo="SU").count(),
+                },
+
             }
             return resumen
 
@@ -147,10 +389,13 @@ class AlquilerVehiculoSerializer(serializers.ModelSerializer):
     caracteristicas = CaracteristicaSerializer(many=True)
     reservas_ocupadas = serializers.SerializerMethodField()
     sucursales = SucursalSerializer(many=False)
+    total_reservas = serializers.SerializerMethodField()
+    total_vendido = serializers.SerializerMethodField()
+    total_en_tour = serializers.SerializerMethodField()
 
     class Meta(ServicioSerializer.Meta):
         model = AlquilerVehiculo
-        fields = ServicioSerializer.Meta.fields + ["modelo", "marca", "transmision", "cant_asientos", "reservas_ocupadas", "sucursales", "categoria"]
+        fields = ServicioSerializer.Meta.fields + ["modelo", "marca", "transmision", "cant_asientos", "reservas_ocupadas", "sucursales", "categoria", "total_reservas", "total_vendido", "total_en_tour"]
 
     def get_reservas_ocupadas(self, obj):
         reservas = obj.reservas.all()
@@ -160,6 +405,15 @@ class AlquilerVehiculoSerializer(serializers.ModelSerializer):
                 "fin": r.fecha_hora_entrega
             } for r in reservas
         ]
+
+    def get_total_reservas(self, obj):
+        return obj.reservas.filter(estado=True).count()
+
+    def get_total_en_tour(self, obj):
+        return obj.reservas.count()
+
+    def get_total_vendido(self, obj):
+        return sum(r.total for r in obj.reservas.filter(estado=True))
 
 #serializers transporte
 class HoraSalidaSerializer(serializers.ModelSerializer):
@@ -199,7 +453,10 @@ class ViajeDirectoSerializer(serializers.ModelSerializer):
     itinerarios = ItinerarioSerializer(many=True, read_only=False)
     reservas_ocupadas = serializers.SerializerMethodField()
     imagenes = ServicioImageSerializer(many=True, read_only=True)
-
+    total_reservas = serializers.SerializerMethodField()
+    total_vendido = serializers.SerializerMethodField()
+    total_en_tour = serializers.SerializerMethodField()
+    
     class Meta(ServicioSerializer.Meta):
         model = ViajeDirecto
         fields = ServicioSerializer.Meta.fields + [
@@ -209,7 +466,18 @@ class ViajeDirectoSerializer(serializers.ModelSerializer):
             "reservas_ocupadas", 
             "itinerarios",
             "imagenes",
+            "total_reservas", "total_vendido",
+            "total_en_tour"
         ]
+
+    def get_total_reservas(self, obj):
+        return obj.reservas.filter(estado=True).count()
+
+    def get_total_en_tour(self, obj):
+        return obj.reservas.count()
+
+    def get_total_vendido(self, obj):
+        return sum(r.total for r in obj.reservas.filter(estado=True))
 
     def create(self, validated_data):
         destinos_data = validated_data.pop("destinos", [])
@@ -243,16 +511,28 @@ class AtraccionSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
     caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
     reservas_ocupadas = serializers.SerializerMethodField()
+    total_reservas = serializers.SerializerMethodField()
+    total_vendido = serializers.SerializerMethodField()
+    total_en_tour = serializers.SerializerMethodField()
 
     class Meta(ServicioSerializer.Meta):
         model = Atraccion
-        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo", "reservas_ocupadas", "hora_cierre", "hora_apertura", "dias_abierto", "duracion"]
+        fields = ServicioSerializer.Meta.fields + ["guia_incluido", "cupo_maximo", "reservas_ocupadas", "hora_cierre", "hora_apertura", "dias_abierto", "duracion", "total_reservas", "total_vendido", "total_en_tour"]
 
     def get_reservas_ocupadas(self, obj):
         reservas = obj.reservas.all()
         return [
             {"inicio": r.fecha_reserva, "fin": r.fecha_reserva} for r in reservas
         ]
+
+    def get_total_reservas(self, obj):
+        return obj.reservas.filter(estado=True).count()
+
+    def get_total_en_tour(self, obj):
+        return obj.reservas.count()
+
+    def get_total_vendido(self, obj):
+        return sum(r.total for r in obj.reservas.filter(estado=True))
 
 
 class GastronomicoSerializer(serializers.ModelSerializer):
@@ -268,10 +548,13 @@ class HabitacionSerializer(serializers.ModelSerializer):
     imagenes = ServicioImageSerializer(many=True, read_only=True)
     caracteristicas = CaracteristicaSerializer(many=True, read_only=True)
     reservas_ocupadas = serializers.SerializerMethodField()
+    total_reservas = serializers.SerializerMethodField()
+    total_vendido = serializers.SerializerMethodField()
+    total_en_tour = serializers.SerializerMethodField()
 
     class Meta:
         model = Habitacion
-        fields = ServicioSerializer.Meta.fields + ["capacidad", "tipo", "reservas_ocupadas"]
+        fields = ServicioSerializer.Meta.fields + ["capacidad", "tipo", "reservas_ocupadas", "total_reservas", "total_vendido", "total_en_tour"]
 
     def get_reservas_ocupadas(self, obj):
         reservas = obj.reservas.all()
@@ -281,3 +564,12 @@ class HabitacionSerializer(serializers.ModelSerializer):
                 "fin": r.fecha_hora_salida
             } for r in reservas
         ]
+
+    def get_total_reservas(self, obj):
+        return obj.reservas.filter(estado=True).count()
+
+    def get_total_en_tour(self, obj):
+        return obj.reservas.count()
+
+    def get_total_vendido(self, obj):
+        return sum(r.total for r in obj.reservas.filter(estado=True))

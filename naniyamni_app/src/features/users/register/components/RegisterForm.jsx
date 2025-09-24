@@ -1,16 +1,21 @@
 import { useState } from "react";
 import {Input, Form, Button, ErrorText} from "@FormStyled";
 
-export const RegisterForm = ({onRegister, loading, error}) => {
-    const [usuario, setUsuario] = useState({});
+export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUpdate}) => {
+    const [usuario, setUsuario] = useState(usuarioData);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         onRegister(usuario);
     }
 
+    const handleUpdate = (e) => {
+        e.preventDefault();
+        onUpdate(usuario);
+    }
+
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(!usuarioData)?handleSubmit:handleUpdate}>
             <div className="flex gap-2"> 
                 <div className="flex flex-col">
                     <Input
@@ -46,30 +51,50 @@ export const RegisterForm = ({onRegister, loading, error}) => {
                     placeholder="Email"
                 />
             </div>
-            <div className="flex flex-col">
-                <Input
-                    onChange={(e) => setUsuario(prev => {
-                        return {...prev, "password": e.target.value}
-                    })}
-                    value={usuario.password || ""}
-                    type="password"
-                    required
-                    placeholder="Contraseña"
-                />                                                                                                         
-            </div>
-            <div className="flex flex-col">
-                <Input
-                    onChange={(e) => setUsuario(prev => {
-                        return {...prev, "password2": e.target.value}
-                    })}
-                    value={usuario.password2 || ""}
-                    type="password"
-                    required
-                    placeholder="Confirmar contraseña"
-                />
-            </div>
+            {(!usuarioData)?
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "password": e.target.value}
+                        })}
+                        value={usuario.password || ""}
+                        type="password"
+                        required
+                        placeholder="Contraseña"
+                        />                                                                                                         
+                </div>
+                <div className="flex flex-col">
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "password2": e.target.value}
+                        })}
+                        value={usuario.password2 || ""}
+                        type="password"
+                        required
+                        placeholder="Confirmar contraseña"
+                        />
+                </div>
             <Button text={(!loading)? "Registrarse": "Cargando..."}/>
             {error && <ErrorText>{error}</ErrorText>}
+            </div>
+            :
+            <div className="flex flex-col gap-4">
+                <div className="flex flex-col">
+                    {/* <label className="dark:text-[#F9FAFB]">Teléfono</label> */}
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "telefono": e.target.value}
+                        })}
+                        value={usuario.telefono || ""}
+                        type="text"
+                        required
+                        placeholder="Teléfono"
+                        />                                                                                                         
+                </div>
+                {/* <button className="w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/80 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">{(!loading)? "Actualizar": "Cargando..."}</button> */}
+                {error && <ErrorText>{error}</ErrorText>}
+            </div>}
         </Form>
     );
 }

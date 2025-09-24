@@ -16,6 +16,7 @@ export const useRegister = () => {
             const token = await createUser(usuario);
             login(token);
             navigate("/");
+            window.location.reload();
         } catch(e) {
             throw new Error(e);
         }

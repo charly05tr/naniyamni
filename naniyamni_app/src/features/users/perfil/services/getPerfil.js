@@ -1,10 +1,10 @@
 import { API_URL } from "@config";
 
-export const getPerfil = async () => {
+export const getPerfil = async (token) => {
     const res = await fetch(`${API_URL}users/`, {
         "headers": {
             'Content-Type': 'application/json',
-            "Authorization": `Token ${localStorage.getItem('token')}`,
+            "Authorization": `Token ${token || localStorage.getItem('token')}`,
         }
     });
         

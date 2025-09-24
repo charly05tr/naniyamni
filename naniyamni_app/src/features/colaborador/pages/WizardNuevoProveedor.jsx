@@ -6,22 +6,30 @@ import { SubirImagen } from "../proveedor/components/SubirImagen";
 import { useState } from "react";
 import { useUploadImage } from "../proveedor/hooks/useUploadImage";
 import { ProgressBar } from "../styled-components/ProgressBar";
+import { useNavigate } from "react-router-dom";
 
 const WizardNuevoProveedor = () => {
     const { create, loading, error } = usePostProveedor();
-    const { uploadImage } = useUploadImage();
+    const { uploadImage, loading2 } = useUploadImage();
     const [proveedorId, setProveedorId] = useState();
     const [step, setStep] = useState(0);
+    const navigate = useNavigate();
 
     const handleCreate = async (proveedor) => {
             const data = await create(proveedor);
-            setProveedorId(data.id);
-            setStep(1);
+            if (data) {
+                setProveedorId(data.id);
+                setStep(1);
+            }
     }
 
     const handleUploadImage = async (file) => {
         await uploadImage(file, proveedorId, "Mi imagen"); 
         setStep(2);
+    }
+
+    const handleRegresar = () => {
+        navigate(`/proveedor/${proveedorId}/admin`);
     }
 
 
@@ -39,8 +47,11 @@ const WizardNuevoProveedor = () => {
                     <Title text="Seleccione las imágenes que quiere que se muestren en su página."/>
                     <hr className="text-gray-200"></hr>
                     <Title text="La primera imagen será la que se muestre como la de perfil."/>
-                    <SubirImagen  onUploadImage={handleUploadImage} />
+                    <SubirImagen  onUploadImage={handleUploadImage} loading2={loading2} />
                 </FormCard>}
+                {step === 2 &&
+                    handleRegresar()
+                }
             </div>
         </>
     );

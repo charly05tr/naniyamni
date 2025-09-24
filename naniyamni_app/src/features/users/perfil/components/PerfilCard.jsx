@@ -2,6 +2,7 @@ import { usePerfil } from "../hooks/usePerfil";
 import { Title } from "@TextStyled";
 import { Error } from "@Error";
 import { Avatar } from "@Avatar";
+import Cargando from "@Cargando";
 
 export const PerfilCard = () => {
     const { loading, error, perfilData } = usePerfil();
@@ -10,11 +11,9 @@ export const PerfilCard = () => {
 
     if (loading) {
         return (
-            <div className={`${cardBaseClasses} flex items-center justify-center h-64`}>
-                <Title text="Cargando..." className="text-xl font-semibold text-gray-700"/>
-            </div>
+          <Cargando>Cargando...</Cargando>
         );
-    }
+      }
 
     if (error) {
         return (

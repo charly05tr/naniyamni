@@ -11,6 +11,7 @@ import { useState } from "react";
 import { TransporteCard } from "./components/TransporteCard";
 import { AtraccionCard } from "./components/AtraccionCard";
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import Cargando from "@Cargando";
 
 const ProveedorPage = () => {
     const { id } = useParams();
@@ -21,7 +22,13 @@ const ProveedorPage = () => {
         ...(proveedor?.imagenes || []),
         ...((proveedor?.servicios || []).map(s => s?.imagenes || []).flat())
       ];
-      
+    
+    if (loading) {
+        return (
+          <Cargando>Cargando...</Cargando>
+        );
+      }
+
     return (
         <>
             {(!loading)

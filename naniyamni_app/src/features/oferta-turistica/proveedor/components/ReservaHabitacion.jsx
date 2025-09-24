@@ -116,6 +116,10 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                     </div>
                 </div>
                 {(!inTour) &&
+                <div className="flex flex-col gap-2">
+                    {!token && (
+                        <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
+                    )}
                 <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
                     <button 
                         className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
@@ -129,14 +133,11 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                             navigate("/login")
                           }} 
                      >{(!loading)?"Agregar a mi Tour":"Agregando..."}</button>
-                </div>}
-                {!token && (
-                    <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
-                )}
+                </div>
                 {error && (
                     <Error>{error}</Error>
                 )}
-
+                </div>}
             </div>
         </div>
     )

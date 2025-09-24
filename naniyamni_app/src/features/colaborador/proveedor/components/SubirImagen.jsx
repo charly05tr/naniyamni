@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useUploadImage } from "../hooks/useUploadImage";
 import { Button, Input, ErrorText, Form } from "@FormStyled";
 import { RemoveButton } from "@RemoveButton";
+import Cargando  from "@Cargando";
 
-export const SubirImagen = ({ onUploadImage }) => {
+export const SubirImagen = ({ onUploadImage, loading2 }) => {
   const [imagenes, setImagenes] = useState([]); 
   const { loading, error } = useUploadImage();
 
@@ -31,6 +32,14 @@ export const SubirImagen = ({ onUploadImage }) => {
     setImagenes([]); 
   };
 
+  if (loading2) {
+    return(
+      <div>
+        <Cargando>Enviando</Cargando>
+      </div>
+    )
+  }
+
   return (
     <div className="w-full">
       <Form onSubmit={handleSubmit}>
@@ -47,7 +56,6 @@ export const SubirImagen = ({ onUploadImage }) => {
             </div>
           ))}
         </div>
-
         {imagenes.length > 0 && (
           <Button
             type="submit"

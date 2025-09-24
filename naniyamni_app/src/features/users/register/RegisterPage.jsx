@@ -14,7 +14,7 @@ const RegisterPage = () => {
         <div className="flex items-center justify-center h-[80dvh] flex-col">
             <FormCard>
                 <Title text="Regístrate"/>
-                <RegisterForm onRegister={handleRegister} loading={loading} error={error}/>    
+                <RegisterForm onRegister={handleRegister} loading={loading} error={error} usuarioData={false}/>    
                 <Hr/>
                 <RegisterGoogle/>   
             </FormCard>
