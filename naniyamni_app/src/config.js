@@ -1,4 +1,4 @@
-export const API_URL = "https://api.naniyamni.app";
+export const API_URL = "https://api.naniyamni.app/";
 
 export const actividades = [
     // { value: "HF", label: "Hostal-familiar" },
