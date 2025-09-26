@@ -57,12 +57,16 @@ export const SubirImagen = ({ onUploadImage, loading2 }) => {
           ))}
         </div>
         {imagenes.length > 0 && (
-          <Button
-            type="submit"
-            disabled={loading}
-            text={loading ? "Subiendo..." : "Enviar"}
-            className="mt-4"
-          />
+          <div className="flex w-full justify-center">
+              <div className="w-xs">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  text={loading ? "Subiendo..." : "Enviar"}
+                  className="mt-4"
+                />
+            </div>
+          </div>
         )}
 
         {error && <ErrorText>{error}</ErrorText>}

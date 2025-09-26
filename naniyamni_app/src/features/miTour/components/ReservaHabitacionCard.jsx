@@ -12,6 +12,7 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
     fecha_hora_salida,
     proveedor_nombre, 
     total,
+    estado,
   } = reserva;
 
 
@@ -65,8 +66,8 @@ export const ReservaHabitacionCard = ({ reserva, eliminar, irAProveedor, handleO
         </div>
         {(!inPay)&&
         <div className='flex gap-2'>
-          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
-          <span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>
+          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>{(!estado)?"Eliminar":"Cancelar"}</span>
+          {(!estado)&&<span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>}
           <span onClick={() => handleOpen(reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
         </div>}
       </div>

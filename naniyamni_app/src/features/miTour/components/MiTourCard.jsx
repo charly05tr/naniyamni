@@ -15,6 +15,9 @@ export const MiTourCard  = ({ reserva, setReservas, handleOpen, inPay=false }) =
     };
 
     const handleEliminarDeTour = async (reserva_id, tipo) => {
+        if (reserva.estado) {
+            alert("El reembolso es únicamente el 20% de la compra.");
+        }
         try {
             await eliminarDeTour(reserva_id, tipo);
             setReservas(prev => prev.filter(r => r.id !== reserva_id));

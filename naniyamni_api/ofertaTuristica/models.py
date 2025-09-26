@@ -9,18 +9,18 @@ class Proveedor(models.Model):
     actividades = (
         ('HF', 'Hostal-familiar'),
         ('H', 'Hotel'),
-        ('R', 'Restaurante'),
-        ('B', 'Bar'),
+        # # ('R', 'Restaurante'),
+        # ('B', 'Bar'),
         ('CR', 'Centro recreativo'),
-        ('C', 'Cafetería'),
+        # ('C', 'Cafetería'),
         ('TTT', 'Transporte turístico terrestre'),
-        ('OV', 'Operadora de viaje'),
+        # ('OV', 'Operadora de viaje'),
         ('AV', 'Arrendamiento de Vehículos'),
         ('CH', 'Casa de Huésped'),
-        ('D', 'Discoteca'),
-        ('CP', 'Canopy'),
-        ('CDN', 'Centro de Diversión Nocturna'),
-        ('AL', 'Albergue'),
+        # ('D', 'Discoteca'),
+        # ('CP', 'Canopy'),
+        # ('CDN', 'Centro de Diversión Nocturna'),
+        # ('AL', 'Albergue'),
     )
 
     nombre = models.CharField(max_length=50)
@@ -39,13 +39,13 @@ class Proveedor(models.Model):
 
     amenidades = ArrayField(models.CharField(max_length=255), blank=True, default=list)
 
-    class Meta:
-        indexes = [
-            GinIndex(fields=['nombre'], name='proveedor_nombre_gin', opclasses=['gin_trgm_ops']),
-            GinIndex(fields=['descripcion'], name='proveedor_descripcion_gin', opclasses=['gin_trgm_ops']),
-            GinIndex(fields=['tipo'], name='proveedor_tipo_gin', opclasses=['gin_trgm_ops']),
-            GinIndex(fields=['ciudad'], name='proveedor_ciudad_gin', opclasses=['gin_trgm_ops']),
-        ]
+    # class Meta:
+    #     indexes = [
+    #         GinIndex(fields=['nombre'], name='proveedor_nombre_gin', opclasses=['gin_trgm_ops']),
+    #         GinIndex(fields=['descripcion'], name='proveedor_descripcion_gin', opclasses=['gin_trgm_ops']),
+    #         GinIndex(fields=['tipo'], name='proveedor_tipo_gin', opclasses=['gin_trgm_ops']),
+    #         GinIndex(fields=['ciudad'], name='proveedor_ciudad_gin', opclasses=['gin_trgm_ops']),
+    #     ]
 
 #servicios
 class Caracteristica(models.Model):
@@ -62,7 +62,7 @@ class Servicio(models.Model):
     )
 
     nombre = models.CharField(max_length=255)
-    descripcion = models.TextField()
+    descripcion = models.TextField(blank=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     disponible = models.BooleanField(default=True)
     creado_en = models.DateTimeField(auto_now_add=True)
@@ -75,18 +75,20 @@ class Habitacion(Servicio):
     tipos = (('S', 'single'), ('D', 'double'), ('SU', 'suite'))
     tipo = models.CharField(choices=tipos, max_length=2)
     capacidad = models.IntegerField()
+    hora_check_in = models.TimeField(null=True, blank=True)
+    hora_check_out = models.TimeField(null=True, blank=True)
 
 #Alquiler vehiculo
 class Categoria(models.Model):
     nombre = models.CharField(max_length=255)
-    cant_vehiculos = models.CharField(max_length=255)
+    cant_vehiculos = models.IntegerField()
 
 
 class Sucursal(models.Model):
     latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)
     longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)     
     direccion = models.CharField(max_length=255)
-    proveedor = models.ForeignKey(Proveedor, related_name="sucursales", on_delete=models.CASCADE, null=True)
+    proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name="sucursales", null=True)
 
 
 class AlquilerVehiculo(Servicio):
@@ -95,7 +97,8 @@ class AlquilerVehiculo(Servicio):
     marca = models.CharField(max_length=255)
     transmision = models.CharField(choices=TIPO_TRANSMISION, default='A')
     cant_asientos = models.IntegerField(default=5)
-    sucursales = models.ForeignKey(Sucursal, on_delete=models.CASCADE, related_name="vehiculos", null=True)
+    
+    sucursales = models.ManyToManyField(Sucursal, related_name="vehiculos")
     categoria  = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name="vehiculos", null=True)
 
 #transporte

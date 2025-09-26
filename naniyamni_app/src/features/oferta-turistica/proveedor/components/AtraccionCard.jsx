@@ -2,6 +2,7 @@ import { useAtraccionCard } from "../hooks/useAtraccionCard";
 import { convertirHora, formatDateOld } from "@config";
 import { ReservaAtraccion } from "./ReservaAtraccion";
 import { Alert } from "@Alert";
+import { quitarSegundos } from "@config";
 
 export const AtraccionCard = ({ servicio }) => {
     const {
@@ -10,16 +11,21 @@ export const AtraccionCard = ({ servicio }) => {
         dias_abierto,
         duracion,
         imagenes,
-        // cupo_maximo,
+        disponible,
         hora_cierre,
         hora_apertura,
+        total_reservas
     } = servicio;
-        
+
     const { selectedDate, 
             handleDateSelect, handleClose,
             handleOpen,
             ReservaCardOpen, noPuedeReservar
     } = useAtraccionCard(dias_abierto);
+
+    if (!disponible) return null;
+
+
 
     const imageUrl =
         imagenes.length > 0
@@ -38,7 +44,7 @@ export const AtraccionCard = ({ servicio }) => {
 
     return (
         <>
-        <div className="rounded-2xl shadow-md overflow-hidden max-w-3xl p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div className="rounded-2xl shadow-md overflow-hidden max-w-3xl p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 md:min-w-2xl">
             <div className="relative">
                 <img
                 className="rounded-xl object-cover w-full h-64"
@@ -47,7 +53,7 @@ export const AtraccionCard = ({ servicio }) => {
                 />
             </div>
             <div className="mt-6 space-y-4">
-                <div className='flex gap-6 justify-around'>
+                <div className='flex gap-6 justify-between'>
                     <h2 className="lg:text-3xl md:text-2xl text-xl font-bold text-gray-900 dark:text-[#F9FAFB]">{nombre}</h2>
                     <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 dark:bg-[#F9FAFB] hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
                         <button
@@ -74,7 +80,7 @@ export const AtraccionCard = ({ servicio }) => {
                 <div className="flex items-center flex-wrap gap-2 justify-between text-lg font-medium text-gray-900 border-t pt-4 border-gray-100 dark:border-[#AAAAAA]/50">
                     <div className="flex items-center space-x-2">
                     <span className="text-sm font-semibold text-gray-500 dark:text-[#F9FAFB]/70">Duración reserva:</span>
-                        <span className="text-gray-900/90 font-semibold text-nowrap dark:text-[#F9FAFB]">{(duracion === "23:30:00")?"Todo el día":`${duracion} hrs`}</span>
+                        <span className="text-gray-900/90 font-semibold text-nowrap dark:text-[#F9FAFB]">{(duracion === "23:30:00")?"Todo el día":`${quitarSegundos(duracion)} hrs`}</span>
                     </div>
                 <div className="flex items-center space-x-2">
                     <span className="text-sm font-semibold text-gray-500 dark:text-[#F9FAFB]/70">Precio:</span>

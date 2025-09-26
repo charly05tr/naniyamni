@@ -1,15 +1,16 @@
 import { Input, Select } from "@FormStyled";
 import { generarOpcionesHoras } from "@config";
 import DaysSeleccionForm from "./DaySelectionForm";
+import InputErrorMessage from "@InputErrorMessage";
 
-export const AtraccionesForm = ({ formData, handleChange, setFormData }) => {
+export const AtraccionesForm = ({ formData, handleChange, setFormData, errorValidacion }) => {
     
     const opciones =generarOpcionesHoras();
     
     return (
         <>
             <div className="my-2">
-                <label className="text-gray-800/90">Hora de apertura</label>
+                <label className="text-gray-800/90 dark:text-[#F9FAFB]">Hora de apertura</label>
                 <Select
                     name="hora_apertura"
                     value={formData.hora_apertura}
@@ -21,9 +22,10 @@ export const AtraccionesForm = ({ formData, handleChange, setFormData }) => {
                         </option>
                     ))}
                 </Select>
+                {errorValidacion.hora_apertura && <InputErrorMessage>{errorValidacion.hora_apertura}</InputErrorMessage>}
             </div>
             <div className="mb-2">
-                <label className="text-gray-800/90">Hora de cierre</label>
+                <label className="text-gray-800/90 dark:text-[#F9FAFB]">Hora de cierre</label>
                 <Select
                     name="hora_cierre"
                     value={formData.hora_cierre}
@@ -35,6 +37,7 @@ export const AtraccionesForm = ({ formData, handleChange, setFormData }) => {
                         </option>
                     ))}
                 </Select>
+                {errorValidacion.hora_cierre && <InputErrorMessage>{errorValidacion.hora_cierre}</InputErrorMessage>}
             </div>
             <div className="flex mt-2 items-center gap-2">
                 <input
@@ -46,16 +49,17 @@ export const AtraccionesForm = ({ formData, handleChange, setFormData }) => {
                     }
                     className="h-5 w-5 rounded-lg border-gray-100"
                 />
-                <label htmlFor="incluyeGuia" className="text-gray-800/95">Incluye Guía turístico</label>
+                <label htmlFor="incluyeGuia" className="text-gray-800/95 dark:text-[#F9FAFB]">Incluye Guía turístico</label>
             </div>
             <div>
-                <DaysSeleccionForm formData={formData} setFormData={setFormData}/>
+                <DaysSeleccionForm formData={formData} setFormData={setFormData} errorValidacion={errorValidacion}/>
             </div>
             <div className="mb-2">
                 <Input type="number" name="cupo_maximo" value={formData.cupo_maximo} onChange={handleChange} placeholder="Capacidad" />
+                {errorValidacion.cupo_maximo && <InputErrorMessage>{errorValidacion.cupo_maximo}</InputErrorMessage>}
             </div>
             <div className="mb-2">
-            <label className="text-gray-800/90">Duración de la reserva</label>
+            <label className="text-gray-800/90 dark:text-[#F9FAFB]">Duración de la reserva</label>
                 <Select
                     name="duracion"
                     value={formData.duracion}
@@ -67,6 +71,7 @@ export const AtraccionesForm = ({ formData, handleChange, setFormData }) => {
                         </option>
                     ))}
                 </Select>
+                {errorValidacion.duracion && <InputErrorMessage>{errorValidacion.duracion}</InputErrorMessage>}
             </div>
         </>
     );

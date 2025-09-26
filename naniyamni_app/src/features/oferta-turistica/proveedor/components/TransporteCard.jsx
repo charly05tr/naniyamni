@@ -14,6 +14,7 @@ export const TransporteCard = ({ servicio }) => {
         itinerarios,
         imagenes,
         asientos_disponibles,
+        total_reservas
     } = servicio;
     
     const { selectedDate, selectedHour, selectedHourIndex, 
@@ -47,7 +48,7 @@ export const TransporteCard = ({ servicio }) => {
     }
     return (
         <>
-        <div className="rounded-2xl shadow-md overflow-hidden max-w-2xl mx-auto p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+        <div className="rounded-2xl shadow-md overflow-hidden max-w-3xl mx-auto p-6 transition-transform duration-300 hover:shadow-xl hover:-translate-y-1  md:min-w-2xl">
             <div className="relative">
                 <img
                 className="rounded-xl object-cover w-full h-64"

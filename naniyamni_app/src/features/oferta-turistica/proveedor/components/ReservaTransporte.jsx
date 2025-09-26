@@ -16,6 +16,7 @@ export const ReservaTransporte = ({ reserva, handleClose, inTour=false }) => {
     
     const irADetalle = () => {
         navigate("/MiTour/");
+        window.location.reload();
     };
     const { token } = useContext(AuthContext);
 

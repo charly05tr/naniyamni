@@ -7,7 +7,7 @@ import { Filtros } from "./Filtros";
 import { useDisponibilidad } from "../../context/disponibilidadContext";
 import { SelectLugarInicio } from "./Surcursales";
 
-export const DisponibilidadForm = ({ tipo, setFiltro, sucursales=[] }) => {
+export const DisponibilidadForm = ({ tipo, setFiltro, sucursales }) => {
     const {
         range,
         setRange,
@@ -17,6 +17,7 @@ export const DisponibilidadForm = ({ tipo, setFiltro, sucursales=[] }) => {
         cantAdultos,
         cantHabitaciones,
         cantNinos,
+        lugarInicio,
         setLugarInicio,
       } = useDisponibilidad();
  
@@ -51,7 +52,7 @@ export const DisponibilidadForm = ({ tipo, setFiltro, sucursales=[] }) => {
                                     <NumericInput value={cantHabitaciones} onChange={setCantHabitaciones} min={1} max={1} step={1} text="Vehículos" />
                                 </>
                                 <div className="w-full">
-                                    <SelectLugarInicio sucursales={sucursales} setLugarInicio={setLugarInicio}/>
+                                    <SelectLugarInicio sucursales={sucursales} setLugarInicio={setLugarInicio} lugarInicio={lugarInicio}/>
                                 </div>
                             </div>
                         )}

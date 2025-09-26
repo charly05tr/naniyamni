@@ -62,10 +62,34 @@ const ProveedorPage = () => {
                             :
                             (proveedor.tipo !== "CR")
                                 ?
-                                <div>
+                                <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
+                                    <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
+                                        <h1 className="text-gray-800/90 font-bold text-xl mb-2 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
+                                        <div className="text-center p-4 border rounded-full border-gray-200 dark:border-[#AAAAAA]/30">
+                                            No hay comentarios.
+                                        </div>
+                                    </div>
+                                    <div className="lg:min-w-120 flex md:justify-center items-center max-w-200 flex-col gap-2">
                                     {proveedor.servicios?.map(servicio =>
                                         <TransporteCard key={servicio.id} servicio={servicio}/>
                                     )}
+                                    </div>
+                                     {(proveedor?.reglas.length > 0)?
+                                    <div className="h-fit lg:w-1/4 flex flex-col gap-3 w-fit flex-wrap p-6 lg:min-w-50 max-w-100 rounded-xl shadow">
+                                        <h1 className="text-gray-800/90 font-bold text-xl mb-4 dark:text-[#F9FAFB] flex flex-col gap-2">Normas</h1>
+                                        {proveedor.reglas?.map((regla, index) => (
+                                            <p key={index} className="tracking-tight text-gray-800/95 text-sm dark:text-[#F9FAFB]/90 flex gap-2"><ArrowRightIcon className="h-4 w-4 max-w-4 max-h-4 min-w-4 min-h-4" /> {regla}</p>
+                                        ))}
+                                    </div>
+                                    :
+                                    (proveedor?.amenidades.length > 0)?
+                                        <div className="h-fit lg:w-1/4 flex flex-col gap-3 w-fit flex-wrap p-6 lg:min-w-50 max-w-100 rounded-xl shadow">
+                                            <h1 className="text-gray-800/90 font-bold text-xl mb-4 dark:text-[#F9FAFB] flex flex-col gap-2">Amenidades</h1>
+                                            {proveedor.amenidades?.map((regla, index) => (
+                                                <p key={index} className="tracking-tight text-gray-800/95 text-sm dark:text-[#F9FAFB]/90 flex gap-2"><ArrowRightIcon className="h-4 w-4 max-w-4 max-h-4 min-w-4 min-h-4" /> {regla}</p>
+                                            ))}
+                                        </div>:<div className="min-w-100"></div>
+                                    }
                                 </div>
                                 :
                                 <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
@@ -75,7 +99,7 @@ const ProveedorPage = () => {
                                             No hay comentarios.
                                         </div>
                                     </div>
-                                    <div className="lg:min-w-120 flex md:justify-center items-center  max-w-200">
+                                    <div className="lg:min-w-120 flex md:justify-center items-center max-w-200 flex-col gap-2">
                                         {proveedor.servicios?.map(servicio =>
                                             <AtraccionCard key={servicio.id} servicio={servicio}/>
                                         )}

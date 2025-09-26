@@ -121,3 +121,20 @@ cloudinary.config(
   api_key=config('API_KEY'),
   api_secret=config('API_SECRET'),
 )
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0' 
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC' 
+
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'desactivar_reservas_cada_minuto': {
+        'task': 'reservas.tasks.desactivar_reservas_vencidas',
+        'schedule': crontab(minute='*/1'), 
+    },
+}

@@ -16,9 +16,9 @@ export const useLogin = () => {
         setError("");
         try {
             const token = await obtenerToken(usuario);
-            login(token);
-            navigate("/oferta-turistica");
             refetch(token)
+            login(token, perfilData.rol);
+            navigate("/oferta-turistica");
             setUser(perfilData);
         }
         catch(e) {

@@ -16,7 +16,7 @@ class ReservaAtraccionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservaAtraccion
         fields = ["id", "servicio", "servicio_id", "total",
-            "cant_personas", "turista", "tipo", "fecha_llegada"
+            "cant_personas", "turista", "tipo", "fecha_llegada", "estado"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  
@@ -35,7 +35,7 @@ class ReservaVehiculoSerializer(serializers.ModelSerializer):
         fields = [
             "id", "turista", "servicio", "servicio_id", "total",
             "fecha_hora_entrega", "fecha_hora_recogida",
-            "lugar_recogida", "lugar_devolucion", "tipo", "dias"
+            "lugar_recogida", "lugar_devolucion", "tipo", "dias", "estado"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  
@@ -55,44 +55,34 @@ class ReservaHabitacionSerializer(serializers.ModelSerializer):
         fields = [
             "id", "turista", "fecha_hora_llegada", "fecha_hora_salida",
             "servicio", "cant_adultos", "cant_ninos", "cant_habitaciones",
-            "noches", "total", "servicio_id", "tipo"
+            "noches", "total", "servicio_id", "tipo", "estado"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}
         }
 
     def validate(self, data):
-        fecha_inicio = data.get("fecha_hora_llegada")
-        fecha_fin = data.get("fecha_hora_salida")
-        servicio = data.get("servicio")
+        fecha_inicio = data.get("fecha_hora_llegada") or getattr(self.instance, "fecha_hora_llegada", None)
+        fecha_fin = data.get("fecha_hora_salida") or getattr(self.instance, "fecha_hora_salida", None)
+        servicio = data.get("servicio") or getattr(self.instance, "servicio", None)
+
         request = self.context.get("request")
-        user = None
+        user = getattr(request, "user", None)
 
-        if request and hasattr(request, "user"):
-            user = request.user
-
-        if fecha_inicio >= fecha_fin:
+        if fecha_inicio and fecha_fin and fecha_inicio >= fecha_fin:
             raise serializers.ValidationError(
                 {"fecha_hora_salida": "La fecha de salida debe ser posterior a la de llegada."}
             )
 
-        reservas_existentes = ReservaHabitacion.objects.filter(
-            servicio=servicio,
-            estado=True
-        )
-
+        # Excluir la reserva actual al buscar overlaps
+        reservas_existentes = ReservaHabitacion.objects.filter(servicio=servicio, estado=True).exclude(id=getattr(self.instance, 'id', None))
         overlap = reservas_existentes.filter(
             fecha_hora_llegada__date__lt=fecha_fin.date(),
             fecha_hora_salida__date__gt=fecha_inicio.date(),
         ).exists()
 
-        dentro_de_un_tour = ReservaHabitacion.objects.filter(
-            servicio=servicio,
-        )
-
-        ya_lo_agrego = dentro_de_un_tour.filter(
-            turista=user
-        )
+        dentro_de_un_tour = ReservaHabitacion.objects.filter(servicio=servicio).exclude(id=getattr(self.instance, 'id', None))
+        ya_lo_agrego = dentro_de_un_tour.filter(turista=user)
 
         if overlap:
             raise serializers.ValidationError(
@@ -118,7 +108,7 @@ class ReservaViajeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReservaViaje
         fields = [
-            "id", "servicio", "servicio_id", "tipo", "total", "cant_personas", "fecha_hora_salida"
+            "id", "servicio", "servicio_id", "tipo", "total", "cant_personas", "fecha_hora_salida", "estado"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  

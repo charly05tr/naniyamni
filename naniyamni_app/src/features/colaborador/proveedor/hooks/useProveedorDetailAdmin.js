@@ -36,5 +36,5 @@ export const useProveedorDetailAdmin = (id) => {
 
     }, [handleGetProveedor]);
 
-    return { error, loading, proveedor, refetch: handleGetProveedor }    
+    return { error, loading, proveedor, setProveedor, refetch: handleGetProveedor }    
 }

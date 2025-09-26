@@ -6,13 +6,80 @@ import { usePerfil } from "../../users/perfil/hooks/usePerfil";
 import { RegisterForm } from "../../users/register/components/RegisterForm";
 import { Info } from "lucide-react";
 import Cargando from "@Cargando";
+import { useActualizarReserva } from "../hooks/useActualizarReserva";
+import { tiposServicios } from "@config";
+import { useNavigate } from "react-router-dom";
 
 const Pagos = () => {
     const [message, setMessage] = useState(""); 
     const { perfilData, loading, error } = usePerfil();
     const { state } = useLocation();
     const { subtotal, totalPedido, descuentoPedido, reservasPedido } = state || {};
+    const { patch, loading2, error2 } = useActualizarReserva();
+    const [idReservas, setIdReservas] = useState([]);
+    const navigate = useNavigate();
 
+    useEffect(() => {
+      if (reservasPedido && Array.isArray(reservasPedido)) {
+        const ids = reservasPedido.map(r => ({ id: r.id, tipo: tiposServicios[r.servicio.tipo_servicio] }));
+        setIdReservas(ids);
+      }
+    }, [reservasPedido]);
+
+    const handleTerminarTransaccion = async () => {
+      try {
+        if (!idReservas || idReservas.length === 0) return;
+    
+        await Promise.all(
+          idReservas.map(({ id, tipo }) => {
+            const reserva = reservasPedido.find(r => r.id === id);
+            if (!reserva) return null;
+    
+            // Payload mínimo según tipo
+            const payload = { estado: true, servicio_id: reserva.servicio.id };
+    
+            switch (tipo) {
+              case "habitacion":
+                if (reserva.fecha_hora_llegada) payload.fecha_hora_llegada = reserva.fecha_hora_llegada;
+                if (reserva.fecha_hora_salida) payload.fecha_hora_salida = reserva.fecha_hora_salida;
+                if (reserva.cant_adultos !== undefined) payload.cant_adultos = reserva.cant_adultos;
+                if (reserva.cant_ninos !== undefined) payload.cant_ninos = reserva.cant_ninos;
+                if (reserva.cant_habitaciones !== undefined) payload.cant_habitaciones = reserva.cant_habitaciones;
+                if (reserva.noches !== undefined) payload.noches = reserva.noches;
+                break;
+    
+              case "atraccion":
+                if (reserva.fecha_hora_llegada) payload.fecha_hora_llegada = reserva.fecha_hora_llegada;
+                if (reserva.fecha_llegada) payload.fecha_llegada = reserva.fecha_llegada;
+                if (reserva.cant_personas !== undefined) payload.cant_personas = reserva.cant_personas;
+                break;
+    
+              case "vehiculo":
+                if (reserva.fecha_hora_recogida) payload.fecha_hora_recogida = reserva.fecha_hora_recogida;
+                if (reserva.fecha_hora_devolucion) payload.fecha_hora_devolucion = reserva.fecha_hora_devolucion;
+                if (reserva.cant_personas !== undefined) payload.cant_personas = reserva.cant_personas;
+                break;
+    
+              default:
+                // para reservas genericas u otros tipos
+                break;
+            }
+    
+            return patch(id, payload, tipo);
+          })
+        );
+    
+        console.log("Todas las reservas se actualizaron correctamente");
+      } catch (err) {
+        console.error("Error al actualizar alguna reserva:", err);
+      }
+    };                                                            
+    
+    const pagar = () => {
+      handleTerminarTransaccion();
+      navigate("/reservas-activas");
+    }
+  
     useEffect(() => {
       // Check to see if this is a redirect back from Checkout
       const query = new URLSearchParams(window.location.search);
@@ -37,19 +104,20 @@ const Pagos = () => {
     }
   
 
-    if (loading) {
+    if (loading || loading2) {
       return (
         <Cargando>Cargando...</Cargando>
       );
     }
 
-    if (error) {
+    if (error || error2) {
       return (
-        <Error>{error}</Error>
+        <Error>{error || error2 }</Error>
       );
     }
 
     const reservas = Array.isArray(reservasPedido) ? reservasPedido : [reservasPedido];
+    const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
 
     const ProductDisplay = () => (
       <div className="flex justify-between my-5">
@@ -60,9 +128,9 @@ const Pagos = () => {
                   <h1 className="md:p-4 mb-3 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Confirmar pedido</h1>
                   {reservas ?
                     <div className="flex flex-col gap-2 rounded max-w-200">
-                        {(reservas.length > 1)?
+                        {(reservasPendientes.length > 1)?
                             <div className="flex flex-wrap gap-4 justify-center">
-                                {reservas?.map(reserva => (
+                                {reservasPendientes?.map(reserva => (
                                   <MiTourCard 
                                     key={reserva.id}
                                     reserva={reserva} 
@@ -72,8 +140,8 @@ const Pagos = () => {
                             </div>
                             :
                               <MiTourCard 
-                                key={reservas[0].id}
-                                reserva={reservas[0]} 
+                                key={reservasPedido[0]?.id}
+                                reserva={reservasPendientes[0]} 
                                 inPay={true}
                             />
                         }
@@ -86,7 +154,7 @@ const Pagos = () => {
                             <p>Servicios ({reservasPedido.length || 1})</p>
                             C$ {totalPedido}
                         </div>
-                        {(reservasPedido.length > 2) &&
+                        {(reservasPendientes.length > 2) &&
                             <div className="flex justify-between mb-4 text-sm">
                                 <p>Descuento 10%</p>
                             - C$ {descuentoPedido}
@@ -96,11 +164,11 @@ const Pagos = () => {
                             <p>Subtotal</p>
                             C$ {subtotal}
                         </div>
-                        <form className="mt-5" action="/create-checkout-session" method="POST">
-                          <button type="submit" className="w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">
+                        {/* <form className="mt-5" action="/create-checkout-session" method="POST"> */}
+                          <button onClick={pagar} type="submit" className="mt-5 w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">
                             Pagar
                           </button>
-                        </form>
+                        {/* </form> */}
                     </div>
                     <div className="py-5 flex flex-col gap-5 border px-4 rounded-xl border-[#AAAAAA]/30">
                       <h1 className="text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Confirmar datos personales</h1>

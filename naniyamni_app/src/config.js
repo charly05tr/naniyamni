@@ -63,6 +63,7 @@ export const formatDateOld = (date, type) => {
   };
 
 
+  export const API_KEY = "a7104ef1a4314122976b32b3f589f44b";
   export const formatDate = (dateTimeString, type = null, puntito=true) => {
     if (!dateTimeString || typeof dateTimeString !== "string") {
       return "Fecha no válida";
@@ -83,6 +84,7 @@ export const formatDateOld = (date, type) => {
       timeText = `${hh.padStart(2, "0")}:${mm.padStart(2, "0")}`;
       timeText= convertirHora(timePartRaw);
     }
+
   
     // Formatear fecha en español
     const formatter = new Intl.DateTimeFormat("es-ES", {
@@ -241,4 +243,11 @@ export const convertirAMPMaMilitar = (horaAMPM) => {
   const minutosStr = minutos.toString().padStart(2, "0");
 
   return `${horaStr}:${minutosStr}`;
+}
+
+
+export const quitarSegundos = (hora) => {
+  // Si viene en formato HH:MM:SS
+  if (!hora) return "";
+  return hora.split(":").slice(0, 2).join(":"); // Devuelve HH:MM
 }

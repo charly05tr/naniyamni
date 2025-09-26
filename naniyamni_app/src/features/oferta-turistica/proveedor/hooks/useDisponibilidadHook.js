@@ -42,7 +42,7 @@ export const useDisponibilidad = () => {
     setDisponibilidad((prev) => ({ ...prev, horaInicio }));
   
   const setHoraDevolucion = (horaDevolucion) =>
-    setDisponibilidad((prev) => ({ ...prev, horaDevolucion }));
+    setDisponibilidad((prev) => ({ ...prev, horaDevolucion })); 
 
   return {
     ...disponibilidad,

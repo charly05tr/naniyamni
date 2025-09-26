@@ -4,6 +4,7 @@ import ThemeSwitch from "./ThemeSwitch"
 import { Avatar } from "../styled-components/Avatar";
 import { AuthContext } from "@authContext";
 import Cargando from "@Cargando";
+import { useLocation } from "react-router-dom"; 
 
 const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, loading}) => {
   const { token } = useContext(AuthContext);
@@ -14,6 +15,7 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
   const NAV_LINKS = [
     { name: "Inicio", path: "/" },
     { name: "Oferta Turística", path: "/oferta-turistica" },
+    { name: "Reservas", path: "/reservas-activas" },
     dashboard,
   ];
   
@@ -44,6 +46,10 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
   
   useEffect(() => {
     const handleScroll = () => {
+      if (location.pathname === "/") {
+        setVisible(true);
+        return;
+      }
       if (mobileOpen) {
         return;
       }
@@ -61,13 +67,13 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY, mobileOpen]);
   
-  if (loading) {
-    return (
-      <Cargando></Cargando>
-    )
-  }
+    if (loading) {
+      return (
+        <Cargando></Cargando>
+      )
+    }
   return (
-    <header className={`sticky top-0 z-50 bg-gray-50/80 backdrop-blur-sm border-b border-gray-200/80 transition-transform duration-300 dark:bg-[#202124]/50 dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB] ${
+    <header className={`sticky top-0 z-50  backdrop-blur-sm border-b border-gray-200/80 transition-transform duration-300  dark:border-[#AAAAAA]/30 dark:text-[#F9FAFB] ${
       visible ? "translate-y-0" : "-translate-y-full"
     }`}>
       <div className="max-w-10xl mx-auto px-4 sm:px-6 lg:px-8">

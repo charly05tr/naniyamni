@@ -89,7 +89,7 @@ export const ProveedoresTable = ({proveedores, loading, error, setProveedores}) 
                   {item.reservas.length || 0}
                 </td>
                 <td className="px-6 py-4">
-                  {(item.total_vendido) || 0}
+                 C$ {(item.total_vendido) || 0}
                 </td>
                 <td className="px-6 py-4">
                 {item.activo?"público":"privado"}

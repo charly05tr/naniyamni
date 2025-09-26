@@ -21,5 +21,5 @@ export function useUploadImageServicio() {
       }
     };
   
-    return { uploadImageServicio, loading2, error, data };
+    return { uploadImageServicio, loading2, error, data, loading5:loading2};
   }

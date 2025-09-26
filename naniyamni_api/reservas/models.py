@@ -6,11 +6,18 @@ from ofertaTuristica.models import *
 
 #Reservas
 class Reserva(PolymorphicModel):
+    TIPOS = (
+        ("H", "habitacion"),
+        ("V", "vehiculo"),
+        ("A", "atraccion"),
+        ("VI", "viaje"),
+        ("G", "generico")
+    )
     turista = models.ForeignKey(User,on_delete=models.PROTECT, db_index=True)
     fecha_reserva = models.DateTimeField(auto_now_add=True)
     total = models.DecimalField(max_digits=10, decimal_places=2)
     estado = models.BooleanField(default=False) 
-    tipo = models.CharField(max_length=50, default='reserva')
+    tipo = models.CharField(max_length=50, choices=TIPOS, default="G")
     
 
 class ReservaAtraccion(Reserva):

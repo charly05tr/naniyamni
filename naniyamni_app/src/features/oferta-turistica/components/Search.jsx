@@ -1,4 +1,12 @@
 import { useState } from 'react';
+const actividadMap = {
+    "Hoteles": "H",
+    "Rent a car": "AV",
+    "Transporte": "TTT",
+    "Museos": "CR",
+    "Parques": "CR",
+    "Centros turísticos": "CR",
+  };
 
 export const Search = ({ categories = [], refetch }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -12,6 +20,7 @@ export const Search = ({ categories = [], refetch }) => {
     const handleCategorySelect = (category) => {
         setSelectedCategory(category);
         setIsDropdownOpen(false); 
+        refetch(actividadMap[category]);
     };
 
     const handleSubmit = (e) => {

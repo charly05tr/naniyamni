@@ -214,14 +214,13 @@ export const ProveedorForm = ({onCreateProveedor, loading, error, proveedorOldDa
                 {(error)&&<Error>{error}</Error>}
             </div>
             :
-            <div>
-                <div className="flex flex-col items-center mt-5 gap-5">
+            <div className="flex w-full items-center justify-center">
+                <div className="flex flex-col items-center mt-5 gap-5 w-fit">
                     <Button text={(!loading)? "Actualizar": "Cargando..."}/>
                     {(error)&&<Error>{error}</Error>}
                 </div>
             </div>}
         </Form>
-
         {Object.keys(proveedorOldData).length > 0 
             &&
             <div className="mt-10">

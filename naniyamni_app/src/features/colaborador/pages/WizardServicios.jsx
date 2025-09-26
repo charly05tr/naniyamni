@@ -7,6 +7,8 @@ import { FormCard } from "@FormStyled";
 import { Title } from "@TextStyled";
 import { useUploadImageServicio } from "../servicios/hooks/useUploadImageServicio";
 import { SubirImagen } from "../proveedor/components/SubirImagen";
+import Cargando  from "@Cargando";
+import { useNavigate } from "react-router-dom";
 
 const WizardServicios = () => {
     const { id, tipo } = useParams();
@@ -14,6 +16,7 @@ const WizardServicios = () => {
     const [step, setStep] = useState(0);
     const { uploadImageServicio, loading2 } = useUploadImageServicio();
     const [servicioId, setServicioId] = useState();
+    const navigate = useNavigate();
 
     const handlePostServicios = async (servicios) => {
         const data = await createServicios(servicios, id, tipo);
@@ -21,10 +24,22 @@ const WizardServicios = () => {
         setStep(1);
     }
 
+    const handleRegresar = () => {
+        navigate(`/proveedor/${id}/admin`);
+    }
+
     const handleUploadImageServicio = async (file) => {
         await uploadImageServicio(file, servicioId, "Mi imagen"); 
         setStep(2);
     }
+
+     if (loading2) {
+        return(
+          <div>
+            <Cargando>Enviando</Cargando>
+          </div>
+        )
+      }
 
     return(
         <div className="flex items-center justify-center flex-col">
@@ -39,6 +54,9 @@ const WizardServicios = () => {
                     <Title text="Seleccione las imágenes que describan el servicio."/>
                     <SubirImagen  onUploadImage={handleUploadImageServicio} loading2={loading2}/>
                 </FormCard>}
+                {step === 2 &&
+                    handleRegresar()
+                }
         </div>
     )
 }

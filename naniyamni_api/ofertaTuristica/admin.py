@@ -75,15 +75,14 @@ class AlquilerVehiculoAdmin(admin.ModelAdmin):
         "precio",
         "proveedor",
         "mostrar_categorias",
-        "mostrar_sucursales",
     )
 
-    def mostrar_sucursales(self, obj):
-        return obj.sucursales.direccion if obj.sucursales else "-"
-    mostrar_sucursales.short_description = "Sucursal"
+    # def mostrar_sucursales(self, obj):
+    #     return obj.sucursales.direccion if obj.sucursales else "-"
+    # mostrar_sucursales.short_description = "Sucursal"
 
     def mostrar_categorias(self, obj):
-        return obj.categoria.nombre if obj.categoria else "-"
+        return {"nombre":obj.categoria.nombre, "cant_vehiculos":obj.cant_vehiculos} if obj.categoria else "-"
     mostrar_categorias.short_description = "Categoría"
 
 

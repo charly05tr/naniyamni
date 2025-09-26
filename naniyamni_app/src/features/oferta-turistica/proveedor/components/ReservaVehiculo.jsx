@@ -21,7 +21,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
 
     const tarifaDiaria = reserva.servicio.precio; 
     const recargoPorHora = 0.15; 
-    const horasExtras =
+    const horasExtras = !reserva.estado &&
     reserva.horaInicio !== reserva.horaDevolucion
       ? calcularHorasExtras(reserva.horaInicio, reserva.horaDevolucion)
       : 0;
@@ -29,6 +29,9 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
     const recargo = horasExtras > 0 ? Math.min(horasExtras * recargoPorHora * tarifaDiaria, tarifaDiaria) : 0;
 
     const handleChangeHoraInicio = (hora) => {
+        if (reserva.estado) {
+            return;
+        }
         setHoraInicio(hora);
         if (reserva.horaDevolucion === "") {
             setHoraDevolucion(hora);
@@ -38,6 +41,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
     const navigate = useNavigate();
     const irADetalle = () => {
         navigate("/MiTour/");
+        window.location.reload();
     };
 
     const buildReservaPayload = () => {
@@ -82,7 +86,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                         <p className="text-sm">Fecha Inicio</p>
                         <p className="font-bold">{reserva.entrada.split("\n")[0]}</p>
                         <p className="mt-3 text-sm">Hora Inicio</p>
-                        <select
+                        {!reserva.estado?<select
                             value={reserva.horaInicio}
                             onChange={(e) => handleChangeHoraInicio(e.target.value)}
                             className="w-fit py-1 font-bold focus:outline-none cursor-pointer dark:bg-[#181818]"
@@ -92,12 +96,13 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                                 {op} hrs
                                 </option>
                             ))}
-                        </select>
+                        </select>:<p className="font-bold">{reserva.horaInicio}</p>}
                     </div>
                     <div className="flex flex-col gap-1 p-2">
                         <p className="text-sm">Fecha Devolución</p>
                         <p className="font-bold">{reserva.salida.split("\n")[0]}</p>
                         <p className="mt-3 text-sm">Hora Devolución</p>
+                        {!reserva.estado?
                         <select
                             value={reserva.horaDevolucion}
                             onChange={(e) => setHoraDevolucion(e.target.value)}
@@ -108,7 +113,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                                 {op} hrs
                                 </option>
                             ))}
-                        </select>
+                        </select>:<p className="font-bold">{reserva.horaDevolucion}</p>}
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 p-2 border border-gray-200 items-start rounded dark:border-[#AAAAAA]/30">
@@ -118,7 +123,9 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                     </div>
                     <div className="flex flex-col gap-1 p-2">
                         <p className="text-sm">Lugar Devolución</p>
-                        <SelectLugarDevolucion sucursales={reserva.sucursales} setLugarDevolucion={setLugarDevolucion} lugarDevolucion={reserva.lugarDevolucion}/>
+                        {!reserva.estado?
+                        <SelectLugarDevolucion reserva={reserva} sucursales={reserva?.servicio?.sucursales_data} setLugarDevolucion={setLugarDevolucion} lugarDevolucion={reserva.lugarDevolucion || ""}/>
+                        :<p className="font-bold">{reserva.lugarDevolucion.toLowerCase()}</p>}
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 p-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">

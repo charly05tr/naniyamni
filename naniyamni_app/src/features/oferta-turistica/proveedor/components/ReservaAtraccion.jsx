@@ -8,6 +8,7 @@ import { AuthContext } from "@authContext";
 import { useReservarTransporte } from "../hooks/useReservarTransporte";
 import { tiposServicios } from "@config";
 import { generarOpcionesNumeros, formatearFechaParaDjango } from "@config"; 
+import { quitarSegundos } from "@config";
 
 export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour = false }) => {
     const { crearReserva, loading, error } = useReservar();
@@ -16,6 +17,7 @@ export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour
 
     const irADetalle = () => {
         navigate("/MiTour/");
+        window.location.reload();
     };
     const { token } = useContext(AuthContext);
 
@@ -59,7 +61,7 @@ export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour
                         </div>
                         <div className="flex flex-col gap-1 p-2">
                             <p className="text-sm">Duración reserva:</p>
-                            <strong>{(reserva.servicio.duracion === "23:30:00")?"Todo el día":`${reserva.servicio.duracion} hrs`}</strong>
+                            <strong>{(reserva.servicio.duracion === "23:30:00")?"Todo el día":`${quitarSegundos(reserva.servicio.duracion)} hrs`}</strong>
                         </div>
                     </div>
                     <div className="flex gap-2 px-2 py-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">

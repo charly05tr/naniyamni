@@ -3,29 +3,65 @@ import Cargando from "@Cargando";
 import { SubirImagen } from './SubirImagen';
 import { useUploadImage } from '../hooks/useUploadImage';
 import { deleteImage } from '../services/deleteImage';
+import { useUploadImageServicio } from '../../servicios/hooks/useUploadImageServicio';
+import { deleteImageServicio } from '../../servicios/services/deleteImageServicio';
 
-const ProveedorImageManager = ({ initialImages, proveedorId }) => {
+const ProveedorImageManager = ({ initialImages, proveedorId, esServicio=false, loading4 }) => {
     const [images, setImages] = useState(initialImages);
-    const [loading2, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { uploadImage, loading } = useUploadImage();
+    const { uploadImage, loading2 } = useUploadImage();
+    const { uploadImageServicio, loading5 } = useUploadImageServicio();
 
     const handleUploadImage = async (file) => {
-        await uploadImage(file, proveedorId, "Mi imagen"); 
-    }
+        setLoading(true);
+        setError(null);
+        try{
+            if (esServicio) {
+                await uploadImageServicio(file, proveedorId, "Mi imagen")
+                if (loading5) {
+                    return (
+                        <Cargando>Enviando...</Cargando>
+                    )
+                }
+            } else {
+                await uploadImage(file, proveedorId, "Mi imagen"); 
+                if (loading2) {
+                    return (
+                        <Cargando>Enviando...</Cargando>
+                    )
+                }
+            }
+        } finally {
+            window.location.reload();
+            }
+            setLoading(false);
+        }
+    
     
     const handleDeleteImage = async (imageId) => {
         setLoading(true);
         setError(null);
         try {
-        await deleteImage(imageId);
-        setImages(images.filter(image => image.id !== imageId));
+            if (esServicio) {
+                await deleteImageServicio(imageId);;
+            }
+            else {
+                await deleteImage(imageId);
+            }
         } 
         finally {
-        setLoading(false);
-        window.location.reload();
+            setImages(images.filter(image => image.id !== imageId));
+            // window.location.reload();
+            setLoading(false);
         }
     };
+    if (loading || loading5 || loading4 || loading2) {
+        return (
+            <Cargando>Enviando...</Cargando>
+        )
+    }
+
 
     return (
         <div className="py-4 md:px-10 px-4  bg-gray-100 dark:bg-[#18181818] rounded-lg shadow-md">
@@ -37,7 +73,7 @@ const ProveedorImageManager = ({ initialImages, proveedorId }) => {
             </div>
         )}
         
-        {loading2 && (
+        {loading2 || loading && (
             <div className="text-center text-blue-500 mb-4">
             <Cargando>Cargando...</Cargando>
             </div>

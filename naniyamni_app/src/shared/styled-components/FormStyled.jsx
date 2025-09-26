@@ -8,7 +8,7 @@ export const Form = styled.form`
 
 export const FormCard = ({ children }) => {
   return (
-    <div className="max-w-[800px] min-w-[340px] p-4 md:p-6 border dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/30 border-gray-300 rounded-lg bg-gray-50 shadow-md mb-[50px] mx-[5px] lg:min-w-[450px]">
+    <div className="max-w-[800px] min-w-[340px] p-4 md:p-8 border dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/30 border-gray-300 rounded-lg bg-gray-50 shadow-md mb-[50px] mx-[5px] lg:min-w-[450px]">
       {children}
     </div>
   );

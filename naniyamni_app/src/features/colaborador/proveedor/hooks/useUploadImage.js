@@ -18,7 +18,6 @@ export function useUploadImage() {
         throw err;
       } finally {
         setLoading(false);
-        window.location.reload();
       }
     };
   

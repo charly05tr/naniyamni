@@ -2,17 +2,11 @@ import { Select } from "@FormStyled";
 import { useEffect } from "react";
 
 export const SelectLugarInicio = ({ sucursales, setLugarInicio, lugarInicio }) => {
-    if (sucursales == [])  {
+    if (!sucursales || sucursales.length === 0)  {
         return (
             <Select><option>No hay sucursales</option></Select>
         );
-    }   else if (sucursales.direccion) {
-        return (
-            <Select>
-                <option>{sucursales.direccion}</option>
-            </Select>
-        );
-    };  
+    } 
 
     return (
         <Select 
@@ -21,29 +15,24 @@ export const SelectLugarInicio = ({ sucursales, setLugarInicio, lugarInicio }) =
             value={lugarInicio}   
         >
             <option>Sucursal</option>
-            {sucursales.map(sucursal => (
-                <option key={sucursal.id}>{sucursal.direccion.toLowerCase()}</option>
+            {sucursales?.map(sucursal => (
+                <option key={sucursal.id}>{sucursal.direccion}</option>
             ))}
         </Select>
     );
 };
 
-export const SelectLugarDevolucion = ({ sucursales, setLugarDevolucion, lugarDevolucion }) => {
-    
+export const SelectLugarDevolucion = ({reserva = [], sucursales, setLugarDevolucion, lugarDevolucion }) => {
     useEffect(() => {
-            setLugarDevolucion(sucursales[0].direccion.toLowerCase() || "")
+        if (reserva?.estado) {
+            return;
+        }
+        setLugarDevolucion(sucursales[0].direccion)
     }, []);
-    if (sucursales == [])  {
-        return (
-            <p>No hay sucursales</p>
-        );
-    } else if (sucursales == {}) {
-        return (
-            <select className="w-fit py-1 font-bold focus:outline-none cursor-pointer">
-                <option>{sucursales.direccion.toLowerCase()}</option>
-            </select>
-        );
-    };
+    if (reserva?.estado) {
+        return;
+    }
+
     return (
         <select 
             name="Sucursal" 
@@ -51,8 +40,8 @@ export const SelectLugarDevolucion = ({ sucursales, setLugarDevolucion, lugarDev
             onChange={(e) => setLugarDevolucion(e.target.value)}
             value={lugarDevolucion}
         >
-        {sucursales.map(sucursal => (
-            <option key={sucursal.id}>{sucursal.direccion.toLowerCase()}</option>
+        {sucursales?.map(sucursal => (
+            <option key={sucursal?.id}>{sucursal?.direccion}</option>
         ))}
     </select>
     );

@@ -2,11 +2,10 @@ import { useDisponibilidad } from "../../context/disponibilidadContext";
 import { formatDateOld } from "@config";
 import { ReservaHabitacion } from "./ReservaHabitacion";
 import { ReservaVehiculo } from "./ReservaVehiculo";
-import { X } from "lucide-react";
 import { useReservar } from "../hooks/useCrearReserva";
 
 
-export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
+export const ReservaCard = ({ servicio, handleClose  }) => {
     const { range, cantAdultos, cantNinos, cantHabitaciones, lugarInicio, lugarDevolucion, setLugarDevolucion, setHoraInicio, setHoraDevolucion, horaInicio, horaDevolucion } = useDisponibilidad();
     const entrada = formatDateOld(range[0].startDate, "entrada");
     const salida = formatDateOld(range[0].endDate, "salida");
@@ -46,7 +45,6 @@ export const ReservaCard = ({ servicio, handleClose, sucursales }) => {
                         lugarDevolucion,
                         lugarInicio,
                         servicio,
-                        sucursales,
                         fechaInicio:range[0].startDate,
                         fechaDevolucion:range[0].endDate,
                     }} 

@@ -86,7 +86,7 @@ export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUp
                         onChange={(e) => setUsuario(prev => {
                             return {...prev, "telefono": e.target.value}
                         })}
-                        value={usuario.telefono || ""}
+                        value={(usuario.telefono !== "0")?usuario.telefono:""}
                         type="text"
                         required
                         placeholder="Teléfono"

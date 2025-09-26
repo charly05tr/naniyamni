@@ -14,9 +14,25 @@ class IsProveedor(permissions.BasePermission):
 
 class IsProveedorOwner(permissions.BasePermission):
     """
-    Solo el proveedor que creó el servicio puede modificarlo
+    Permite modificar solo al proveedor propietario del servicio.
     """
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return True
-        return request.user.is_authenticated and getattr(request.user, 'rol', None) == 'Proveedor' and obj.administrador == request.user
+
+        user = request.user
+
+        # Primero intenta usar 'administrador' directo
+        propietario = getattr(obj, 'administrador', None)
+
+        # Si no existe, intenta obtener de 'proveedor'
+        if propietario is None:
+            proveedor_obj = getattr(obj, 'proveedor', None)
+            if proveedor_obj:
+                propietario = getattr(proveedor_obj, 'administrador', None)
+
+        return (
+            user.is_authenticated and
+            getattr(user, 'rol', None) == 'Proveedor' and
+            propietario == user
+        )

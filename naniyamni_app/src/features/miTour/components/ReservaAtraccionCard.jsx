@@ -1,5 +1,6 @@
 import { tiposServicios, formatDate } from "@config"
 import { useNavigate } from "react-router-dom";
+import { quitarSegundos } from "@config";
 
 export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOpen, inPay=false }) => {
   const {
@@ -9,6 +10,7 @@ export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOp
     fecha_llegada,
     proveedor_nombre, 
     total,
+    estado,
   } = reserva;
 
   const imageUrl = servicio?.imagenes && servicio?.imagenes?.length > 0 ? servicio?.imagenes[0]?.image_url : 'https://via.placeholder.com/150';
@@ -48,7 +50,7 @@ export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOp
           </div>
           <div className="flex items-start flex-col gap-1">
             <span className="text-sm font-medium text-gray-500 mr-2 dark:text-[#F9FAFB]/60">Duración reserva:</span>
-            <span className="text-sm text-gray-800 line-clamp-1 dark:text-[#F9FAFB]/90">{(servicio.duracion === "23:30:00")?"Todo el día":`${servicio.duracion} hrs`}</span>
+            <span className="text-sm text-gray-800 line-clamp-1 dark:text-[#F9FAFB]/90">{(servicio.duracion === "23:30:00")?"Todo el día":`${quitarSegundos(servicio.duracion)} hrs`}</span>
           </div>
           <div className="flex items-start">
             <span className="text-sm font-medium text-gray-500 mr-2 dark:text-[#F9FAFB]/60">Proveedor:</span>
@@ -57,8 +59,8 @@ export const ReservaAtraccionCard = ({ reserva, eliminar, irAProveedor, handleOp
         </div>
         {(!inPay)?
         <div className='flex gap-2'>
-          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
-          <span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>
+          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>{(!estado)?"Eliminar":"Cancelar"}</span>
+          {(!estado)&&<span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>}
           <span onClick={() => handleOpen(reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
         </div>:""}
       </div>

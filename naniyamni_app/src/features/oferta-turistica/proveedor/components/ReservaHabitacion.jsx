@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { Percent, DollarSign, Coins, X } from "lucide-react";
 import { useReserva } from "../hooks/useReserva";
-import { tiposServicios } from "@config";
+import { tiposServicios, convertirHora } from "@config";
 
 export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handleClose, inTour=false }) => {
 
@@ -30,6 +30,7 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
 
     const irADetalle = () => {
         navigate("/MiTour/");
+        window.location.reload();
     };
 
     const { token } = useContext(AuthContext);
@@ -60,12 +61,12 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                     <div className="flex flex-col gap-1 p-2 border-r pr-4 border-gray-300 dark:border-[#AAAAAA]/30">
                         <p className="text-sm">Entrada</p>
                         <strong>{reserva.entrada.split("\n")[0]}</strong>
-                        <p>{reserva.entrada.split("\n")[1]}</p>
+                        <p>{convertirHora(reserva.servicio.hora_check_in)}</p>
                     </div>
                     <div className="flex flex-col gap-1 p-2">
                         <p className="text-sm">Salida</p>
                         <strong>{reserva.salida.split("\n")[0]}</strong>
-                        <p>{reserva.salida.split("\n")[1]}</p>
+                        <p>{convertirHora(reserva.servicio.hora_check_out)}</p>
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 mt-2 p-4 border border-gray-200 rounded dark:border-[#AAAAAA]/30">
@@ -127,6 +128,9 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                             if (token){
                                 const payload = buildReservaPayload();
                                 crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
+                                if (error) {
+                                    return
+                                }
                                 irADetalle();
                                 return;
                             }

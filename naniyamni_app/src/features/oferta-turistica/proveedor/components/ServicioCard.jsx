@@ -1,7 +1,9 @@
 import { GaleriaImagenes } from "./GaleriaImagenes";
 import { useState, useEffect } from "react";
 import { ReservaCard } from "./ReservaCard";
-import { Sliders, Users, Tag  } from "lucide-react";
+import { Sliders, Users, Tag } from "lucide-react";
+import { HabitacionDetalle } from "./HabitacionDetalleCard";
+import {FaStar} from "react-icons/fa";
 
 export const ServicioCard = ({ servicios, tipo, sucursales }) => {
 
@@ -19,19 +21,24 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
 
     const [ReservaCardOpen, setReservaCardOpen] = useState(null);
     const [servicioReserva, setServicioReserva] = useState(null);
+    const [DetalleCardOpen, setDetalleCardOpen] = useState(null);
+
     const handleReserva = (servicio) => {
         setReservaCardOpen(servicio);
         setServicioReserva(servicio);
     } 
+
+    const handleVerDetalle = (servicio) => {
+      setDetalleCardOpen(servicio);
+    }
+
     useEffect(() => {
       if (ReservaCardOpen) {
-        // Desactiva scroll del fondo
         document.body.style.overflow = "hidden";
       } else {
         document.body.style.overflow = "auto";
       }
   
-      // Limpieza cuando el componente se desmonta
       return () => {
         document.body.style.overflow = "auto";
       };
@@ -39,6 +46,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
 
     const handleClose = () => {
         setReservaCardOpen(null);
+        setDetalleCardOpen(null);
     }
 
     return (
@@ -47,7 +55,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
     {servicios?.map(servicio => (
       <div key={servicio.id} className="p-6 border border-gray-200 dark:text-[#F9FAFB]  dark:border-[#AAAAAA]/30 rounded-2xl transition-transform transform  shadow-sm  duration-200 flex flex-col hover:shadow-xl">
         <div className="flex justify-between items-start gap-4 mb-2">
-          <h2 className=" text-xl md:text-2xl font-semibold text-gray-800 flex-1 dark:text-[#F9FAFB]">{servicio.nombre}</h2>
+          <h2 onClick={() => handleVerDetalle(servicio)} className="underline cursor-pointer text-xl md:text-2xl font-semibold text-gray-800 flex-1 dark:text-[#F9FAFB]">{servicio.nombre}</h2>
           <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500 dark:bg-[#F9FAFB]">
             <button
               onClick={() => handleReserva(servicio)}
@@ -64,7 +72,7 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
                 <p>C$</p>
                 <p>{servicio.precio}</p>
               </div>
-              <div className="mb-2 text-sm text-gray-600 flex gap-1 items-center dark:text-[#F9FAFB]"><Tag className="w-6 h-6 text-blue-300" /> {tipoHabitacion[servicio.tipo]}</div>
+              <div className="mb-2 text-sm text-gray-600 flex gap-1 items-center dark:text-[#F9FAFB] mb-2"><FaStar className="text-blue-300" size={20} /> {tipoHabitacion[servicio.tipo]}</div>
               <div className="mb-2 text-sm text-gray-600 flex gap-2 items-center dark:text-[#F9FAFB]"><Users className="w-6 h-6 text-blue-300" />{servicio.capacidad}</div>
             </>
           )}
@@ -109,6 +117,22 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
         </button>
       <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2 md:max-h-[85dvh] max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
         <ReservaCard servicio={servicioReserva} handleClose={handleClose} sucursales={sucursales}/>
+      </div>
+    </div>
+  )}
+
+{(DetalleCardOpen && (tipo === "H") ) && (
+    <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-center z-50">
+        <button
+          className="absolute top-4 right-4 text-white hidden md:block"
+          onClick={handleClose}
+        >
+          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      <div onClick={(e) => e.stopPropagation()} className=" md:rounded-xl md:m-2 shadow-2xl m-2  max-h-[100dvh] w-full md:w-fit overflow-y-auto  overflow-x-clip">
+        <HabitacionDetalle habitacion={DetalleCardOpen} handleClose={handleClose}/>
       </div>
     </div>
   )}

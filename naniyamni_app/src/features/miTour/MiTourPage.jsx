@@ -18,6 +18,7 @@ const MiTourPage = () => {
     const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservas);
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
     const navigate = useNavigate();
+    const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
 
     const irAPagar = (subtotal, totalPedido, descuentoPedido, reservasPedido) => {
         navigate("/pay", {
@@ -45,6 +46,7 @@ const MiTourPage = () => {
             <Cargando>Cargando...</Cargando>
         )
     }
+
     return (
         <div className="flex justify-between mb-5">
             <div></div>
@@ -52,9 +54,9 @@ const MiTourPage = () => {
                 <h1 className="md:p-4 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Mi Tour</h1>
                 <div className="flex gap-5 flex-wrap-reverse md:flex-nowrap">
                     <div className="flex flex-col gap-2 rounded max-w-200">
-                        {(!loading && reservas)?
-                            <div className="flex flex-wrap gap-4 justify-center">
-                                {reservas?.map(reserva => (
+                        {(!loading && reservasPendientes)?
+                            <div className="flex flex-wrap gap-4 justify-center w-full">
+                                {reservasPendientes?.map(reserva => (
                                         <MiTourCard 
                                             key={reserva.id}
                                             reserva={reserva} 
@@ -69,7 +71,7 @@ const MiTourPage = () => {
                         }
                         {error &&<Error>{error}</Error>}
                     </div>
-                    {(reservas.length > 0) 
+                    {(reservasPendientes.length > 0) 
                         ?
                     <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-90 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
                         <div className="flex justify-between mb-2 text-sm">

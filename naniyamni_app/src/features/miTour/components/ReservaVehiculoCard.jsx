@@ -12,8 +12,8 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
     fecha_hora_recogida,
     proveedor_nombre, 
     total,
+    estado
   } = reserva;  
-
 
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
   return (
-    <div className="flex flex-col md:flex-row  rounded-xl shadow-lg overflow-hidden max-w-3xl mx-auto dark:border dark:border-[#AAAAAA]/10 transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
+    <div className="flex flex-col md:flex-row  rounded-xl shadow-lg overflow-hidden min-w-full max-w-3xl mx-auto dark:border dark:border-[#AAAAAA]/10 transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
       <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
@@ -66,8 +66,8 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
         </div>
         {(!inPay)&&
         <div className='flex gap-2'>
-          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
-          <span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>
+          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>{(!estado)?"Eliminar":"Cancelar"}</span>
+          {(!estado)&&<span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>}
           <span onClick={() => handleOpen(reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
         </div>}
       </div>

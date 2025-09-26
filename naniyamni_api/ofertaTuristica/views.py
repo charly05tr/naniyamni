@@ -105,6 +105,20 @@ class HabitacionViewSet(viewsets.ModelViewSet):
             raise
         return super().create(request, *args, **kwargs) 
 
+        
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()  # obtiene la habitación según pk
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+        
+
 class AlquilerVehiculoViewSet(viewsets.ModelViewSet):
     queryset = AlquilerVehiculo.objects.all()
     serializer_class = AlquilerVehiculoSerializer
@@ -124,6 +138,7 @@ class AlquilerVehiculoViewSet(viewsets.ModelViewSet):
             logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
             raise
         return super().create(request, *args, **kwargs) 
+        
 
 class ViajeDirectoViewSet(viewsets.ModelViewSet):
     queryset = ViajeDirecto.objects.all()
@@ -176,6 +191,62 @@ class GastronomicoViewSet(viewsets.ModelViewSet):
         if self.request.method == "GET":
             return [AllowAny()]
         return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
+
+
+class SucursalViewSet(viewsets.ModelViewSet):
+    serializer_class = SucursalSerializer
+    authentication_classes = [authentication.TokenAuthentication]
+    queryset = Sucursal.objects.all()
+    
+    def get_permissions(self):  
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated(), IsProveedor(), IsProveedorOwner()]
+
+    def get_queryset(self):
+        proveedor_id = self.request.query_params.get("proveedor_id")
+        if proveedor_id:
+            return Sucursal.objects.filter(proveedor_id=proveedor_id)
+        return Sucursal.objects.none() 
+
+    def create(self, request, *args, **kwargs):
+        if "sucursales" in request.data:
+            bulk_serializer = BulkSucursalSerializer(data=request.data)
+            bulk_serializer.is_valid(raise_exception=True)
+            sucursales_objs = bulk_serializer.save()
+            return Response(
+                SucursalSerializer(sucursales_objs, many=True).data,
+                status=status.HTTP_201_CREATED
+            )
+
+        return super().create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        # Bulk update para sucursales de un proveedor
+        proveedor_id = request.data.get("proveedor_id")
+        if "sucursales" in request.data and proveedor_id:
+            try:
+                proveedor = request.user.proveedor.get(id=proveedor_id)
+            except:
+                return Response({"error": "Proveedor no encontrado."}, status=status.HTTP_404_NOT_FOUND)
+
+            sucursales_data = request.data["sucursales"]
+
+            # Limpiar sucursales actuales
+            proveedor.sucursales.clear()
+
+            sucursales_objs = []
+            for sucursal in sucursales_data:
+                obj, _ = Sucursal.objects.get_or_create(direccion=sucursal["direccion"])
+                obj.proveedor.add(proveedor)
+                sucursales_objs.append(obj)
+
+            return Response(
+                SucursalSerializer(sucursales_objs, many=True).data,
+                status=status.HTTP_200_OK
+            )
+
+        return super().update(request, *args, **kwargs)
 
 
 class ProveedorImageView(APIView):
@@ -262,6 +333,7 @@ class ProveedorImageView(APIView):
 
 
 class ServicioImageView(APIView):
+    authentication_classes = [authentication.TokenAuthentication]
     parser_classes = [MultiPartParser]
 
     def get_permissions(self):

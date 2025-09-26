@@ -9,7 +9,7 @@ router.register(r'habitaciones', HabitacionViewSet)
 router.register(r'alquileres', AlquilerVehiculoViewSet)
 router.register(r'viajes', ViajeDirectoViewSet)
 router.register(r'Atracciones', AtraccionViewSet)
-router.register(r'gastronomicos', GastronomicoViewSet)
+router.register(r'sucursales', SucursalViewSet,  basename='sucursal')
 router.register(r'mis-proveedores', MisProveedoresViewSet, basename="mis-proveedores")  
 
 urlpatterns = [

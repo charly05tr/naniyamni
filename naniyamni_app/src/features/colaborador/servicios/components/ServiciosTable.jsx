@@ -1,16 +1,38 @@
 import { Error } from "@Error";
 import MenuAcciones from "../../components/menuAcciones"; 
 import Cargando from "@Cargando";
+import { useNavigate } from "react-router-dom";
+import { useActualizarVisibilidad } from "../hooks/useActualizarVisibilidad";
 
-export const ServiciosTable = ({proveedor, loading, error}) => {
+export const ServiciosTable = ({proveedor, loading, error, setProveedor }) => {
+console.log(proveedor)
+    const navigate = useNavigate();
+    const { patch } = useActualizarVisibilidad();
 
     if (proveedor?.servicios?.length < 1) {
         return (
             <div className="p-4 border border-[#AAAAAA]/30 rounded-lg">No tienes servicios creados</div>
         )
     }   
-    console.log(proveedor)
 
+    const handleVerPreview = (id) => {
+      navigate(`/proveedor/${id}/`);
+    }
+
+    const handleEdit = (id) => {
+      navigate(`/proveedor/${proveedor.id}/admin/servicio/${id}/actualizar/`);
+    }
+
+    const handlePrivate = (id, servicio) => { 
+      setProveedor((prev) => ({
+        ...prev,
+        servicios: prev.servicios.map((s) =>
+          s.id === servicio.id ? { ...s, disponible: !s.disponible } : s
+        ),
+      }));
+    
+      patch(id, !servicio.disponible, proveedor.tipo);
+    };
 
     return (
         <div className="relative shadow-md sm:rounded-lg w-full flex items-center">
@@ -21,6 +43,9 @@ export const ServiciosTable = ({proveedor, loading, error}) => {
                 Nombre
               </th>
               <th scope="col" className="px-6 py-3">
+                Total en Tours
+              </th>
+              <th scope="col" className="px-6 py-3">
                 Precio
               </th>
               <th scope="col" className="px-6 py-3">
@@ -28,6 +53,9 @@ export const ServiciosTable = ({proveedor, loading, error}) => {
               </th>
               <th scope="col" className="px-6 py-3">
                 Total vendido
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Disponibilidad
               </th>
               <th scope="col" className="px-6 py-3">
                 Acción
@@ -45,16 +73,22 @@ export const ServiciosTable = ({proveedor, loading, error}) => {
                   {item.nombre}
                 </th>
                 <td className="px-6 py-4">
-                  {item.precio}
+                  {item.total_en_tour}
+                </td>
+                <td className="px-6 py-4">
+                  C$ {item.precio}
                 </td>
                 <td className="px-6 py-4">
                   {item.total_reservas || 0}
                 </td>
                 <td className="px-6 py-4">
-                  {item.total_vendido || 0}
+                  C$ {item.total_vendido || 0}
                 </td>
                 <td className="px-6 py-4">
-                    <MenuAcciones />
+                  {item.disponible?"Disponible":"No disponible"}
+                </td>
+                <td className="px-6 py-4">
+                    <MenuAcciones onEdit={handleEdit} onDelete={handlePrivate} onPreview={handleVerPreview} id={item.id} textOnDelete={"disponibilidad"} proveedor={item} />
                 </td>
               </tr>
             ))}

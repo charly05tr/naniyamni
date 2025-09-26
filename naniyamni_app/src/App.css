@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @import 'tailwind-scrollbar-hide/v4';
+[-webkit-mask-image:linear-gradient(to_bottom,black_70%,transparent_100%)]
+
+.fade-mask {
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); /* Para compatibilidad */
+  }

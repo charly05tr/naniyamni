@@ -74,3 +74,10 @@ class ReservaViewSet(viewsets.ModelViewSet):
             logger.error("Validation errors: %s ; payload: %s", serializer.errors, request.data)
             raise
         return super().create(request, *args, **kwargs) 
+    
+    def partial_update(self, request, *args, **kwargs):
+        print("=== PATCH request ===")
+        print("User:", request.user)
+        print("Query params:", request.query_params)
+        print("Data recibida:", request.data)
+        return super().partial_update(request, *args, **kwargs)

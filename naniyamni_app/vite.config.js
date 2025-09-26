@@ -25,6 +25,8 @@ export default defineConfig({
       '@Alert': path.resolve(__dirname, 'src/shared/styled-components/Alert.jsx'),
       '@Error': path.resolve(__dirname, 'src/shared/styled-components/Error.jsx'),
       '@Cargando': path.resolve(__dirname, 'src/shared/components/Cargando.jsx'),
+      '@InputList': path.resolve(__dirname, 'src/shared/components/InputList.jsx'),
+      '@InputErrorMessage': path.resolve(__dirname, 'src/shared/styled-components/InputErrorMessage.jsx'),
     }
   }
 })

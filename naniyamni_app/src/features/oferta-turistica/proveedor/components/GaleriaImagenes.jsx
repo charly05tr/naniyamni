@@ -5,7 +5,19 @@ export const GaleriaImagenes = ({ imagenes = [], duplicar = true, tamSel="lg" })
   const galeriaRef = useRef(null);
   const [imagenSeleccionada, setImagenSeleccionada] = useState(null);
   const [indiceSeleccionado, setIndiceSeleccionado] = useState(null);
-  const [isAnimating, setIsAnimating] = useState(false); // Nuevo estado para la animación de flash
+  const [isAnimating, setIsAnimating] = useState(false); 
+  
+  useEffect(() => {
+    if (imagenSeleccionada) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [imagenSeleccionada]);
 
   const tamSelOpciones = {
     sm: "max-w-[60vw]",
