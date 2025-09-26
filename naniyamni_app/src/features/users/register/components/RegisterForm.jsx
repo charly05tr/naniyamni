@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {Input, Form, Button, ErrorText} from "@FormStyled";
 
-export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUpdate}) => {
+export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUpdate, colaborador = false}) => {
     const [usuario, setUsuario] = useState(usuarioData);
 
     const handleSubmit = (e) => {
@@ -51,6 +51,19 @@ export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUp
                     placeholder="Email"
                 />
             </div>
+            {(colaborador)?
+            <div className="flex flex-col">
+                    {/* <label className="dark:text-[#F9FAFB]">Teléfono</label> */}
+                    <Input
+                        onChange={(e) => setUsuario(prev => {
+                            return {...prev, "telefono": e.target.value}
+                        })}
+                        value={(usuario.telefono !== "0")?usuario.telefono:""}
+                        type="text"
+                        required
+                        placeholder="Teléfono"
+                        />                                                                                                         
+                </div>:""}
             {(!usuarioData)?
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col">

@@ -11,13 +11,20 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef(null);
   const buttonRef = useRef(null);
-  const dashboard = (user?.rol === "Proveedor")?{ name: "Dashboard", path: "/colaborador"}:{ name: "Mi Tour", path: "/MiTour" };
-  const NAV_LINKS = [
-    { name: "Inicio", path: "/" },
-    { name: "Oferta Turística", path: "/oferta-turistica" },
-    { name: "Reservas", path: "/reservas-activas" },
-    dashboard,
-  ];
+  const dashboard = (user?.rol === "Proveedor")
+  ? [{ name: "Dashboard", path: "/colaborador" }]
+  : [{ name: "Mi Tour", path: "/MiTour" }, { name: "Reservas", path: "/reservas-activas" }];
+
+const NAV_LINKS = token
+  ? [
+      { name: "Inicio", path: "/" },
+      { name: "Oferta Turística", path: "/oferta-turistica" },
+      ...dashboard,
+    ]
+  : [
+      { name: "Oferta Turística", path: "/oferta-turistica" },
+      { name: "Registrar Oferta Turística", path: "/colaborador"}
+    ];
   
   useEffect(() => {
     function onDocClick(e) {
@@ -81,7 +88,7 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
           
           <NavLink to="/" className="flex items-center gap-3 cursor-pointer lg:w-70">                                                                                             
             <img src={logoSrc} alt={`${brandName} logo`} className="h-10 w-10 transition-transform duration-300 hover:scale-105" />
-            <span className="hidden sm:inline font-semibold">{brandName}</span>
+            <span className="hidden sm:inline font-semibíold">{brandName}</span>
           </NavLink>
           <nav aria-label="Primary" className="hidden md:flex md:items-center md:gap-2 w-fit">
             <ul className="flex items-center gap-1">
@@ -105,7 +112,6 @@ const Navbar = ({ brandName = "Naniyamni", logoSrc = "/public/logo.png", user, l
           </nav>
 
           <div className="flex items-center justify-end lg:gap-3 lg:w-70 w-fit">
-            {/* <ThemeSwitch /> */}
             {(!token)
               ?<div className="flex gap-2 items-center">
                   <NavLink to="/login" className={ ({isActive}) => 

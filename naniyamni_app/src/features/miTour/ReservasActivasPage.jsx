@@ -15,7 +15,31 @@ import { useDisponibilidad } from "../oferta-turistica/context/disponibilidadCon
 const ReservasActivasPage = () => {
     const { loading, error, reservas, setReservas } = useGetMiTour();
     const { ReservaCardOpen, handleClose, handleOpen } = useMiTour(reservas);
-    const reservasActivas = reservas.filter(reserva => reserva.estado === true);
+    const hoy = new Date();
+    const reservasActivas = reservas.filter((reserva) => {
+        if (!reserva.estado) return false;
+      
+        let fechaComparar;
+      
+        switch (reserva.polymorphic_ctype) {
+          case "reservahabitacion":
+            fechaComparar = new Date(reserva.fecha_hora_llegada);
+            break;
+          case "reservavehiculo":
+            fechaComparar = new Date(reserva.fecha_hora_recogida);
+            break;
+          case "reservaviaje":
+            fechaComparar = new Date(reserva.fecha_hora_salida);
+            break;
+          case "reservaatraccion":
+            fechaComparar = new Date(reserva.fecha_llegada);
+            break;
+          default:
+            return false;
+        }
+      
+        return fechaComparar >= hoy;
+      });
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
 
     const { token } = useContext(AuthContext);
@@ -58,7 +82,7 @@ const ReservasActivasPage = () => {
                         }
                         {error &&<Error>{error}</Error>}
                     </div>
-                    {(reservasActivas.length > 0) 
+                    {/* {(reservasActivas.length > 0) 
                         ?
                     <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-90 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
                         TODO:Mostrar mapa
@@ -67,7 +91,7 @@ const ReservasActivasPage = () => {
                     <div className="p-4 bg-gray-200/40 h-fit rounded-xl min-w-80">
                         No tienes reservas activas
                     </div>
-                    }
+                    } */}
                 </div>
                 {(ReservaCardOpen) && (
                     <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-center z-50">

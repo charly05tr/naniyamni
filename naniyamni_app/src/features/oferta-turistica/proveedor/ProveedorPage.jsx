@@ -12,6 +12,7 @@ import { TransporteCard } from "./components/TransporteCard";
 import { AtraccionCard } from "./components/AtraccionCard";
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import Cargando from "@Cargando";
+import { FaCheck } from "react-icons/fa";
 
 const ProveedorPage = () => {
     const { id } = useParams();
@@ -28,6 +29,7 @@ const ProveedorPage = () => {
           <Cargando>Cargando...</Cargando>
         );
       }
+      console.log(proveedor)
 
     return (
         <>
@@ -50,7 +52,41 @@ const ProveedorPage = () => {
                         <>
                             <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
                             <div className="rounded-xl border dark:border-[#AAAAAA]/10 border-gray-200 p-4  shadow-sm transition-transform transform  hover:shadow-md duration-300">
-                                <h1 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
+                            <h2 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1 dark:text-[#F9FAFB] mb-5">Información del local</h2>
+                                <div className="flex flex-col gap-10">
+                                    <div className="py-2">
+                                        <h3 className="text-xl mb-4 font-semibold text-gray-800 dark:text-[#F9FAFB]">Comentarios Destacados</h3>
+                                        <div>
+                                                    No hay comentarios.
+                                        </div>
+                                    </div>
+                                {proveedor?.amenidades && proveedor?.amenidades?.length > 0 && (
+                                    <div>
+                                        <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-[#F9FAFB]">Amenidades</h3>
+                                        <div className="flex gap-5 max-h-20 overflow-y-hidden">
+                                        {proveedor?.amenidades?.map((c) => (
+                                            <div key={c.id} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
+                                            <FaCheck className="text-green-300" />
+                                            <span>{c}</span>
+                                            </div>
+                                        ))}
+                                        </div>
+                                    </div>
+                                )}
+                                {proveedor?.reglas && proveedor?.reglas?.length > 0 && (
+                                    <div>
+                                        <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-[#F9FAFB]">Normas</h3>
+                                        <div className="flex max-h-20 gap-5 overflow-y-hidden">
+                                        {proveedor?.reglas?.map((c) => (
+                                            <div key={c.id} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
+                                            <ArrowRightIcon className="h-4 w-4 max-w-4 max-h-4 min-w-4 min-h-4" />
+                                            <span>{c}</span>
+                                            </div>
+                                        ))}
+                                        </div>
+                                    </div>
+                                )}
+                                </div>
                             </div>
                         </>}
                     </div>

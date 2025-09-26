@@ -30,7 +30,10 @@ const ProveedorAdmin = () => {
                             <Button onClick={handleNewServicio} text="Crear servicio"/>
                         </div>
                         <div>
-                            <EnTourCard proveedor={proveedor}/>
+                            <EnTourCard reservas={proveedor?.reservas} title={"Reservas Activas"}/>
+                        </div>
+                        <div>
+                            <EnTourCard reservas={proveedor?.total_en_tour}/>
                         </div>
                     </div>
                 </div>
