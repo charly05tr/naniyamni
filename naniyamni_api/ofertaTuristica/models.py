@@ -31,6 +31,8 @@ class Proveedor(models.Model):
     actualizado_en = models.DateTimeField(auto_now=True)
     activo = models.BooleanField(default=True)
     administrador = models.ForeignKey(User, on_delete=models.PROTECT, related_name='proveedor')
+    stripe_account_id = models.CharField(max_length=100, blank=True, null=True)
+
 
 
 class Servicio(models.Model):
@@ -42,54 +44,54 @@ class Servicio(models.Model):
     disponible = models.BooleanField(default=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE, related_name='servicios')
 
-
 class AlquilerVehiculo(Servicio):
     modelo = models.CharField(max_length=255)
     marca = models.CharField(max_length=255)
 
+class Reserva(models.Model):
+     turista = models.ForeignKey(User,on_delete=models.PROTECT,related_name="reservas")
+     servicio_rel = models.ForeignKey(AlquilerVehiculo,on_delete=models.PROTECT,related_name="servicio_reservado")
+     fecha_reserva =  models.DateTimeField(auto_now=True)
+     cantidad = models.IntegerField()
+     estado_reserva  = models.BooleanField(default=False)  # True: Confirmada, False: Pendiente de pago
 
-class ReservaVehiculo(AlquilerVehiculo):
-       fecha_reserva =  models.DateTimeField(auto_now=True)
+class ReservaVehiculo(Reserva):
        fecha_recogida = models.DateTimeField()
        fecha_devolucion = models.DateTimeField()
        hora_recogida = models.DateTimeField()
        hora_entrega  = models.DateTimeField()
-       turista = models.ForeignKey(User,on_delete=models.PROTECT,related_name="vehiculo_alquilado")
        lugar_recogida = models.CharField(max_length=255)
-       lugar_devolucion = models.CharField(blank=True)
+       lugar_devolucion = models.CharField(max_length=255)
 
 class ViajeDirecto(Servicio):
-    origen = models.CharField(max_length=255)
-    destino = models.CharField(max_length=255)
     asientos_disponibles = models.IntegerField()
 
-class ReservaViaje(ViajeDirecto):
-       turista = models.ForeignKey(User,on_delete=models.PROTECT)
-       fecha_reserva = models.DateTimeField(auto_now=True)
+class ReservaViaje(Reserva):
+       origen = models.CharField(max_length=255)
+       destino = models.CharField(max_length=255)
        fecha_salida = models.DateTimeField()
+       n_pasajeros = models.IntegerField()
+       
 
 class Habitacion(Servicio):
     tipos = (('S', 'single'), ('D', 'double'), ('SU', 'suite'))
     tipo = models.CharField(choices=tipos, max_length=2)
     capacidad = models.IntegerField()
 
-class ReservaHabitacion(Habitacion):
-       turista = models.ForeignKey(User,on_delete=models.PROTECT)
-       fecha_reserva = models.DateTimeField(auto_now=True)
+class ReservaHabitacion(Reserva):
        fecha_llegada = models.DateTimeField()
        fecha_salida = models.DateTimeField()
        hora_llegada = models.DateTimeField()
        hora_salida  = models.DateTimeField()
-
+       n_habitaciones = models.IntegerField()
+       peticiones_especiales = models.CharField(max_length=255,blank=True)
 
 class Atracciones(Servicio):
     cupo_maximo = models.IntegerField(null=True, blank=True)      
     guia_incluido = models.BooleanField(default=True)  
 
-class ReservaAtracciones(Atracciones):
-    turista = models.ForeignKey(User,on_delete=models.PROTECT)
-    fecha_reserva = models.DateTimeField()
-    duracion_minutos = models.IntegerField(null=True, blank=True)
+class ReservaAtracciones(Reserva):
+     duracion_minutos = models.IntegerField(null=True, blank=True)
                  
 class Gastronomico(Servicio):
     tipo_comida = models.CharField(

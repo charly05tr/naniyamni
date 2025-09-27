@@ -1,8 +1,11 @@
+import os
 from pathlib import Path
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from decouple import config
+from dotenv import load_dotenv
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -113,3 +116,8 @@ cloudinary.config(
   api_key=config('API_KEY'),
   api_secret=config('API_SECRET'),
 )
+
+#Configuracion especial para el funcionamiento de la pasarela de pagos
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
