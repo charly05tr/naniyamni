@@ -24,6 +24,7 @@ import ActualizarServicio from './features/colaborador/servicios/components/Actu
 import LandingPage from './shared/LandingPage';
 
 function App() {
+
   const { perfilData, loading } = usePerfil();
   
   return (

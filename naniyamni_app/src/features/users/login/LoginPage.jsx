@@ -3,8 +3,11 @@ import { LoginForm } from "./components/LoginForm";
 import { FormCard, Hr } from "@FormStyled";
 import { Title } from "@TextStyled";
 import { GoogleLogin } from "./components/GoogleLogin";
+// import {useGoogleLoginDRF}  from "./hooks/useGoogleAuth";
+
 
 const LoginPage = () => {
+    // const login = useGoogleLoginDRF();
     const {handleLogin, loading, error} = useLogin();
 
     const handleSubmit = async (username, password) => {
@@ -17,7 +20,7 @@ const LoginPage = () => {
                 <Title text="Bienvenido"/>
                 <LoginForm onLogin={handleSubmit} loading={loading} error={error}/>
                 <Hr/>
-                <GoogleLogin/>
+                <GoogleLogin />
             </FormCard>
         </div>
     );

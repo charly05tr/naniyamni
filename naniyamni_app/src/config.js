@@ -1,4 +1,4 @@
-export const API_URL = "https://api.devconnect.network";
+export const API_URL = "https://api.devconnect.network/";
 
 export const actividades = [
     // { value: "HF", label: "Hostal-familiar" },
