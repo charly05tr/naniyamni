@@ -13,7 +13,7 @@ Integración con Cloudinary para gestión de imágenes
 Búsqueda avanzada con PostgreSQL full-text search
 Sistema de permisos basado en roles
 Frontend - Aplicación React
-La aplicación frontend está desarrollada en React 19 con Vite como herramienta de construcción. App.jsx:26-32
+La aplicación frontend está desarrollada en React 19 con Vite como herramienta de construcción. 
 
 # Roles en la plataforma
 
