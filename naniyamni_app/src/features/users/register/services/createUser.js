@@ -4,6 +4,12 @@ import { getGeoDatos } from "@getGeoDatos";
 
 export const createUser = async (usuario) => {
     const geoDatos = await getGeoDatos();
+    console.log({...usuario, 
+        "pais": geoDatos.pais,
+        "ciudad": geoDatos.ciudad,
+        "longitud": geoDatos.longitud.toFixed(2),
+        "latitud": geoDatos.latitud.toFixed(2) 
+    });
     const response = await fetch(`${API_URL}users/register`, {
         method: "POST",
         headers: {
@@ -12,8 +18,8 @@ export const createUser = async (usuario) => {
         body: JSON.stringify({...usuario, 
             "pais": geoDatos.pais,
             "ciudad": geoDatos.ciudad,
-            "longitud": geoDatos.longitud.toFixed(2),
-            "latitud": geoDatos.latitud.toFixed(2) 
+            "longitud": geoDatos.longitud.toFixed(5),
+            "latitud": geoDatos.latitud.toFixed(5) 
         })
     });
 

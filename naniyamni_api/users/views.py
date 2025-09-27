@@ -24,7 +24,6 @@ class RegisterView(APIView):
         if serializer.is_valid():
             serializer.save()
 
-            # Preparar una solicitud para obtener el token
             factory = APIRequestFactory()
             token_request = factory.post('/api/token-auth/', {
                 "username": request.data.get("username"),

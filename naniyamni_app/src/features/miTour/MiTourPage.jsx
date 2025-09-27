@@ -15,10 +15,10 @@ import Cargando from "@Cargando";
 
 const MiTourPage = () => {
     const { loading, error, reservas, setReservas } = useGetMiTour();
-    const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservas);
+    const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
+    const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservasPendientes);
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
     const navigate = useNavigate();
-    const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
 
     const irAPagar = (subtotal, totalPedido, descuentoPedido, reservasPedido) => {
         navigate("/pay", {
@@ -75,10 +75,10 @@ const MiTourPage = () => {
                         ?
                     <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-90 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
                         <div className="flex justify-between mb-2 text-sm">
-                            <p>Servicios ({reservas.length})</p>
+                            <p>Servicios ({reservasPendientes.length})</p>
                             C$ {total}
                         </div>
-                        {(reservas.length > 2) &&
+                        {(reservasPendientes.length > 2) &&
                             <div className="flex justify-between mb-4 text-sm">
                                 <p>Descuento 10%</p>
                             - C$ {descuento}

@@ -2,7 +2,6 @@ import { API_URL } from "@config";
 
 export const actualizarReserva = async (id, reserva, tipo) => {
     const token = localStorage.getItem('token');
-    console.log(reserva);
     const response = await fetch(`${API_URL}reservas/${id}/?tipo=${tipo}`, {
 
         method: "PATCH",

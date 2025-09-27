@@ -61,7 +61,6 @@ const Pagos = () => {
                 break;
     
               default:
-                // para reservas genericas u otros tipos
                 break;
             }
     
@@ -81,7 +80,6 @@ const Pagos = () => {
     }
   
     useEffect(() => {
-      // Check to see if this is a redirect back from Checkout
       const query = new URLSearchParams(window.location.search);
       
       if (query.get("success")) {
@@ -151,7 +149,7 @@ const Pagos = () => {
                     <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl  dark:bg-[#AAAAAA]/10 ">
                         <h1 className="pb-4 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Resumen pedido</h1>
                         <div className="flex justify-between mb-2 text-sm">
-                            <p>Servicios ({reservasPedido.length || 1})</p>
+                            <p>Servicios ({reservasPendientes.length || 1})</p>
                             C$ {totalPedido}
                         </div>
                         {(reservasPendientes.length > 2) &&
