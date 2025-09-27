@@ -1,4 +1,4 @@
-export const API_URL = "https://api.naniyamni.app/";
+export const API_URL = "https://api.devconnect.network";
 
 export const actividades = [
     // { value: "HF", label: "Hostal-familiar" },
@@ -63,7 +63,8 @@ export const formatDateOld = (date, type) => {
   };
 
 
-  export const API_KEY = "a7104ef1a4314122976b32b3f589f44b";
+  export const API_KEY = "a7104ef1a4314122976b32b3f589f44b"
+
   export const formatDate = (dateTimeString, type = null, puntito=true) => {
     if (!dateTimeString || typeof dateTimeString !== "string") {
       return "Fecha no válida";
