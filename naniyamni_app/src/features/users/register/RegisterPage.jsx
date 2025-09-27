@@ -11,7 +11,7 @@ const RegisterPage = () => {
         await register(usuario);
     }
     return (
-        <div className="flex items-center justify-center h-[80dvh] flex-col">
+        <div className="flex items-center justify-center h-[100dvh] flex-col">
             <FormCard>
                 <Title text="Regístrate"/>
                 <RegisterForm onRegister={handleRegister} loading={loading} error={error} usuarioData={false}/>    
