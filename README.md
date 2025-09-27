@@ -38,7 +38,7 @@ Contraseña: 1234
 Cuenta Proveedor de prueba:
 
 Usuario: Juan@gmail.com
-Contraseña: 12345
+Contraseña: 123
 
 Stripe está configurado en modo prueba, por lo que se pueden usar tarjetas de prueba oficiales de Stripe.
 Ejemplo: 4242 4242 4242 4242 con cualquier fecha y cualquier CVC.
