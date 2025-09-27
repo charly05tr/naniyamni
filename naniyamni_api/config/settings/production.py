@@ -18,4 +18,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ['api.naniyamni.app']
+ALLOWED_HOSTS = [
+    'api.naniyamni.app',
+    'https://api.devconnect.network',
+]
