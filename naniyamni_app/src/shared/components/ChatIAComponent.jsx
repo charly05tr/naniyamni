@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { useN8nChat } from "../hooks/useSendIAMessage";
 import { Send, X } from 'lucide-react';
 
-const ChatComponent = () => {
+const ChatComponent = ({handleClose}) => {
   const webhookUrl = "https://carloseduardo05.app.n8n.cloud/webhook/e094f018-1e1f-4542-995a-8bddbf53270e";
   const { sendMessage, loading, error } = useN8nChat(webhookUrl);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hola! Bienvenido a Naniyamni. ¿Soy Dario y te ayudaré con tus reservas, en qué puedo ayudarte?", sender: 'agent' },
+    { id: 1, text: "Hola! Bienvenido a Naniyamni. Soy Dario y te ayudaré con tus reservas, ¿En qué puedo ayudarte?", sender: 'agent' },
   ]);
 
   const messagesEndRef = useRef(null);
@@ -51,19 +51,15 @@ const ChatComponent = () => {
       setMessages(prev => [...prev, { ...agentMessage, formattedText }]);
     }}      
 
-  const handleClose = () => {
-    // Aquí podés ocultar el chat o manejar estado
-    console.log("Cerrar chat");
-  };
   console.log(messages)
   return (
     <div className="w-120 h-[600px] bg-[#181818]/90 rounded-lg shadow-2xl flex flex-col backdrop-blur-sm overflow-hidden fixed right-2 bottom-2">
       {/* HEADER */}
       <div className="flex justify-between items-center p-3 bg-[#AAAAAA]/30 text-white shadow-md">
         <div className="flex items-center">
-          <img className="w-8 h-8 rounded-full flex items-center justify-center mr-2 bg-[#181818] object-contain" src="/gueguense.jpg" />
+          <img className="w-8 h-8 rounded-full flex items-center justify-center mr-2 bg-[#181818] object-contain" src="/gueguense.png" />
             
-          <span className="font-semibold">Dario AI</span>
+          <span className="font-semibold">Dario</span>
         </div>
         <button onClick={handleClose} className="text-white hover:text-gray-200 transition" aria-label="Cerrar ventana de chat">
           <X size={20} />

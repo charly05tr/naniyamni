@@ -23,11 +23,18 @@ import ActualizarProveedor from './features/colaborador/proveedor/components/Act
 import ActualizarServicio from './features/colaborador/servicios/components/ActualizarServicio';
 import LandingPage from './shared/LandingPage';
 import ChatComponent from './shared/components/ChatIAComponent'; 
+import { useState } from 'react';
 
 function App() {
-
+    const [chatOpen, setChatOpen] = useState(false);
   const { perfilData, loading } = usePerfil();
-  
+
+  const handleClose = () => {
+    setChatOpen(false);
+  }
+  const handleOpen = () => {
+    setChatOpen(true);
+  }
   return (
     <AuthProvider>
       <DisponibilidadProvider>
@@ -52,7 +59,8 @@ function App() {
             <Route path="/proveedor/:id/admin/actualizar/" element={<ActualizarProveedor />} />
             <Route path="/proveedor/:id/admin/servicio/:servicioId/actualizar/" element={<ActualizarServicio />} />
           </Routes>
-          <ChatComponent/>
+          {chatOpen ?
+          <ChatComponent handleClose={handleClose}/>: <button className='fixed right-4 bottom-4 bg-[#181818] rounded-full border-[#181818] cursor-pointer' onClick={handleOpen}> <img className="w-12 h-12 object-cover rounded-full flex items-center justify-center mr-2 bg-[#181818] " src="/gueguense.png" /></button>}
         </BrowserRouter>
       </DisponibilidadProvider>
     </AuthProvider>
