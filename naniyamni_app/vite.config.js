@@ -12,9 +12,21 @@ export default defineConfig({
   plugins: [react(), tailwindcss(),],
   resolve: {
     alias: {
-      '@FormStyled': path.resolve(__dirname, 'src/shared/styled-components/FormStyled'),
-      '@TextStyled': path.resolve(__dirname, 'src/shared/styled-components/TextStyled'),
-      '@config': path.resolve(__dirname, 'src/config.js')
+      '@FormStyled': path.resolve(__dirname, 'src/shared/styled-components/FormStyled.jsx'),
+      '@TextStyled': path.resolve(__dirname, 'src/shared/styled-components/TextStyled.jsx'),
+      '@config': path.resolve(__dirname, 'src/config.js'),
+      '@Card': path.resolve(__dirname, 'src/shared/styled-components/Card.jsx'),
+      '@authContext': path.resolve(__dirname, 'src/shared/contexts/authContext.jsx'),
+      '@getGeoDatos': path.resolve(__dirname, 'src/shared/services/getGeoDatos.js'),
+      '@Avatar': path.resolve(__dirname, 'src/shared/styled-components/Avatar.jsx'),
+      '@RemoveButton': path.resolve(__dirname, 'src/shared/styled-components/RemoveButton.jsx'),
+      '@ReadMoreText': path.resolve(__dirname, 'src/shared/components/ReadMoreText.jsx'),
+      '@NumericInput': path.resolve(__dirname, 'src/shared/components/NumericInput.jsx'),
+      '@Alert': path.resolve(__dirname, 'src/shared/styled-components/Alert.jsx'),
+      '@Error': path.resolve(__dirname, 'src/shared/styled-components/Error.jsx'),
+      '@Cargando': path.resolve(__dirname, 'src/shared/components/Cargando.jsx'),
+      '@InputList': path.resolve(__dirname, 'src/shared/components/InputList.jsx'),
+      '@InputErrorMessage': path.resolve(__dirname, 'src/shared/styled-components/InputErrorMessage.jsx'),
     }
   }
 })

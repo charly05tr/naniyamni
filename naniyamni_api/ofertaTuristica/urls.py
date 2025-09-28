@@ -3,13 +3,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'proveedores', ProveedorViewSet)
+router.register(r'proveedores', ProveedorViewSet,  basename='proveedor')
 router.register(r'servicios', ServicioViewSet)
 router.register(r'habitaciones', HabitacionViewSet)
 router.register(r'alquileres', AlquilerVehiculoViewSet)
 router.register(r'viajes', ViajeDirectoViewSet)
-router.register(r'visitas', VisitaViewSet)
-router.register(r'gastronomicos', GastronomicoViewSet)
+router.register(r'Atracciones', AtraccionViewSet)
+router.register(r'sucursales', SucursalViewSet,  basename='sucursal')
+router.register(r'mis-proveedores', MisProveedoresViewSet, basename="mis-proveedores")  
 
 urlpatterns = [
     path('', include(router.urls)),

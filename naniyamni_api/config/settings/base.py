@@ -12,7 +12,17 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  
     "http://127.0.0.1:5173",  
+    "https://naniyamni.app",
+    "https://www.naniyamni.app",
+    "https://api.devconnect.network",
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend"
+    ]
+}
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -26,6 +36,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'ofertaTuristica',
     'users',
+    'reservas',
 ]
 
 MIDDLEWARE = [
@@ -113,3 +124,20 @@ cloudinary.config(
   api_key=config('API_KEY'),
   api_secret=config('API_SECRET'),
 )
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0' 
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC' 
+
+
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'desactivar_reservas_cada_minuto': {
+        'task': 'reservas.tasks.desactivar_reservas_vencidas',
+        'schedule': crontab(minute='*/1'), 
+    },
+}

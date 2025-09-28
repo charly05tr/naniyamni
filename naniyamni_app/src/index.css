@@ -1,3 +1,81 @@
 body {
-    background-color: #F8F8FF;
+    /* background-image: url('https://res.cloudinary.com/drxgsb2ez/image/upload/v1758420146/vew8bjhznpwgxsghybao.jpg'); */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+#root {
+  background-size: cover;
+}
+
+.leaflet-control-attribution {
+    display:none
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+.rdrCalendarWrapper,
+.rdrMonth,
+.rdrDateDisplayWrapper {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+/* Días individuales */
+.rdrDayNumber span {
+  color: inherit !important;
+  background-color: transparent !important;
+}
+
+/* Días seleccionados */
+.rdrDaySelected,
+.rdrDaySelected span,
+.rdrDayStartPreview,
+.rdrDayInPreview,
+.rdrDayEndPreview,
+.rdrDayInRange {
+  background-color: inherit !important; /* hereda del padre */
+  color: inherit !important;       
+  width: 100% !important;      /* texto también */
+}
+
+/* Hover de días */
+.rdrDay:hover,
+.rdrDayNumber span:hover {
+  background-color: inherit !important;
+  color: inherit !important;
+}
+
+.rdrDayNumber span {
+  color: #181818 !important; /* negro */
+}
+
+/* Tema oscuro (cuando el SO está en dark mode) */
+@media (prefers-color-scheme: dark) {
+  .rdrDayNumber span {
+    color: #F9FAFB !important; /* blanco */
+  }
+}
+
+.rdrCalendarWrapper {
+  width: 100% !important;
+}
+
+.rdrDateDisplayWrapper { 
+  width: 100% !important;
+}
+
+.rdrMonth { 
+  width: 100% !important;
 }
