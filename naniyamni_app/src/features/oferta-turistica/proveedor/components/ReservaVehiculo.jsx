@@ -40,8 +40,8 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
 
     const navigate = useNavigate();
     const irADetalle = () => {
-        // navigate("/MiTour/");
-        // window.location.reload();
+        navigate("/MiTour/");
+        window.location.reload();
     };
 
     const buildReservaPayload = () => {

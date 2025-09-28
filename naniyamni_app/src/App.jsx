@@ -60,7 +60,7 @@ function App() {
             <Route path="/proveedor/:id/admin/servicio/:servicioId/actualizar/" element={<ActualizarServicio />} />
           </Routes>
           {chatOpen ?
-          <ChatComponent handleClose={handleClose}/>: <button className='fixed right-4 bottom-4 bg-[#181818] rounded-full border-[#181818] cursor-pointer' onClick={handleOpen}> <img className="w-12 h-12 object-cover rounded-full flex items-center justify-center mr-2 bg-[#181818] " src="/gueguense.png" /></button>}
+          <ChatComponent handleClose={handleClose}/>: <button className='fixed right-4 bottom-4 rounded-full border-[#181818] cursor-pointer' onClick={handleOpen}> <img className="w-12 h-12 object-cover rounded-full flex items-center justify-center mr-2 bg-[#181818] " src="/gueguense.png" /></button>}
         </BrowserRouter>
       </DisponibilidadProvider>
     </AuthProvider>

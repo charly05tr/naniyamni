@@ -29,8 +29,8 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
     const navigate = useNavigate();
 
     const irADetalle = () => {
-        // navigate("/MiTour/");
-        // window.location.reload();
+        navigate("/MiTour/");
+        window.location.reload();
     };
 
     const { token } = useContext(AuthContext);
