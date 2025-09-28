@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useN8nChat } from "../hooks/useSendIAMessage";
 import { Send, X } from 'lucide-react';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const ChatComponent = ({handleClose}) => {
   const webhookUrl = "https://carloseduardo05.app.n8n.cloud/webhook/e094f018-1e1f-4542-995a-8bddbf53270e";
@@ -70,24 +72,29 @@ const ChatComponent = ({handleClose}) => {
       <div className="flex-1 p-4 space-y-3 overflow-y-auto">
       {messages.map(msg => (
   <div key={msg.id} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-    <div className={`
-      max-w-[75%] px-3 py-2 text-sm rounded-xl shadow-sm
-      ${msg.sender === 'user'
-        ? 'bg-blue-100 text-gray-800 rounded-br-none'
-        : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
-      }
-    `}>
-      {/** Renderizamos texto y reemplazamos imágenes con <img> */}
-      {msg.text.split("\n").map((line, i) => {
-        const imgRegex = /!\[.*?\]\((https?:\/\/.*?)\)/; // detecta Markdown de imagen
-        const match = line.match(imgRegex);
-
-        if (match) {
-          return <img key={i} src={match[1]} alt="imagen" className="my-2 rounded-md max-w-full" />;
+    <div
+      className={`
+        max-w-[75%] px-3 py-2 text-sm rounded-xl shadow-sm
+        ${msg.sender === 'user'
+          ? 'bg-blue-100 text-gray-800 rounded-br-none'
+          : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
         }
-
-        return <p key={i}>{line}</p>;
-      })}
+      `}
+    >
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{
+          img: ({ node, ...props }) => (
+            <img {...props} className="my-2 rounded-md max-w-full" />
+          ),
+          a: ({ node, ...props }) => (
+            <a {...props} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" />
+          ),
+          li: ({ node, ...props }) => <li className="ml-4 list-disc" {...props} />,
+        }}
+      >
+        {msg.text}
+      </ReactMarkdown>
     </div>
   </div>
 ))}
