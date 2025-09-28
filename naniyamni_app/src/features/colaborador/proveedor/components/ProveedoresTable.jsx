@@ -39,6 +39,7 @@ export const ProveedoresTable = ({proveedores, loading, error, setProveedores}) 
         )
       );
     };
+    const proveedoresFiltrados = proveedores?.filter(proveedor => proveedor?.activo === true);
 
 
     return (
@@ -71,28 +72,29 @@ export const ProveedoresTable = ({proveedores, loading, error, setProveedores}) 
           </thead>
           {(!loading)?
           <tbody>
-            {proveedores?.map((item, index) => (
+            {proveedoresFiltrados?.map((item, index) => (
+              
               <tr 
               key={index} 
               className="odd:bg-[#F9FAFB] odd:dark:bg-[#AAAAAA]/10 even:bg-gray-50 even:dark:bg-[#181819] border-b dark:border-[#AAAAAA]/30 border-gray-200"
               >
                 <th onClick={() => handleProveedorAdmin(item.id)} scope="row" className="underline cursor-pointer px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-[#F9FAFB] dark:hover:text-[#F9FAFB]/80">
-                 {item.nombre} 
+                 {item?.nombre} 
                 </th>
                 <td className="px-6 py-4">
-                  {item.cantidad_servicios.total}
+                  {item?.cantidad_servicios?.total}
                 </td>
                 <td className="px-6 py-4">
-                  {item.total_en_tour.length || 0}
+                  {item?.total_en_tour?.length || 0}
                 </td>
                 <td className="px-6 py-4">
-                  {item.reservas.length || 0}
+                  {item?.reservas?.length || 0}
                 </td>
                 <td className="px-6 py-4">
-                 C$ {(item.total_vendido) || 0}
+                 C$ {(item?.total_vendido) || 0}
                 </td>
                 <td className="px-6 py-4">
-                {item.activo?"público":"privado"}
+                {item?.activo?"público":"privado"}
                 </td>
                 <td className="px-6 py-4">
                 <MenuAcciones onEdit={handleEdit} onDelete={handlePrivate} onPreview={handleVerPreview} id={item.id} proveedor={item}/>

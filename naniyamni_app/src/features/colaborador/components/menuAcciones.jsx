@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MenuAcciones = ({ onEdit, onDelete, onPreview, id, proveedor, textOnDelete = "visibilidad" }) => {
+const MenuAcciones = ({ onEdit, onDelete, onPreview, id, proveedor, textOnDelete = "Eliminar" }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -44,7 +44,7 @@ const MenuAcciones = ({ onEdit, onDelete, onPreview, id, proveedor, textOnDelete
             className="text-gray-700 dark:text-gray-200 block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 dark:hover:bg-[#AAAAAA]/10"
             role="menuitem"
           >
-            Cambiar {textOnDelete}
+            {textOnDelete}
           </button>
           <button
             onClick={() => { onPreview(id); setIsMenuOpen(false); }}
