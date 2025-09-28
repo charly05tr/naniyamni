@@ -7,7 +7,7 @@ const ChatComponent = () => {
   const { sendMessage, loading, error } = useN8nChat(webhookUrl);
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hola! Bienvenido al soporte. ¿En qué podemos ayudarte hoy?", sender: 'agent' },
+    { id: 1, text: "Hola! Bienvenido a Naniyamni. ¿Soy Dario y te ayudaré con tus reservas, en qué puedo ayudarte?", sender: 'agent' },
   ]);
 
   const messagesEndRef = useRef(null);
@@ -61,9 +61,8 @@ const ChatComponent = () => {
       {/* HEADER */}
       <div className="flex justify-between items-center p-3 bg-[#AAAAAA]/30 text-white shadow-md">
         <div className="flex items-center">
-          <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center mr-2">
-            <div className="text-blue-600" />
-          </div>
+          <img className="w-8 h-8 rounded-full flex items-center justify-center mr-2 bg-[#181818] object-contain" src="/gueguense.jpg" />
+            
           <span className="font-semibold">Dario AI</span>
         </div>
         <button onClick={handleClose} className="text-white hover:text-gray-200 transition" aria-label="Cerrar ventana de chat">

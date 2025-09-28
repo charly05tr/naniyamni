@@ -54,16 +54,30 @@ class ProveedorDetailSerializer(serializers.ModelSerializer):
 class ProveedorListSerializer(serializers.ModelSerializer):
     imagen = serializers.SerializerMethodField()
     cantidad_servicios = serializers.SerializerMethodField()
+    servicios = serializers.SerializerMethodField()
+    sucursales = SucursalSerializer(many=True, read_only=True)
 
     class Meta:
         model = Proveedor
-        fields = ["id", "nombre", "descripcion", "imagen","ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas", "cantidad_servicios", "direccion"]
+        fields = ["id", "servicios","nombre", "descripcion", "imagen","ciudad", "activo", "tipo", "latitud", "longitud", "amenidades", "reglas", "cantidad_servicios", "direccion", "sucursales"]
 
     def get_imagen(self, obj):
         primera = obj.imagenes.first()
         if primera:
             return ProveedorImageSerializer(primera).data
         return None
+
+    def get_servicios(self, obj):
+        if obj.tipo in ["H", "HF"]: 
+            return HabitacionSerializer(Habitacion.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo == "AV":  
+            return AlquilerVehiculoSerializer(AlquilerVehiculo.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo in ["TTT", "OV"]: 
+            return ViajeDirectoSerializer(ViajeDirecto.objects.filter(proveedor=obj), many=True).data
+        elif obj.tipo in ["CR", "CP", "AL"]:  
+            return AtraccionSerializer(Atraccion.objects.filter(proveedor=obj), many=True).data
+        else: 
+            return ServicioSerializer(Servicio.objects.filter(proveedor=obj), many=True).data
 
     def get_cantidad_servicios(self, obj):
         """Devuelve un desglose polimórfico de servicios disponibles"""
