@@ -11,4 +11,5 @@ urlpatterns = [path('', include(router.urls)),
                path('change-password', ChangePasswordView.as_view(), name='change_password'),
                path('reset-password/', ResetPasswordRequestView.as_view(), name='reset_password_request'),
                path('reset-password-confirm/', ResetPasswordConfirmView.as_view(), name='reset_password_confirm'),
+               path("auth/google", GoogleLoginView.as_view(), name="google-login"),
 ]   

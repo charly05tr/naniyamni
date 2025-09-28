@@ -141,3 +141,4 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/1'), 
     },
 }
+

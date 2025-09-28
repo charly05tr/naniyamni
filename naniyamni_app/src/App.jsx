@@ -22,6 +22,7 @@ import ProveedorAdmin from './features/colaborador/pages/ProveedorAdmin';
 import ActualizarProveedor from './features/colaborador/proveedor/components/ActualizarProveedor';
 import ActualizarServicio from './features/colaborador/servicios/components/ActualizarServicio';
 import LandingPage from './shared/LandingPage';
+import ChatComponent from './shared/components/ChatIAComponent'; 
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
             <Route path="/proveedor/:id/admin/actualizar/" element={<ActualizarProveedor />} />
             <Route path="/proveedor/:id/admin/servicio/:servicioId/actualizar/" element={<ActualizarServicio />} />
           </Routes>
+          <ChatComponent/>
         </BrowserRouter>
       </DisponibilidadProvider>
     </AuthProvider>
