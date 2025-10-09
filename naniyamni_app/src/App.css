@@ -6,3 +6,13 @@
     mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
     -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); /* Para compatibilidad */
   }
+
+
+@font-face {
+    font-family: 'MiFuente';
+    src: url('fonts/CooperMdBT-Regular.woff2') format('truetype');
+  }
+  
+  body {
+    font-family: 'MiFuente', sans-serif;
+  }
