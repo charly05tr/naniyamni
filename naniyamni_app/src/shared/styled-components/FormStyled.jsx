@@ -8,7 +8,7 @@ export const Form = styled.form`
 
 export const FormCard = ({ children }) => {
   return (
-    <div className="max-w-[800px] min-w-[340px] p-4 md:p-8 border dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/30 border-gray-300 rounded-lg bg-gray-50 shadow-md mb-[50px] mx-[5px] lg:min-w-[450px]">
+    <div className="max-w-[800px] min-w-[340px] p-4 md:p-8 border dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/30 border-gray-300 rounded-lg bg-gray-50 shadow-md shadow-[#F4B731]/20 mb-[50px] mx-[5px] lg:min-w-[450px]">
       {children}
     </div>
   );
@@ -68,7 +68,7 @@ export const Select = ({ type = "text", placeholder, value, onChange, ...props }
 export const Button = ({ text, disabled=false, color="blue", onClick=()=>{}}) => {
   const colorClasses = {
     red: "bg-red-400 hover:bg-red-500 dark:bg-[#E53935]/70 dark:hover:bg-[#E53935]/80",
-    blue: "bg-blue-600 hover:bg-blue-700 dark:bg-[#007bff]/90 dark:hover:bg-[#007bff]",
+    blue: "bg-[#153B57] hover:bg-[#153B57]/90 dark:bg-[#2CA6A4]/80 dark:hover:bg-[#2CA6A4]/90",
     green: "bg-green-400 hover:bg-green-500",
   };
 

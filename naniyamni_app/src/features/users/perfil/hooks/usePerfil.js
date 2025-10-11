@@ -36,12 +36,5 @@ export const usePerfil = () => {
         }, [handlePerfil]);
 
 
-        useEffect(() => {
-            if (perfilData) {
-                localStorage.setItem("nombre_turista", perfilData.first_name);
-                localStorage.setItem("apellido_turista", perfilData.last_name);
-            }
-        }, [perfilData]);
-
-    return { loading, error, perfilData, LogOut, refetch:handlePerfil };
+    return { loading, error, perfilData, LogOut, setPerfilData, refetch:handlePerfil };
 }

@@ -11,3 +11,15 @@ export const getProveedorDetail = async (id) => {
     const data = await response.json();
     return data;
 }
+
+export const getProveedorDetailByName = async (nombre) => {
+    const response = await fetch(`${API_URL}oferta-turistica/proveedores/?nombre=${encodeURIComponent(nombre)}/`);
+
+    if (!response.ok) {
+        const errorData = await response.json();  
+        throw errorData;
+    }
+
+    const data = await response.json();
+    return data;
+}

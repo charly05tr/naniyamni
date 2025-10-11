@@ -1,4 +1,4 @@
-import { useGetMiTour } from "./hooks/useGetMiTour";
+import { useGetReservasActivas } from "./hooks/useGetReservasActivas";
 import { MiTourCard } from "./components/MiTourCard";
 import { useMiTour } from "./hooks/useMiTour";
 import { Error } from "@Error";
@@ -13,33 +13,9 @@ import Cargando from "@Cargando";
 import { useDisponibilidad } from "../oferta-turistica/context/disponibilidadContext";
 
 const ReservasActivasPage = () => {
-    const { loading, error, reservas, setReservas } = useGetMiTour();
+    const { loading, error, reservas, setReservas } = useGetReservasActivas();
     const { ReservaCardOpen, handleClose, handleOpen } = useMiTour(reservas);
-    const hoy = new Date();
-    const reservasActivas = reservas.filter((reserva) => {
-        if (!reserva.estado) return false;
       
-        let fechaComparar;
-      
-        switch (reserva.polymorphic_ctype) {
-          case "reservahabitacion":
-            fechaComparar = new Date(reserva.fecha_hora_llegada);
-            break;
-          case "reservavehiculo":
-            fechaComparar = new Date(reserva.fecha_hora_recogida);
-            break;
-          case "reservaviaje":
-            fechaComparar = new Date(reserva.fecha_hora_salida);
-            break;
-          case "reservaatraccion":
-            fechaComparar = new Date(reserva.fecha_llegada);
-            break;
-          default:
-            return false;
-        }
-      
-        return fechaComparar >= hoy;
-      });
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
 
     const { token } = useContext(AuthContext);
@@ -62,12 +38,12 @@ const ReservasActivasPage = () => {
         <div className="flex justify-between mb-5">
             <div></div>
             <div className="flex flex-col gap-2 mt-5  px-4">
-                <h1 className="md:p-4 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Reservas activas</h1>
+            <h1 class="md:p-4 mb-4 text-3xl font-bold text-gray-900 dark:text-white md:text-2xl lg:text-3xl"><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#153B57] to-[#2CA6A4]">Reservas Activas</span></h1>
                 <div className="flex gap-5 flex-wrap-reverse md:flex-nowrap">
                     <div className="flex flex-col gap-2 rounded max-w-200">
-                        {(!loading && reservasActivas)?
+                        {(!loading && reservas)?
                             <div className="flex flex-wrap gap-4 justify-center w-full">
-                                {reservasActivas?.map(reserva => (
+                                {reservas?.map(reserva => (
                                         <MiTourCard 
                                             key={reserva.id}
                                             reserva={reserva} 
@@ -82,7 +58,7 @@ const ReservasActivasPage = () => {
                         }
                         {error &&<Error>{error}</Error>}
                     </div>
-                    {/* {(reservasActivas.length > 0) 
+                    {(reservas.length > 0) 
                         ?
                     <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-90 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
                         TODO:Mostrar mapa
@@ -91,7 +67,7 @@ const ReservasActivasPage = () => {
                     <div className="p-4 bg-gray-200/40 h-fit rounded-xl min-w-80">
                         No tienes reservas activas
                     </div>
-                    } */}
+                    }
                 </div>
                 {(ReservaCardOpen) && (
                     <div onClick={handleClose} className="fixed inset-0 backdrop-blur-sm bg-[#181818]/90 flex items-center justify-center z-50">
@@ -113,8 +89,8 @@ const ReservasActivasPage = () => {
                                 <ReservaHabitacion 
                                     handleClose={handleClose} inTour={true}
                                     reserva={{
-                                        entrada:formatDate(ReservaCardOpen.fecha_hora_llegada, null, false),
-                                        salida:formatDate(ReservaCardOpen.fecha_hora_salida, null, false),
+                                        entrada:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_llegada, null, false).fecha),
+                                        salida:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_salida, null, false).fecha),
                                         cantHabitaciones:ReservaCardOpen.cant_habitaciones,
                                         cantNinos:ReservaCardOpen.cant_ninos,
                                         cantAdultos:ReservaCardOpen.cant_adultos,

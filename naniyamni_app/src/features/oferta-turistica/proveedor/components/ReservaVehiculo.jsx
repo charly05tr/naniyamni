@@ -41,7 +41,7 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
     const navigate = useNavigate();
     const irADetalle = () => {
         navigate("/MiTour/");
-        window.location.reload();
+        // window.location.reload();
     };
 
     const buildReservaPayload = () => {
@@ -183,9 +183,9 @@ export const ReservaVehiculo = ({ reserva, setHoraInicio, setHoraDevolucion, set
                     {!token && (
                         <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
                     )}
-                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
+                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-[#2CA6A4]/50 hover:to-[#F4B731] p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-[#2CA6A4]">
                     <button 
-                        className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
+                        className="bg-[#2CA6A4] py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
                         onClick={() => {
                             if (token){
                                 const payload = buildReservaPayload();

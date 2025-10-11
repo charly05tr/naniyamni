@@ -30,7 +30,7 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
 
     const irADetalle = () => {
         navigate("/MiTour/");
-        window.location.reload();
+        // window.location.reload();
     };
 
     const { token } = useContext(AuthContext);
@@ -48,7 +48,7 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
     }; 
 
     return (
-        <div onClick={(e) => e.stopPropagation()} className="z-70 flex flex-wrap md:gap-4 gap-2 w-fit  p-1 md:p-4 md:border rounded-xl border-gray-300 bg-gray-50/95 text-zinc-800 dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/5 md:w-fit max-w-220">
+        <div onClick={(e) => e.stopPropagation()} className="z-70 flex flex-wrap md:gap-4 gap-2 w-fit  p-1 md:p-4 md:border rounded-xl border-[#F4B731] bg-[#F9FAFB] text-zinc-800 dark:text-[#F9FAFB] dark:bg-[#181818] dark:border-[#AAAAAA]/5 md:w-fit max-w-220">
                 <button
                     className="md:hidden  right-4 text-zinc-700 px-1 py-1 absolute rounded-full cursor-pointer"
                     onClick={handleClose}
@@ -81,7 +81,7 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                     <p className="text-sm">1 x {reserva.servicio.nombre}</p>
                 </div>
             </div>
-            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-100 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30">
+            <div className="flex-shrink flex-1 md:p-4 p-2 md:border min-w-96 gap-4 border-gray-300 flex flex-col rounded-lg justify-between dark:border-[#AAAAAA]/30">
                 <div className="flex gap-3 flex-col">
                     <div className="border-b border-gray-300 p-2 px-4 md:text-2xl text-xl bg-gray-200/60 rounded-t font-semibold text-gray-800/95 flex justify-between dark:text-[#F9FAFB] dark:border-[#AAAAAA]/30 dark:bg-[#AAAAAA]/10">
                             <p>{(noches > 1)?"Noches":"Noche"} ({noches})</p>
@@ -121,21 +121,24 @@ export const ReservaHabitacion = ({ reserva, crearReserva, loading, error, handl
                     {!token && (
                         <Alert size="sm">Para agregar servicios a tu Tour tienes que iniciar sesión</Alert>
                     )}
-                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
+                 <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-[#2CA6A4]/50 hover:to-[#F4B731] p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-[#2CA6A4]">
                     <button 
-                        className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
-                        onClick={() => {
-                            if (token){
-                                const payload = buildReservaPayload();
-                                crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
-                                if (error) {
-                                    return
-                                }
+                        className="bg-[#2CA6A4] py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
+                        onClick={async () => {
+                            if (token) {
+                              const payload = buildReservaPayload();
+                              try {
+                                await crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
+                                // si no lanza error, continuamos
                                 irADetalle();
-                                return;
+                              } catch (err) {
+                                // Aquí se detiene si hay error
+                                console.error("Error al crear reserva:", err);
+                              }
+                              return;
                             }
-                            navigate("/login")
-                          }} 
+                            navigate("/login");
+                        }}
                      >{(!loading)?"Agregar a mi Tour":"Agregando..."}</button>
                 </div>
                 {error && (

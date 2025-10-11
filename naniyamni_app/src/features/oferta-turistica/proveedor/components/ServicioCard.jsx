@@ -56,10 +56,10 @@ export const ServicioCard = ({ servicios, tipo, sucursales }) => {
       <div key={servicio.id} className="p-6 border border-gray-200 dark:text-[#F9FAFB]  dark:border-[#AAAAAA]/30 rounded-2xl transition-transform transform  shadow-sm  duration-200 flex flex-col hover:shadow-xl">
         <div className="flex justify-between items-start gap-4 mb-2">
           <h2 onClick={() => handleVerDetalle(servicio)} className="underline cursor-pointer text-xl md:text-2xl font-semibold text-gray-800 flex-1 dark:text-[#F9FAFB]">{servicio.nombre}</h2>
-          <div className="w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500 dark:bg-[#F9FAFB]">
+          <div className="w-fit h-fit bg-gradient-to-r hover:from-[#2CA6A4] hover:to-[#F4B731] p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-[#2CA6A4] dark:bg-[#F9FAFB]">
             <button
               onClick={() => handleReserva(servicio)}
-              className="bg-blue-500 py-2 px-5 rounded-full cursor-pointer dark:bg-[#F9FAFB] dark:text-[#181818]  text-white/95 font-bold tracking-tight"
+              className="bg-[#2CA6A4] py-2 px-5 rounded-full cursor-pointer dark:bg-[#F9FAFB] dark:text-[#181818]  text-white/95 font-bold tracking-tight"
             >
               Reservar
             </button>

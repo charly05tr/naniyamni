@@ -13,3 +13,4 @@ class User(AbstractUser):
     latitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)
     longitud = models.DecimalField(default=0.0, max_digits=10, decimal_places=5)        
     pais = models.CharField(max_length=50, default='Nicaragua')
+    stripe_account_id = models.CharField(max_length=100, blank=True, null=True)

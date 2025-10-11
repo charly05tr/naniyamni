@@ -1,39 +1,50 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef  } from "react";
 import { useLocation } from "react-router-dom";
 import { Error } from "@Error";
 import { MiTourCard } from "./MiTourCard";
 import { usePerfil } from "../../users/perfil/hooks/usePerfil"; 
-import { RegisterForm } from "../../users/register/components/RegisterForm";
+import { UpdatePerfilForm } from "../../users/register/components/UpdatePerfilForm";
 import { Info } from "lucide-react";
 import Cargando from "@Cargando";
 import { useActualizarReserva } from "../hooks/useActualizarReserva";
 import { tiposServicios } from "@config";
 import { useNavigate } from "react-router-dom";
+import { useActualizarDatos } from "../../users/perfil/hooks/useActualizarDatos";
 
 const Pagos = () => {
     const [message, setMessage] = useState(""); 
     const { perfilData, loading, error } = usePerfil();
+    const { updatePerfil, loading3, error3 } = useActualizarDatos();
     const { state } = useLocation();
     const { subtotal, totalPedido, descuentoPedido, reservasPedido } = state || {};
     const { patch, loading2, error2 } = useActualizarReserva();
     const [idReservas, setIdReservas] = useState([]);
+    const formRef = useRef();
     const navigate = useNavigate();
-
+    
     useEffect(() => {
       if (reservasPedido && Array.isArray(reservasPedido)) {
         const ids = reservasPedido.map(r => ({ id: r.id, tipo: tiposServicios[r.servicio.tipo_servicio] }));
         setIdReservas(ids);
+      }
+      else if (reservasPedido) {
+        setIdReservas([{id:reservasPedido.id, tipo: tiposServicios[reservasPedido.servicio.tipo_servicio] }]);
       }
     }, [reservasPedido]);
 
     const handleTerminarTransaccion = async () => {
       try {
         if (!idReservas || idReservas.length === 0) return;
-    
         await Promise.all(
           idReservas.map(({ id, tipo }) => {
-            const reserva = reservasPedido.find(r => r.id === id);
-            if (!reserva) return null;
+            let reserva;
+            if (Array.isArray(reservasPedido)) {
+              reserva = reservasPedido.find(r => r.id === id);
+              if (!reserva) return null;
+            }
+            else {
+              reserva = reservasPedido;
+            }
     
             // Payload mínimo según tipo
             const payload = { estado: true, servicio_id: reserva.servicio.id };
@@ -67,15 +78,16 @@ const Pagos = () => {
             return patch(id, payload, tipo);
           })
         );
-    
-        console.log("Todas las reservas se actualizaron correctamente");
       } catch (err) {
-        console.error("Error al actualizar alguna reserva:", err);
       }
     };                                                            
     
-    const pagar = () => {
-      handleTerminarTransaccion();
+    const pagar = async () => {
+      formRef.current.submit();
+      await handleTerminarTransaccion();
+      if (error) {
+        return;
+      }
       navigate("/reservas-activas");
     }
   
@@ -102,20 +114,24 @@ const Pagos = () => {
     }
   
 
-    if (loading || loading2) {
+    if (loading || loading2 || loading3) {
       return (
         <Cargando>Cargando...</Cargando>
       );
     }
 
-    if (error || error2) {
+    if (error || error2 || error3) {
       return (
-        <Error>{error || error2 }</Error>
+        <Error>{error || error2 || error3 }</Error>
       );
     }
 
     const reservas = Array.isArray(reservasPedido) ? reservasPedido : [reservasPedido];
     const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
+
+    const handleUpdatePerfil = async (usuario) => {
+      await updatePerfil(usuario);
+    } 
 
     const ProductDisplay = () => (
       <div className="flex justify-between my-5">
@@ -123,7 +139,7 @@ const Pagos = () => {
           <div className="flex flex-col gap-2 mt-5  px-4">
               <div className="flex gap-5 flex-wrap-reverse md:flex-nowrap">
                 <div>
-                  <h1 className="md:p-4 mb-3 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Confirmar pedido</h1>
+                  <h1 className="p-4 mb-3 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB] md:text-start text-center">Confirmar pedido</h1>
                   {reservas ?
                     <div className="flex flex-col gap-2 rounded max-w-200">
                         {(reservasPendientes.length > 1)?
@@ -159,19 +175,17 @@ const Pagos = () => {
                             </div>
                         }
                         <div className="flex justify-between border-t pt-4 border-gray-300 dark:border-[#AAAAAA]/80">
-                            <p>Subtotal</p>
+                            <p>Total</p>
                             C$ {subtotal}
                         </div>
-                        {/* <form className="mt-5" action="/create-checkout-session" method="POST"> */}
-                          <button onClick={pagar} type="submit" className="mt-5 w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">
+                          <button onClick={pagar} type="submit" className="mt-5 w-full py-3 text-sm rounded-full  text-white/95 dark:bg-[#2CA6A4]/90 bg-[#153B57]/90 hover:bg-[#153B57]/80 font-extrabold cursor-pointer dark:hover:bg-[#2CA6A4]/80 tracking-tight">
                             Pagar
                           </button>
-                        {/* </form> */}
                     </div>
                     <div className="py-5 flex flex-col gap-5 border px-4 rounded-xl border-[#AAAAAA]/30">
                       <h1 className="text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Confirmar datos personales</h1>
                       <p className="dark:text-[#F9FAFB]/60 flex gap-2"><Info className="w-6 h-6" /> Estos datos se registrarán en la reserva.</p>
-                      <RegisterForm usuarioData={perfilData}/>
+                      <UpdatePerfilForm usuario={perfilData} onSave={handleUpdatePerfil} ref={formRef} />
                     </div>
                   </div>  
               </div>

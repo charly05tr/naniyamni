@@ -9,14 +9,22 @@ import { useMisProveedores } from "../proveedor/hooks/useMisProveedores";
 import { RegisterForm } from "../../users/register/components/RegisterForm";
 import { Info } from "lucide-react";
 import { useRegister } from "../../users/register/hooks/useRegister";
+import { useCrearCuentaStripe } from "../proveedor/hooks/useCrearCuentaStripe";
+import Cargando from "@Cargando";
 
 const ColaboradorPage = () => {
     const { user, token } = useContext(AuthContext);
+    const { create, loading3, error2 } = useCrearCuentaStripe();
     const { register } = useRegister();
     
     const handleRegister = async (usuario) => {
         await register({...usuario, rol:"Proveedor"});
     }
+    
+    const handleCreateStripeAccount = async () => {
+        await create();
+    }
+
     const { error, loading, proveedores, setProveedores } = useMisProveedores();
     
     const navigate = useNavigate();
@@ -43,6 +51,13 @@ const ColaboradorPage = () => {
             </div>
         )
     }
+
+    if (loading3) {
+        return (
+            <Cargando>Cargando...</Cargando>
+        )
+    }
+
     return (
         <div className="flex flex-col justify-center items-center m-2 border rounded border-gray-200 dark:border-none p-2">
             <Title text="Panel de colaborador"/>
@@ -52,6 +67,10 @@ const ColaboradorPage = () => {
             <div className="w-50">
                 <Button text="Crear proveedor" onClick={handleNewProveedor}/>
             </div>
+            <div className="w-50 my-5">
+                <Button text="Crear cuenta Stripe" onClick={handleCreateStripeAccount}/>
+            </div>
+            {(error2) && <Alert>{error2}</Alert>}
         </div>
     );
 } 

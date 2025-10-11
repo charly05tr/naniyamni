@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { AuthContext } from "@authContext";
 import { useReservarTransporte } from "../hooks/useReservarTransporte";
 import { tiposServicios } from "@config";
-import { generarOpcionesNumeros, formatearFechaParaDjango } from "@config"; 
+import { generarOpcionesNumeros, transformarFecha } from "@config"; 
 import { quitarSegundos } from "@config";
 
 export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour = false }) => {
@@ -17,7 +17,7 @@ export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour
 
     const irADetalle = () => {
         navigate("/MiTour/");
-        window.location.reload();
+        // window.location.reload();
     };
     const { token } = useContext(AuthContext);
 
@@ -37,9 +37,15 @@ export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour
             servicio_id: reserva.servicio.id, 
             cant_personas: cantPersonas,
             total: TotalConIVA,
-            fecha_llegada: formatearFechaParaDjango(reserva.fecha_llegada),
+            fecha_llegada: transformarFecha(reserva.fecha_llegada),
         };
     };
+
+    if (error) {
+        return (
+            <Alert>{error}</Alert>
+        );
+    }
 
     const opciones = generarOpcionesNumeros(10);
 
@@ -125,13 +131,13 @@ export const ReservaAtraccion = ({ reserva, handleClose, noPuedeReservar, inTour
                     </div>
                 </div>
                 {(!inTour) &&
-                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-blue-400 hover:to-yellow-200 p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-blue-500">
+                <div className="self-end w-fit h-fit bg-gradient-to-r hover:from-[#2CA6A4]/50 hover:to-[#F4B731] p-[2px] rounded-full shadow-md hover:shadow-xl transition-all duration-300 bg-[#2CA6A4]">
                     <button 
-                        className="bg-blue-500 py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight dark:bg-[#007bff]/90"
-                        onClick={() => {
+                        className="bg-[#2CA6A4] py-3 px-4 rounded-full cursor-pointer text-white/95 font-bold tracking-tight"
+                        onClick={async () => {
                             if (token){
                                 const payload = buildReservaPayload();
-                                crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
+                                await crearReserva(payload, tiposServicios[reserva.servicio.tipo_servicio]);
                                 irADetalle();
                                 return;
                             }

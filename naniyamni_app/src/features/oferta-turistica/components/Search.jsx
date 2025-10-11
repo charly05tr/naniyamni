@@ -73,10 +73,11 @@ export const Search = ({ categories = [], refetch }) => {
                 value={param}
                 spellCheck={false}
                 onChange={(e) => {setParam(e.target.value)}}
+                autoFocus
             />
             <button
                 type="submit"
-                className="pr-3.5 absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-[#007bff]/90 hover:bg-[#007bff]/80 rounded-r-4xl focus:outline-none dark:bg-transparent dark:hover:bg-transparent cursor-pointer dark:hover:text-gray-200"
+                className="pr-3.5 absolute top-0 end-0 p-2.5 text-sm font-medium h-full text-white bg-[#2CA6A4]/90 hover:bg-[#2CA6A4]/80 rounded-r-4xl focus:outline-none dark:bg-transparent dark:hover:bg-transparent cursor-pointer dark:hover:text-gray-200"
             >
                 <svg className="w-4 h-4 transition-transform transform hover:scale-110 duration-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />

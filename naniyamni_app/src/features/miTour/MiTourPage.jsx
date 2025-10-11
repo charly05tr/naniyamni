@@ -15,8 +15,7 @@ import Cargando from "@Cargando";
 
 const MiTourPage = () => {
     const { loading, error, reservas, setReservas } = useGetMiTour();
-    const reservasPendientes = reservas.filter(reserva => reserva.estado === false);
-    const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservasPendientes);
+    const { ReservaCardOpen, handleClose, handleOpen, total, subTotal, descuento } = useMiTour(reservas);
     const { setLugarDevolucion, setHoraInicio, setHoraDevolucion } = useDisponibilidad();
     const navigate = useNavigate();
 
@@ -51,12 +50,13 @@ const MiTourPage = () => {
         <div className="flex justify-between mb-5">
             <div></div>
             <div className="flex flex-col gap-2 mt-5  px-4">
-                <h1 className="md:p-4 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Mi Tour</h1>
+            <h1 class="md:p-4 mb-4 text-3xl font-bold text-gray-900 dark:text-white md:text-2xl lg:text-3xl"><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#153B57] to-[#2CA6A4]">Mi Tour</span></h1>
+                {/* <h1 className="md:p-4 text-2xl text-zinc-800 font-bold dark:text-[#F9FAFB]">Mi Tour</h1> */}
                 <div className="flex gap-5 flex-wrap-reverse md:flex-nowrap">
                     <div className="flex flex-col gap-2 rounded max-w-200">
-                        {(!loading && reservasPendientes)?
+                        {(!loading && reservas)?
                             <div className="flex flex-wrap gap-4 justify-center w-full">
-                                {reservasPendientes?.map(reserva => (
+                                {reservas?.map(reserva => (
                                         <MiTourCard 
                                             key={reserva.id}
                                             reserva={reserva} 
@@ -71,14 +71,14 @@ const MiTourPage = () => {
                         }
                         {error &&<Error>{error}</Error>}
                     </div>
-                    {(reservasPendientes.length > 0) 
+                    {(reservas.length > 0) 
                         ?
-                    <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-90 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
+                    <div className="p-4 md:bg-gray-200/40 h-fit bg-white rounded-xl lg:min-w-95 md:min-w-63 sticky md:top-17 md:w-fit w-full dark:bg-[#AAAAAA]/10 ">
                         <div className="flex justify-between mb-2 text-sm">
-                            <p>Servicios ({reservasPendientes.length})</p>
+                            <p>Servicios ({reservas.length})</p>
                             C$ {total}
                         </div>
-                        {(reservasPendientes.length > 2) &&
+                        {(reservas.length > 2) &&
                             <div className="flex justify-between mb-4 text-sm">
                                 <p>Descuento 10%</p>
                             - C$ {descuento}
@@ -89,7 +89,7 @@ const MiTourPage = () => {
                             C$ {subTotal}
                         </div>
                         <div className="flex justify-center mt-5">
-                            <button onClick={() => irAPagar(subTotal, total, descuento, reservas)} className="w-full py-3 text-sm rounded-full  text-white/95 bg-[#007bff]/90 font-extrabold cursor-pointer hover:bg-[#007bff]/80 tracking-tight">Completar la transacción</button>
+                            <button onClick={() => irAPagar(subTotal, total, descuento, reservas)} className="w-full py-3 text-sm rounded-full  text-white/95 dark:bg-[#2CA6A4]/90 bg-[#153B57]/90 hover:bg-[#153B57]/80 font-extrabold cursor-pointer dark:hover:bg-[#2CA6A4]/80 tracking-tight">Completar la transacción</button>
                         </div>
                     </div>
                     :
@@ -118,8 +118,8 @@ const MiTourPage = () => {
                                 <ReservaHabitacion 
                                     handleClose={handleClose} inTour={true}
                                     reserva={{
-                                        entrada:formatDate(ReservaCardOpen.fecha_hora_llegada, null, false),
-                                        salida:formatDate(ReservaCardOpen.fecha_hora_salida, null, false),
+                                        entrada:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_llegada).fecha),
+                                        salida:formatDate(separarFechaHora(ReservaCardOpen.fecha_hora_salida).fecha),
                                         cantHabitaciones:ReservaCardOpen.cant_habitaciones,
                                         cantNinos:ReservaCardOpen.cant_ninos,
                                         cantAdultos:ReservaCardOpen.cant_adultos,

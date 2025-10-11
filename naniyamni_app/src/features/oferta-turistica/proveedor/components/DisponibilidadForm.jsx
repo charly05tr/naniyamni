@@ -27,7 +27,7 @@ export const DisponibilidadForm = ({ tipo, setFiltro, sucursales }) => {
                 <h2 className="tracking-wide text-xl md:text-2xl lg:text-3xl font-semibold text-gray-700 flex-1 dark:text-[#F9FAFB] ">Disponibilidad</h2>
             </div>
             <div className="h-full flex-wrap flex w-full gap-4">
-                <div className=" text-gray-900 flex-shrink rounded flex-1  h-fit bg-gradient-to-r shadow-md border-none p-[1px] hover:from-blue-300/40 hover:to-yellow-200/40">
+                <div className=" text-gray-900 flex-shrink rounded flex-1  h-fit bg-gradient-to-r shadow-md border-none p-[1px] hover:from-[#2CA6A4]/40 hover:to-[#F4B731]/40">
                     <div className="dark:bg-[#181818] dark:text-[#F9FAFB] dark:border-[#AAAAAA]/10 dark:border rounded dark:hover:text-[#F9FAFB] bg-[#F9FAFB] text-[#181818]">
                         <DateRange
                             ranges={range}

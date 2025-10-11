@@ -24,6 +24,7 @@ import ActualizarServicio from './features/colaborador/servicios/components/Actu
 import LandingPage from './shared/LandingPage';
 import ChatComponent from './shared/components/ChatIAComponent'; 
 import { useState } from 'react';
+import { ChatButton } from './shared/components/ChatButton';
 
 function App() {
     const [chatOpen, setChatOpen] = useState(false);
@@ -48,6 +49,7 @@ function App() {
             <Route path="/profile" element={<Perfil />} />
             <Route path="/oferta-turistica" element={<OfertaTuristica />} />
             <Route path="/proveedor/:id" element={<ProveedorPage />} />
+            <Route path="/proveedor/:nombre" element={<ProveedorPage />} />
             <Route path="/MiTour/" element={<MiTourPage/>} />
             <Route path="/reservas-activas/" element={<ReservasActivasPage />} />
             <Route path="/pay/" element={<Pagos />} />
@@ -60,7 +62,7 @@ function App() {
             <Route path="/proveedor/:id/admin/servicio/:servicioId/actualizar/" element={<ActualizarServicio />} />
           </Routes>
           {chatOpen ?
-          <ChatComponent handleClose={handleClose}/>: <button className='fixed right-4 bottom-4 rounded-full border-[#181818] cursor-pointer' onClick={handleOpen}> <img className="w-12 h-12 object-cover rounded-full flex items-center justify-center mr-2 bg-[#181818] " src="/gueguense.png" /></button>}
+          <ChatComponent handleClose={handleClose}/>: <ChatButton handleOpen={handleOpen}/>}
         </BrowserRouter>
       </DisponibilidadProvider>
     </AuthProvider>

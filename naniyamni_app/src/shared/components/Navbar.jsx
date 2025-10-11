@@ -6,7 +6,7 @@ import { AuthContext } from "@authContext";
 import Cargando from "@Cargando";
 import { useLocation } from "react-router-dom"; 
 
-const Navbar = ({ brandName = "Naniyamni", logoSrc = "/logo.png", user, loading}) => {
+const Navbar = ({ brandName = "Nani Yamni", logoSrc = "/logo.png", user, loading}) => {
   const { token } = useContext(AuthContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const mobileRef = useRef(null);

@@ -24,7 +24,7 @@ class Proveedor(models.Model):
     )
 
     nombre = models.CharField(max_length=50)
-    descripcion = models.TextField()
+    descripcion = models.TextField(null=True, blank=True)
     telefono = models.CharField(max_length=20, default="")
     direccion = models.CharField(max_length=255)
     ciudad = models.CharField(max_length=255)

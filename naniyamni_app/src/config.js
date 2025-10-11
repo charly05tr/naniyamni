@@ -1,4 +1,4 @@
-export const API_URL = "https://api.devconnect.network/";
+export const API_URL = "http://localhost:8000/";
 
 export const actividades = [
     // { value: "HF", label: "Hostal-familiar" },
@@ -251,4 +251,23 @@ export const quitarSegundos = (hora) => {
   // Si viene en formato HH:MM:SS
   if (!hora) return "";
   return hora.split(":").slice(0, 2).join(":"); // Devuelve HH:MM
+}
+
+export const transformarFecha = (fechaStr) => {
+  // Diccionario de meses en español
+  const meses = {
+    ene: "01", feb: "02", mar: "03", abr: "04",
+    may: "05", jun: "06", jul: "07", ago: "08",
+    sep: "09", oct: "10", nov: "11", dic: "12"
+  };
+
+  // Eliminar el día de la semana (por ejemplo "sáb, ")
+  const partes = fechaStr.split(",")[1].trim().split(" ");
+  // partes = ["18", "oct", "2025"]
+
+  const dia = partes[0].padStart(2, "0");
+  const mes = meses[partes[1].toLowerCase()];
+  const año = partes[2];
+
+  return `${año}-${mes}-${dia}`;
 }

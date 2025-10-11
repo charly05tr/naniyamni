@@ -13,7 +13,7 @@ export const Avatar = ({ imageUrl, size = "w-9 h-9", textSize = "text-sm", onCli
   return (
     <div
       onClick={onClick}
-      className={`${baseClasses} ${clickClasses} ${imageUrl ? '' : 'bg-gray-600/80 shadow-lg hover:bg-gray-700'}`}
+      className={`${baseClasses} ${clickClasses} ${imageUrl ? '' : 'bg-[#153B57]/80 shadow-lg hover:bg-[#153B57]'}`}
     >
       {imageUrl ? (
         <img

@@ -13,14 +13,21 @@ class ReservaAtraccionSerializer(serializers.ModelSerializer):
         write_only=True
     )
 
+    stripe_account_id = serializers.SerializerMethodField()
+
     class Meta:
         model = ReservaAtraccion
         fields = ["id", "servicio", "servicio_id", "total",
-            "cant_personas", "turista", "tipo", "fecha_llegada", "estado"
+            "cant_personas", "turista", "tipo", "fecha_llegada", "estado", "stripe_account_id"
         ]
         extra_kwargs = {
             "turista": {"read_only": True}  
         }
+
+    def get_stripe_account_id(self, obj):
+        return obj.servicio.proveedor.administrador.stripe_account_id
+
+
 
 class ReservaVehiculoSerializer(serializers.ModelSerializer):
     servicio = AlquilerVehiculoSerializer(read_only=True)

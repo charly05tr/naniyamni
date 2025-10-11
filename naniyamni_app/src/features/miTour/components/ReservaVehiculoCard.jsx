@@ -1,5 +1,4 @@
 import { tiposServicios } from "@config"
-import { differenceInDays } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
 export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpen, inPay }) => {
@@ -12,7 +11,8 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
     fecha_hora_recogida,
     proveedor_nombre, 
     total,
-    estado
+    estado,
+    dias
   } = reserva;  
 
   const navigate = useNavigate();
@@ -28,13 +28,11 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
       });
   };
 
-  const dias = differenceInDays(fecha_hora_entrega, fecha_hora_recogida) || 0;
-
   const imageUrl = servicio.imagenes && servicio.imagenes.length > 0 ? servicio.imagenes[0].image_url : 'https://via.placeholder.com/150';
   
   return (
-    <div className="flex flex-col md:flex-row  rounded-xl shadow-lg overflow-hidden min-w-full max-w-3xl mx-auto dark:border dark:border-[#AAAAAA]/10 transform transition-transform duration-200 hover:scale-101 hover:shadow-2xl">
-      <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 flex items-center justify-center p-4 md:p-0">
+    <div className="flex flex-col md:flex-row rounded-xl shadow-lg overflow-hidden w-[92dvw] md:max-w-3xl mx-auto transform transition-transform duration-200 hover:scale-101 dark:hover:shadow-lg hover:shadow-[#F4B731]/20 hover:shadow-lg dark:border-[#AAAAAA]/10 dark:border dark:hover:shadow-[#FFD84C]/10">
+      <div className="flex-shrink-0 w-full md:w-1/3 bg-gray-100 dark:bg-[#181818] flex items-center justify-center p-4 md:p-0">
         <img
           src={imageUrl}
           alt={`${servicio.marca} ${servicio.modelo}`}
@@ -46,7 +44,7 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
           <h3 className="text-2xl font-semibold text-gray-800 mb-1 dark:text-[#F9FAFB]/90 ">{`${servicio.marca} ${servicio.modelo}`}</h3>
           <span className="text-gray-600/80 text-nowrap ml-2 dark:text-[#F9FAFB]/60">{dias} {(dias > 1)?"días":"día"}</span>
         </div>
-        <p className="text-xl font-bold mb-2 dark:text-[#00BFFF]/90 text-[#007bff]/90">C$ {total}</p>
+        <p className="text-xl font-bold mb-2 dark:text-[#00BFFF]/90 text-[#2CA6A4]/90">C$ {total}</p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 mb-4">
           <div className="flex items-start flex-col gap-1">
@@ -66,8 +64,8 @@ export const ReservaVehiculoCard = ({ reserva, eliminar, irAProveedor, handleOpe
         </div>
         {(!inPay)&&
         <div className='flex gap-2'>
-          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>{(!estado)?"Eliminar":"Cancelar"}</span>
-          {(!estado)&&<span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>}
+          <span onClick={() => eliminar(id, tiposServicios[servicio.tipo_servicio])} className='hover:text-gray-700 dark:hover:text-gray-400 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400'>Eliminar</span>
+          <span onClick={() => irAPagar(0, total, total, reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end border-r pr-2 border-gray-400 dark:hover:text-gray-400'>Pagar solo este</span>
           <span onClick={() => handleOpen(reserva)} className='hover:text-gray-700 text-sm underline cursor-pointer self-end dark:hover:text-gray-400'>Ver detalle reserva</span>
         </div>}
       </div>

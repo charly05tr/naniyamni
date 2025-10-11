@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { actualizarReserva } from "../services/actualizarReserva";
+import { crearPago } from "../services/crearPago";
 
 export const useActualizarReserva = () => {
     const [loading2, setLoading] = useState(false);
@@ -10,6 +11,8 @@ export const useActualizarReserva = () => {
         setError("");
         try {
             const data = await actualizarReserva(id, reserva, tipo);
+            const url = await crearPago(data);
+            window.location.href = url.account_link;
             return data;
         } catch(e) {
             if (typeof e === "object") {
@@ -24,5 +27,5 @@ export const useActualizarReserva = () => {
         };
     };
 
-    return {patch, loading2, error2};
+    return { patch, loading2, error2 };
 };

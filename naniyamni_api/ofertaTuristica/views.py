@@ -307,15 +307,15 @@ class ProveedorImageView(APIView):
         # Si se sube una nueva imagen, la reemplazamos
         if new_image_file:
             # Extrae el public_id de Cloudinary desde la URL
-            public_id = imagen.image_url.split('/')[-1].split('.')[0]
+            public_id = image.image_url.split('/')[-1].split('.')[0]
             cloudinary.uploader.destroy(public_id)
             upload_result = cloudinary.uploader.upload(new_image_file)
-            imagen.image_url = upload_result.get('secure_url')
+            image.image_url = upload_result.get('secure_url')
 
         image.title = title
         image.save()
 
-        serializer = ProveedorImageSerializer(imagen)
+        serializer = ProveedorImageSerializer(image)
         return Response(serializer.data)
 
     def delete(self, request, image_id, format=None):

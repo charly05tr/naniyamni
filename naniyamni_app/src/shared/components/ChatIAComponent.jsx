@@ -3,18 +3,29 @@ import { useN8nChat } from "../hooks/useSendIAMessage";
 import { Send, X } from 'lucide-react';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useNavigate } from "react-router-dom";
 
 const ChatComponent = ({handleClose}) => {
   const webhookUrl = "https://carloseduardo05.app.n8n.cloud/webhook/e094f018-1e1f-4542-995a-8bddbf53270e";
   const { sendMessage, loading, error } = useN8nChat(webhookUrl);
   const [input, setInput] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+   
+      document.body.style.overflow = "hidden";
+   
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   const [messages, setMessages] = useState([
-    { id: 1, text: "Hola! Bienvenido a Naniyamni. Soy Dario y te ayudaré con tus reservas, ¿En qué puedo ayudarte?", sender: 'agent' },
+    { id: 1, text: "Hola! Bienvenido a Nani Yamni. Soy Darío y te ayudaré a crear el mejor Tour, ¿Por dónde empezamos?", sender: 'agent' },
   ]);
 
   const messagesEndRef = useRef(null);
 
-  // Función para hacer scroll al final
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -27,7 +38,6 @@ const ChatComponent = ({handleClose}) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    // Agregar mensaje del usuario
     const userMessage = { id: Date.now(), text: input, sender: 'user' };
     setMessages(prev => [...prev, userMessage]);
 
@@ -36,7 +46,7 @@ const ChatComponent = ({handleClose}) => {
     const token = localStorage.getItem('token');
     // Llamada a n8n
     const gptResponse = await sendMessage(token, userInput);
-
+    console.log(gptResponse)
     if (gptResponse) {
       const agentMessage = {
         id: Date.now() + 1,
@@ -53,17 +63,25 @@ const ChatComponent = ({handleClose}) => {
       setMessages(prev => [...prev, { ...agentMessage, formattedText }]);
     }}      
 
-  console.log(messages)
+    const handleNavigate = (nombreProveedor) => {
+      console.log("Proveedor clickeado:", nombreProveedor);
+      // Usando navigate de react-router
+      navigate(`/proveedor/${nombreProveedor}`, {
+        state: {
+          nombre: nombreProveedor,
+        }
+      });
+    };
+
   return (
-    <div className="w-120 h-[600px] bg-[#181818]/90 rounded-lg shadow-2xl flex flex-col backdrop-blur-sm overflow-hidden fixed right-2 bottom-2">
-      {/* HEADER */}
-      <div className="flex justify-between items-center p-3 bg-[#AAAAAA]/30 text-white shadow-md">
+    <div className="md:w-120 max-w-120 h-[100dvh] md:h-[600px] dark:bg-[#181818]/90 md:rounded-lg shadow-2xl flex flex-col backdrop-blur-sm overflow-hidden fixed md:right-2 right-0 bottom-0 md:bottom-2 bg-[#F9FAFB]/90 z-99"> 
+      <div className="flex justify-between items-center p-3  text-[#F9FAFB] shadow-md bg-[#2CA6A4]/60">
         <div className="flex items-center">
-          <img className="w-8 h-8 rounded-full flex items-center justify-center mr-2 bg-[#181818] object-contain" src="/gueguense.png" />
+          <img className="w-8 h-8 rounded-full flex items-center justify-center mr-2 object-contain" src="/gueguense.png" />
             
-          <span className="font-semibold">Dario</span>
+          <span className="font-semibold">Darío</span>
         </div>
-        <button onClick={handleClose} className="text-white hover:text-gray-200 transition" aria-label="Cerrar ventana de chat">
+        <button onClick={handleClose} className="text-[#F9FAFB] hover:text-gray-200 transition" aria-label="Cerrar ventana de chat">
           <X size={20} />
         </button>
       </div>
@@ -77,24 +95,31 @@ const ChatComponent = ({handleClose}) => {
         max-w-[75%] px-3 py-2 text-sm rounded-xl shadow-sm
         ${msg.sender === 'user'
           ? 'bg-blue-100 text-gray-800 rounded-br-none'
-          : 'bg-white text-gray-800 rounded-tl-none border border-gray-200'
+          : 'bg-[#F9FAFB] text-gray-800 rounded-tl-none border border-gray-200'
         }
       `}
     >
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{
-          img: ({ node, ...props }) => (
-            <img {...props} className="my-2 rounded-md max-w-full" />
-          ),
-          a: ({ node, ...props }) => (
-            <a {...props} className="text-blue-500 underline" target="_blank" rel="noopener noreferrer" />
-          ),
-          li: ({ node, ...props }) => <li className="ml-4 list-disc" {...props} />,
-        }}
+  remarkPlugins={[remarkGfm]}
+  components={{
+    img: ({ node, ...props }) => (
+      <img {...props} className="my-2 rounded-md max-w-full" />
+    ),
+    li: ({ node, ...props }) => <li className="ml-4 list-disc" {...props} />,
+    strong: ({ node, children, ...props }) => (
+      <span
+        {...props}
+        className="font-bold"
+        onClick={() => handleNavigate(children)}
       >
-        {msg.text}
-      </ReactMarkdown>
+        {children}
+      </span>
+    ),
+  }}
+>
+  {msg.text}
+</ReactMarkdown>
+
     </div>
   </div>
 ))}
@@ -109,27 +134,29 @@ const ChatComponent = ({handleClose}) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* INPUT */}
-      <form onSubmit={handleSend} className="p-3 border-t border-[#AAAAAA]/30 flex items-center">
+      <form onSubmit={handleSend} className="p-3 border-t border-[#AAAAAA]/30 flex items-center gap-3">
         {error && <p className="text-red-500 text-xs mb-1">{error}</p>}
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Escribe tu mensaje..."
-          className="flex-1 mx-2 p-4 border-none outline-none focus:ring-0 text-sm bg-[#AAAAAA]/30 rounded-full"
-          disabled={loading}
-        />
+        <div className="rounded-full flex-1 w-full bg-gradient-to-r p-[2px] dark:p-[1px] dark:bg-transparent to-[#2CA6A4] from-[#F4B731]">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Escribe tu mensaje..."
+            className="w-full flex-1 p-4 border-none outline-none focus:ring-0 text-sm dark:bg-[#181818] bg-[#F9FAFB] rounded-full"
+            disabled={loading}
+            autoFocus
+          />
+        </div>
         <button
           type="submit"
           disabled={loading || input.trim() === ''}
-          className="p-2 text-blue-600 hover:text-blue-700 transition disabled:text-gray-400 disabled:cursor-not-allowed"
+          className="p-2 text-[#2CA6A4] hover:text-[#2CA6A4] transition disabled:text-gray-400 disabled:cursor-not-allowed"
           aria-label={loading ? "Enviando..." : "Enviar mensaje"}
         >
           {loading ? (
-            <div className="w-5 h-5 border-2 border-r-transparent border-blue-600 rounded-full animate-spin" />
+            <div className="w-5 h-5 border-2 border-r-transparent border-[#2CA6A4] rounded-full animate-spin" />
           ) : (
-            <Send size={20} fill="currentColor" />
+            <Send size={25} fill="currentColor" className="transition-all duration-500 transform hover:scale-105" />
           )}
         </button>
       </form>

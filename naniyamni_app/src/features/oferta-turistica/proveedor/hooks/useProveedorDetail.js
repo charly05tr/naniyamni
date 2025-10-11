@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { getProveedorDetail } from "../services/getProveedorDetail";
+import { getProveedorDetailByName } from "../services/getProveedorDetail";
 
-export const useProveedorDetail = (id) => {
+export const useProveedorDetail = (id = false,) => {
     const [proveedor, setProveedor] = useState({});
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -10,7 +11,9 @@ export const useProveedorDetail = (id) => {
         setLoading(true);
         setError("");
         try {
-            const data = await getProveedorDetail(id);
+
+    
+                const data = await getProveedorDetail(id);
             if (data.latitud) data.latitud = parseFloat(data.latitud);
             if (data.longitud) data.longitud = parseFloat(data.longitud);   
             setProveedor(data);

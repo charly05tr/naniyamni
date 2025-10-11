@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {Input, Form, Button, ErrorText} from "@FormStyled";
 
-export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUpdate, colaborador = false}) => {
+export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, colaborador = false}) => {
     const [usuario, setUsuario] = useState(usuarioData);
 
     const handleSubmit = (e) => {
@@ -9,13 +9,8 @@ export const RegisterForm = ({onRegister, loading, error, usuarioData = {}, onUp
         onRegister(usuario);
     }
 
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        onUpdate(usuario);
-    }
-
     return (
-        <Form onSubmit={(!usuarioData)?handleSubmit:handleUpdate}>
+        <Form onSubmit={handleSubmit}>
             <div className="flex gap-2"> 
                 <div className="flex flex-col">
                     <Input

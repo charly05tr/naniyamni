@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createUser } from "../services/createUser";
+import { createUser } from "../../register/services/createUser";
 
 export const useUpdatePerfil = () => {
     const [loading, setLoading] = useState(false);

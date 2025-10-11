@@ -13,9 +13,13 @@ import { AtraccionCard } from "./components/AtraccionCard";
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import Cargando from "@Cargando";
 import { FaCheck } from "react-icons/fa";
+import { useLocation } from "react-router-dom";
 
 const ProveedorPage = () => {
     const { id } = useParams();
+    const { state } = useLocation();
+    const { nombre } = state || [];
+    // const nombreLimpio = nombre.replace(/%20/g, " "); 
     const [filtro, setFiltro] = useState("all");
     const { proveedor, loading, error } = useProveedorDetail(id);
     const { serviciosFiltrados } = useFiltros(proveedor.servicios, filtro, proveedor.tipo);
@@ -29,8 +33,7 @@ const ProveedorPage = () => {
           <Cargando>Cargando...</Cargando>
         );
       }
-      console.log(proveedor)
-
+      
     return (
         <>
             {(!loading)
@@ -47,7 +50,7 @@ const ProveedorPage = () => {
                     </div>}
                 </div>
                 <div>
-                    <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] mb-14 mt-12">
+                    <div className="gap-2 md:gap-4 grid grid-cols-1 grid-rows-1  lg:grid-rows-1 md:grid-rows-1 lg:grid-cols-[1fr_1fr] mb-4 md:mb-14 mt-12">
                         {(proveedor.tipo !== "TTT" && proveedor.tipo !== "CR")&&
                         <>
                             <DisponibilidadForm tipo={proveedor.tipo} setFiltro={setFiltro} sucursales={proveedor?.sucursales}/>
@@ -64,8 +67,8 @@ const ProveedorPage = () => {
                                     <div>
                                         <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-[#F9FAFB]">Amenidades</h3>
                                         <div className="flex gap-5 max-h-20 overflow-y-hidden">
-                                        {proveedor?.amenidades?.map((c) => (
-                                            <div key={c.id} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
+                                        {proveedor?.amenidades?.map((c, i) => (
+                                            <div key={i} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
                                             <FaCheck className="text-green-300" />
                                             <span>{c}</span>
                                             </div>
@@ -77,8 +80,8 @@ const ProveedorPage = () => {
                                     <div>
                                         <h3 className="text-xl font-semibold mb-3 text-gray-800 dark:text-[#F9FAFB]">Normas</h3>
                                         <div className="flex max-h-20 gap-5 overflow-y-hidden">
-                                        {proveedor?.reglas?.map((c) => (
-                                            <div key={c.id} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
+                                        {proveedor?.reglas?.map((c, i) => (
+                                            <div key={i} className="flex items-center gap-2 text-gray-600 dark:text-[#F9FAFB]/80">
                                             <ArrowRightIcon className="h-4 w-4 max-w-4 max-h-4 min-w-4 min-h-4" />
                                             <span>{c}</span>
                                             </div>
@@ -98,7 +101,7 @@ const ProveedorPage = () => {
                             :
                             (proveedor.tipo !== "CR")
                                 ?
-                                <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
+                                <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center md:mt-15">
                                     <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
                                         <h1 className="text-gray-800/90 font-bold text-xl mb-2 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
                                         <div className="text-center p-4 border rounded-full border-gray-200 dark:border-[#AAAAAA]/30">
@@ -128,7 +131,7 @@ const ProveedorPage = () => {
                                     }
                                 </div>
                                 :
-                                <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center mt-15">
+                                <div className="flex lg:justify-between gap-4 lg:gap-1 flex-wrap lg:flex-nowrap w-full justify-center md:mt-15">
                                     <div className="h-fit lg:w-1/4 flex flex-col gap-2 w-fit flex-wrap p-6 lg:min-w-50 max-w-100  rounded-xl shadow">
                                         <h1 className="text-gray-800/90 font-bold text-xl mb-2 dark:text-[#F9FAFB]">Comentarios Destacados</h1>
                                         <div className="text-center p-4 border rounded-full border-gray-200 dark:border-[#AAAAAA]/30">

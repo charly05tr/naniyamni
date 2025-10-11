@@ -24,7 +24,7 @@ export const Filtros = ({ tipo, setFiltro }) => {
     };
 
     return (
-        <div className="w-full h-fit bg-gradient-to-r shadow-md rounded-sm border-none p-[1px] hover:from-blue-300/40 hover:to-yellow-200/40">
+        <div className="w-full h-fit bg-gradient-to-r shadow-md rounded-sm border-none p-[1px] hover:from-[#2CA6A4]/40 hover:to-[#F4B731]/40">
             <div className="bg-gray-50 flex-shrink flex flex-col flex-wrap gap-4 justify-between rounded p-4 dark:text-[#F9FAFB] dark:bg-[#181818] dark:border dark:border-[#AAAAAA]/10">
                 <h1 className="flex-shrink text-xl text-gray-800/95 font-semibold dark:text-[#F9FAFB]">Filtrar por:</h1>
                 <div className="flex gap-4 flex-2 flex-wrap">

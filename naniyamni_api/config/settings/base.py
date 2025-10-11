@@ -1,4 +1,6 @@
 from pathlib import Path
+import stripe
+import os
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
@@ -125,20 +127,7 @@ cloudinary.config(
   api_secret=config('API_SECRET'),
 )
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0' 
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'UTC' 
-
-
-from celery.schedules import crontab
-
-CELERY_BEAT_SCHEDULE = {
-    'desactivar_reservas_cada_minuto': {
-        'task': 'reservas.tasks.desactivar_reservas_vencidas',
-        'schedule': crontab(minute='*/1'), 
-    },
-}
-
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
+SITE_URL = os.getenv('SITE_URL', 'http://localhost:8000')
+stripe.api_key = STRIPE_SECRET_KEY

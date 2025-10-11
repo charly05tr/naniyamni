@@ -13,8 +13,6 @@ export const useMisProveedores = () => {
         try {
             const data = await getMisProveedores();
             setProveedores(data);
-            console.log(data)
-
         } catch(e) {
             setError(e);
         }
